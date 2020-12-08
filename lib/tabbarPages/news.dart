@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
+import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 新闻页面
@@ -17,20 +19,14 @@ class _NewsState extends State<News> with SingleTickerProviderStateMixin {
   List tabs = [];
   int _currentIndex = 0;
 
-  @override
-  void initState() {
-    print("生命周期：initState");
-    // TODO: implement initState
-    super.initState();
-
+  _NewsState() {
     // 获取头部tabBar
     this.getTopTabBar();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -62,93 +58,48 @@ class _NewsState extends State<News> with SingleTickerProviderStateMixin {
               controller: _tabController,
               children: tabs.map((item) {
                 List data = item['data']; //导航对应的新闻
+
+                if (data.length == 0) {
+                  return MyProgress();
+                }
+
                 // 下拉刷新
                 return RefreshIndicator(
                   // 下拉刷新的回调
                   onRefresh: () {
-                    return Future.delayed(Duration(seconds: 2)).then((value) {
-                      this.getNewsList(index: _currentIndex, page: 1);
-                    });
+                    return getNewsList(index: _currentIndex, page: 1);
                   },
                   child: Column(
                     children: [
                       Expanded(
-                        // 判断是否有数据
-                        child: tabs[_currentIndex]['data'].length != 0
-                            ? ListView.builder(
-                                itemCount: data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // 判断是否需要请求数据
-                                  if (index == data.length - 1) {
-                                    // 判断后台是否还有数据
-                                    if (data.length < item['total']) {
-                                      int page = ++item['page'];
-                                      // 请求数据
-                                      Future.delayed(Duration(seconds: 2))
-                                          .then((value) {
-                                        this.getNewsList(
-                                            index: _currentIndex, page: page);
-                                      });
+                        child: ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            // 判断是否需要请求数据
+                            if (index == data.length - 1) {
+                              // 判断后台是否还有数据
+                              if (data.length < item['total']) {
+                                int page = ++item['page'];
+                                // 请求数据
+                                this.getNewsList(
+                                  index: _currentIndex,
+                                  page: page,
+                                );
 
-                                      return AspectRatio(
-                                        aspectRatio: 16 / 1.5,
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: UnconstrainedBox(
-                                            child: Container(
-                                              width: 20,
-                                              height: 20,
-                                              margin:
-                                                  EdgeInsets.only(bottom: 10),
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2.0,
-                                              ), //环形进度器
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return AspectRatio(
-                                        aspectRatio: 16 / 1.5,
-                                        child: Container(
-                                          color: Colors.white,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "没有更多数据了...",
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
+                                return MyProgress();
+                              } else {
+                                return MyProgress(status: false);
+                              }
+                            }
 
-                                  return CardItem(
-                                    item: data[index],
-                                    onClick: (item) {
-                                      print(item);
-                                    },
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 1.5,
-                                  child: Container(
-                                    child: UnconstrainedBox(
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.0,
-                                        ), //环形进度器
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            return CardItem(
+                              item: data[index],
+                              onClick: () {
+                                print(data[index]);
+                              },
+                            );
+                          },
+                        ),
                       )
                     ],
                   ),

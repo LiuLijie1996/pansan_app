@@ -35,6 +35,9 @@ dev_dependencies:
   dio: ^3.0.10
   flutter_swiper: ^1.1.6
   date_format: ^1.0.9
+  shared_preferences: ^0.5.12+4
+  image_picker: ^0.6.7+14
+  barcode_scan: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

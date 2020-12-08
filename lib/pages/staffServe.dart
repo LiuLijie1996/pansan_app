@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 //职工服务
@@ -151,28 +152,19 @@ class _StaffServeState extends State<StaffServe>
           List data = e['data'];
 
           if (data.length == 0) {
-            return UnconstrainedBox(
-              child: Container(
-                width: 30,
-                height: 30,
-                margin: EdgeInsets.only(bottom: 10),
-                child: CircularProgressIndicator(), //环形进度器
-              ),
-            );
+            return MyProgress();
           }
 
           return RefreshIndicator(
             // 下拉刷新的回调
             onRefresh: () {
-              return Future.delayed(Duration(seconds: 2)).then((value) {
-                setState(() {
-                  tabBarList[_tabViewIndex]['data'] = []; //清空数据
-                  getTabViewData(page: 1); //获取数据
-                });
+              setState(() {
+                tabBarList[_tabViewIndex]['data'] = []; //清空数据
               });
+              return getTabViewData(page: 1); //获取数据;
             },
             child: Container(
-              color:Colors.white,
+              color: Colors.white,
               child: ListView.separated(
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider();
@@ -185,32 +177,12 @@ class _StaffServeState extends State<StaffServe>
                   if (dataLength == index + 1) {
                     //判断后端是否还有数据
                     if (dataLength < total) {
-                      Future.delayed(Duration(milliseconds: 2000))
-                          .then((value) {
-                        //获取数据
-                        getTabViewData(page: ++e['page']);
-                      });
+                      //获取数据
+                      getTabViewData(page: ++e['page']);
 
-                      return UnconstrainedBox(
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: CircularProgressIndicator(), //环形进度器
-                        ),
-                      );
+                      return MyProgress();
                     } else {
-                      return UnconstrainedBox(
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            "没有更多数据了...",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      );
+                      return MyProgress(status: false);
                     }
                   }
 
@@ -253,6 +225,7 @@ class _StaffServeState extends State<StaffServe>
                       ),
                     );
                   }
+
                   return Container(
                     height: 30.0,
                     padding: EdgeInsets.only(left: 10.0, right: 10.0),

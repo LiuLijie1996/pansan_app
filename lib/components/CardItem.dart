@@ -20,6 +20,7 @@ class CardItem extends StatelessWidget {
     Color statusColor;
 
     if (item['status'] != null) {
+      print(item['status']);
       statusText = item['status'] == 1
           ? '已学完'
           : item['status'] == 2
@@ -36,7 +37,7 @@ class CardItem extends StatelessWidget {
     // GestureDetector
     return GestureDetector(
       onTap: () {
-        onClick(item);
+        onClick();
       },
       child: AspectRatio(
         aspectRatio: item['thumb_url'] != '' ? 16 / 5 : 16 / 4.1,

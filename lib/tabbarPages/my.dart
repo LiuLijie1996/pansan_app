@@ -78,9 +78,14 @@ class My extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    child: Icon(
-                      myIcon['bi'],
-                      color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/myInformation");
+                      },
+                      child: Icon(
+                        myIcon['bi'],
+                        color: Colors.white,
+                      ),
                     ),
                   )
                 ],
@@ -115,10 +120,26 @@ class FastNavList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List croList = [
-      {"icon": "assets/images/course.png", "title": "我的课程", "router": ""},
-      {"icon": "assets/images/mistake.png", "title": "我的错题", "router": ""},
-      {"icon": "assets/images/collect.png", "title": "我的收藏", "router": ""},
-      {"icon": "assets/images/record.png", "title": "考试记录", "router": ""},
+      {
+        "icon": "assets/images/course.png",
+        "title": "我的课程",
+        "router": "/myCourse",
+      },
+      {
+        "icon": "assets/images/mistake.png",
+        "title": "我的错题",
+        "router": "/myMistakes",
+      },
+      {
+        "icon": "assets/images/collect.png",
+        "title": "我的收藏",
+        "router": "/myCollect",
+      },
+      {
+        "icon": "assets/images/record.png",
+        "title": "考试记录",
+        "router": "/testRecords",
+      },
     ];
 
     return Container(
@@ -139,7 +160,7 @@ class FastNavList extends StatelessWidget {
         children: croList.map((e) {
           return InkWell(
             onTap: () {
-              print(e);
+              Navigator.pushNamed(context, e['router']);
             },
             child: Column(
               children: [
@@ -170,7 +191,11 @@ class FunctionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List funcList = [
-      {"icon": "assets/images/my_data.png", "title": "我的资料", "router": ""},
+      {
+        "icon": "assets/images/my_data.png",
+        "title": "我的资料",
+        "router": "/myInformation",
+      },
       {"icon": "assets/images/my_class.png", "title": "我的班级", "router": ""},
       {"icon": "assets/images/05.png", "title": "考试排行", "router": ""},
       {

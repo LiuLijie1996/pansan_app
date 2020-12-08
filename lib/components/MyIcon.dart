@@ -20,4 +20,5 @@ var myIcon = {
   "verify": const IconData(0xe636, fontFamily: 'iconfont'), //验证码
   "phone": const IconData(0xe634, fontFamily: 'iconfont'), //手机
   "id_card": const IconData(0xe6ba, fontFamily: 'iconfont'), //身份证
+  "bell": const IconData(0xe623, fontFamily: 'iconfont'), //身份证
 };

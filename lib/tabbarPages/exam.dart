@@ -34,11 +34,10 @@ class _ExamPageState extends State<ExamPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-
     // 获取导航
     getExamNav();
+
+    super.initState();
   }
 
   @override

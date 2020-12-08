@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:date_format/date_format.dart';
+
+import 'package:flutter/services.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+
 import 'package:pansan_app/components/CardItem.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
 import '../utils/myRequest.dart';
 
 // 首页页面
-class Index extends StatelessWidget {
-  final arguments;
+class Index extends StatefulWidget {
+  Index({Key key}) : super(key: key);
 
-  const Index({Key key, this.arguments}) : super(key: key);
+  @override
+  _IndexState createState() => _IndexState();
+}
 
+class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +38,9 @@ class Index extends StatelessWidget {
                 borderRadius: BorderRadius.circular(40.0),
               ),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  scan();
+                },
                 icon: Icon(myIcon['sao']),
               ),
             ),
@@ -59,6 +69,28 @@ class Index extends StatelessWidget {
       // 主体内容
       body: IndexPage(),
     );
+  }
+
+  Future scan() async {
+    try {
+      // 此处为扫码结果，barcode为二维码的内容
+      String barcode = await BarcodeScanner.scan();
+      print('扫码结果: ' + barcode);
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        // 未授予APP相机权限
+        print('未授予APP相机权限');
+      } else {
+        // 扫码错误
+        print('扫码错误: $e');
+      }
+    } on FormatException {
+      // 进入扫码页面后未扫码就返回
+      print('进入扫码页面后未扫码就返回');
+    } catch (e) {
+      // 扫码错误
+      print('扫码错误: $e');
+    }
   }
 }
 
@@ -218,46 +250,17 @@ class _IndexPageState extends State<IndexPage>
       // 判断后端是否还有数据
       if (list.length - 1 < _totalLength) {
         // 请求数据
-        Future.delayed(Duration(seconds: 3)).then((value) {
-          isRequestList();
-        });
+        isRequestList();
 
-        return AspectRatio(
-          aspectRatio: 16 / 1.5,
-          child: Container(
-            color: Colors.white,
-            child: UnconstrainedBox(
-              child: Container(
-                width: 20,
-                height: 20,
-                margin: EdgeInsets.only(bottom: 10),
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                ), //环形进度器
-              ),
-            ),
-          ),
-        );
+        return MyProgress();
       } else {
-        return AspectRatio(
-          aspectRatio: 16 / 1.5,
-          child: Container(
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: Text(
-              "没有更多数据了...",
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        );
+        return MyProgress(status: false);
       }
     }
 
     return CardItem(
       item: item,
-      onClick: (Map item) {
+      onClick: () {
         print(item);
       },
     );
@@ -272,46 +275,17 @@ class _IndexPageState extends State<IndexPage>
       // 判断后端是否还有数据
       if (list.length - 1 < _totalLength) {
         // 请求数据
-        Future.delayed(Duration(seconds: 3)).then((value) {
-          isRequestList();
-        });
+        isRequestList();
 
-        return AspectRatio(
-          aspectRatio: 16 / 1.5,
-          child: Container(
-            color: Colors.white,
-            child: UnconstrainedBox(
-              child: Container(
-                width: 20,
-                height: 20,
-                margin: EdgeInsets.only(bottom: 10),
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                ), //环形进度器
-              ),
-            ),
-          ),
-        );
+        return MyProgress();
       } else {
-        return AspectRatio(
-          aspectRatio: 16 / 1.5,
-          child: Container(
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: Text(
-              "没有更多数据了...",
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        );
+        return MyProgress(status: false);
       }
     }
 
     return CardItem(
       item: item,
-      onClick: (Map item) {
+      onClick: () {
         print(item);
       },
     );
@@ -328,11 +302,11 @@ class _IndexPageState extends State<IndexPage>
     }
   }
 
-  // 请求矿井动态数据
+  // 请求矿井动态（新闻）数据
   void getList1Widget() async {
     try {
       var result = await myRequest(path: "/api/news/getNewsAll");
-      List data = result["data"]['news']['child'];
+      List data = result["data"];
       List<Map> list = data.map((item) {
         //时间
         DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
@@ -355,7 +329,7 @@ class _IndexPageState extends State<IndexPage>
       }).toList();
 
       setState(() {
-        _totalLength = result["data"]['news']['total'];
+        _totalLength = result['total'];
         this.list.addAll(list);
       });
     } catch (e) {
@@ -369,7 +343,7 @@ class _IndexPageState extends State<IndexPage>
 
     try {
       var result = await myRequest(path: "/api/course/getCourseAll");
-      List data = result["data"]['news']['child'];
+      List data = result["data"];
       List<Map> list = data.map((item) {
         //时间
         DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
@@ -392,7 +366,7 @@ class _IndexPageState extends State<IndexPage>
       }).toList();
 
       setState(() {
-        _totalLength = result["data"]['news']['total'];
+        _totalLength = result['total'];
         this.list.addAll(list);
       });
     } catch (e) {
@@ -515,29 +489,20 @@ class _MyBannerState extends State<MyBanner> {
 }
 
 // 快捷导航
-// ignore: must_be_immutable
 class FastNavList extends StatelessWidget {
   FastNavList({Key key}) : super(key: key);
 
   List<Map> _navList = [
-    {
-      "icon": "assets/images/01.png",
-      "title": "一日一题",
-      "router": "/staffServe"
-    },
+    {"icon": "assets/images/01.png", "title": "一日一题", "router": "/dayTopic"},
     {
       "icon": "assets/images/02.png",
       "title": "课程学习",
     },
-    {
-      "icon": "assets/images/03.png",
-      "title": "职工服务",
-      "router": "/staffServe"
-    },
+    {"icon": "assets/images/03.png", "title": "职工服务", "router": "/staffServe"},
     {
       "icon": "assets/images/04.png",
       "title": "通知公告",
-      "router": "/staffServe"
+      "router": "/informAffiche"
     },
   ];
 
@@ -571,7 +536,7 @@ class FastNavList extends StatelessWidget {
                   ),
                   (route) => route == null, //将所有路由清空
                 );
-              }else{
+              } else {
                 Navigator.pushNamed(context, "${item['router']}");
               }
             },
@@ -637,7 +602,30 @@ class _NewestTestState extends State<NewestTest> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text("查看更多 >"),
+              InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                      ) {
+                        //  FadeTransition 淡入淡出组件
+                        return FadeTransition(
+                          opacity: animation,
+                          child: MyBottomNavigationBar(
+                            currentIndex: 3,
+                          ),
+                        );
+                      },
+                    ),
+                    (route) => route == null, //将所有路由清空
+                  );
+                },
+                child: Text("查看更多 >"),
+              ),
             ],
           ),
         ),
@@ -689,7 +677,7 @@ class _NewestTestState extends State<NewestTest> {
 
                           // 考试标题
                           Container(
-                            margin: EdgeInsets.only(top: 15, left: 20),
+                            margin: EdgeInsets.only(top: 15, left: 10),
                             child: Text(
                               "${item['title']}",
                               style: TextStyle(
@@ -703,8 +691,7 @@ class _NewestTestState extends State<NewestTest> {
 
                           // 考试时间
                           Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.only(top: 15),
+                            margin: EdgeInsets.only(top: 15, left: 10),
                             child: Text(
                                 "${item['start_date']} 至 ${item['end_date']}"),
                           ),

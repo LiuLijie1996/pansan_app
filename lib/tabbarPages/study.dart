@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 学习页面
@@ -19,25 +20,14 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   var _currentNavId; //当前导航id
 
-  @override
-  void initState() {
-    print("生命周期：initState");
-    // TODO: implement initState
-    super.initState();
-
+  _StudyState() {
     // 获取头部tabBar
     this.getTopTabBar();
-
-    // 监听搜索框的变化
-    // _searchInput.addListener(() {
-    //   print(_searchInput.text);
-    // });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -66,7 +56,8 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                     });
                   },
                   onSubmitted: (String value) {
-                    print(value);
+                    // 搜索课程
+                    searchCourse(value);
                   },
                   decoration: InputDecoration(
                     hintText: "请输入你要搜索的内容",
@@ -86,7 +77,8 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                         Icons.search,
                       ),
                       onTap: () {
-                        print(searchValue);
+                        // 搜索课程
+                        searchCourse(searchValue);
                       },
                     ),
                   ),
@@ -109,13 +101,16 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
               children: tabs.map((item) {
                 List data = item['data']; //导航对应的新闻
                 List children = item["children"]; //子导航
+
+                if (data.length == 0) {
+                  return MyProgress();
+                }
+
                 // 下拉刷新
                 return RefreshIndicator(
                   // 下拉刷新的回调
                   onRefresh: () {
-                    return Future.delayed(Duration(seconds: 2)).then((value) {
-                      this.getCourseList(id: _currentNavId, page: 1);
-                    });
+                    return getCourseList(id: _currentNavId, page: 1);
                   },
                   child: Column(
                     children: [
@@ -134,7 +129,9 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                                             : 0;
                                     return Container(
                                       margin: EdgeInsets.only(
-                                          left: 10, right: right),
+                                        left: 10,
+                                        right: right,
+                                      ),
                                       child: RaisedButton(
                                         color: accentColor,
                                         textColor: textColor,
@@ -145,13 +142,10 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                                           });
 
                                           // 请求子导航对应的数据
-                                          Future.delayed(Duration(seconds: 2))
-                                              .then((value) {
-                                            this.getCourseList(
-                                              id: child['id'],
-                                              page: 1,
-                                            );
-                                          });
+                                          this.getCourseList(
+                                            id: child['id'],
+                                            page: 1,
+                                          );
                                         },
                                         child: Text("${child['name']}"),
                                       ),
@@ -164,81 +158,33 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                       // 列表
                       Expanded(
                         // 判断是否有数据
-                        child: tabs[_currentIndex]['data'].length != 0
-                            ? ListView.builder(
-                                itemCount: data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // 判断是否需要请求数据
-                                  if (index == data.length - 1) {
-                                    // 判断后台是否还有数据
-                                    if (data.length < item['total']) {
-                                      Future.delayed(Duration(seconds: 2))
-                                          .then((value) {
-                                        this.getCourseList(
-                                          id: _currentNavId,
-                                          page: item['page'] + 1,
-                                        );
-                                      });
+                        child: ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            // 判断是否需要请求数据
+                            if (index == data.length - 1) {
+                              // 判断后台是否还有数据
+                              if (data.length < item['total']) {
+                                // 请求数据
+                                this.getCourseList(
+                                  id: _currentNavId,
+                                  page: item['page'] + 1,
+                                );
 
-                                      return AspectRatio(
-                                        aspectRatio: 16 / 1.5,
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: UnconstrainedBox(
-                                            child: Container(
-                                              width: 20,
-                                              height: 20,
-                                              margin:
-                                                  EdgeInsets.only(bottom: 10),
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2.0,
-                                              ), //环形进度器
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return AspectRatio(
-                                        aspectRatio: 16 / 1.5,
-                                        child: Container(
-                                          color: Colors.white,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "没有更多数据了...",
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
+                                return MyProgress();
+                              } else {
+                                return MyProgress(status: false);
+                              }
+                            }
 
-                                  return CardItem(
-                                    item: data[index],
-                                    onClick: (item) {
-                                      print(item);
-                                    },
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 1.5,
-                                  child: Container(
-                                    child: UnconstrainedBox(
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.0,
-                                        ), //环形进度器
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            return CardItem(
+                              item: data[index],
+                              onClick: () {
+                                print(data[index]);
+                              },
+                            );
+                          },
+                        ),
                       )
                     ],
                   ),
@@ -361,5 +307,10 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
     } catch (e) {
       print(e);
     }
+  }
+
+  // 搜索课程
+  searchCourse(String value) {
+    print("搜索课程: $value");
   }
 }

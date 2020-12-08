@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/pages/dayTopic.dart';
+import 'package:pansan_app/pages/informAffiche.dart';
+import 'package:pansan_app/pages/myCollect.dart';
+import 'package:pansan_app/pages/myCourse.dart';
+import 'package:pansan_app/pages/myInformation.dart';
+import 'package:pansan_app/pages/myMistakes.dart';
+import 'package:pansan_app/pages/testRecords.dart';
 import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
 import 'package:pansan_app/pages/staffServe.dart';
 import 'package:pansan_app/pages/login.dart';
@@ -13,6 +20,13 @@ Map<String, Function> routers = {
   "/login": (context) => Login(), //登录页面
   "/updatePwd": (context) => UpdatePwd(), //修改密码页面
   "/staffServe": (context) => StaffServe(), //职工服务
+  "/informAffiche": (context) => InformAffiche(), //通知公告
+  "/dayTopic": (context) => DayTopic(), //一日一题
+  "/myInformation": (context) => MyInformation(), //我的资料
+  "/myCourse": (context) => MyCourse(), //我的课程
+  "/myMistakes": (context) => MyMistakes(), //我的错题
+  "/myCollect": (context) => MyCollect(), //我的收藏
+  "/testRecords": (context) => TestRecords(), //考试记录
 };
 
 Function onGenerateRoute = (RouteSettings settings) {

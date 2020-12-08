@@ -1,0 +1,229 @@
+/*一日一题*/
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart';
+import 'package:pansan_app/utils/myRequest.dart';
+
+class DayTopic extends StatefulWidget {
+  @override
+  _DayTopicState createState() => _DayTopicState();
+}
+
+class _DayTopicState extends State<DayTopic> {
+  List dataList = [];
+
+  _DayTopicState() {
+    //获取数据
+    this.getDayTopic();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("一日一题"),
+      ),
+      body: RefreshIndicator(
+        // 下拉刷新的回调
+        onRefresh: () {
+          return Future.delayed(Duration(seconds: 2)).then((value) {});
+        },
+        child: Container(
+          child: ListView(
+            children: dataList.map((e) {
+              return DayTopicItem(
+                item: e,
+              );
+            }).toList(),
+            // children: [
+            //   Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       SizedBox(height: 10.0),
+            //       Row(
+            //         children: [
+            //           Container(
+            //             width: 3.0,
+            //             height: 15.0,
+            //             margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            //             color: Colors.blue,
+            //           ),
+            //           Text(
+            //             "2020-11",
+            //             style: TextStyle(
+            //               fontSize: 20.0,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //       Container(
+            //         padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            //         child: Column(
+            //           children: [
+            //             Container(
+            //               margin: EdgeInsets.only(top: 10.0),
+            //               decoration: BoxDecoration(
+            //                   color: Colors.white,
+            //                   borderRadius: BorderRadius.circular(10.0),
+            //                   boxShadow: [
+            //                     BoxShadow(
+            //                         color: Colors.grey[300],
+            //                         blurRadius: 5.0,
+            //                         offset: Offset(0.0, 0.0)),
+            //                   ]),
+            //               child: ListTile(
+            //                 title: Text("我是标题1"),
+            //                 subtitle: Text("已学习"),
+            //               ),
+            //             ),
+            //             Container(
+            //               margin: EdgeInsets.only(top: 10.0),
+            //               decoration: BoxDecoration(
+            //                   color: Colors.white,
+            //                   borderRadius: BorderRadius.circular(10.0),
+            //                   boxShadow: [
+            //                     BoxShadow(
+            //                         color: Colors.grey[300],
+            //                         blurRadius: 5.0,
+            //                         offset: Offset(0.0, 0.0)),
+            //                   ]),
+            //               child: ListTile(
+            //                 title: Text("我是标题2"),
+            //                 subtitle: Text("已学习"),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void getDayTopic() async {
+    try {
+      var result = await myRequest(path: "/api/day-topic");
+      List data = result['data'];
+      List newData = data.map((e) {
+        //所属年月
+        DateTime time = DateTime.fromMillisecondsSinceEpoch(
+          e['time'] * 1000,
+        );
+
+        //格式化所属年月
+        String _time = formatDate(
+          time,
+          [yyyy, '年', mm, '月'],
+        );
+
+        List child = e['child'];
+        List newChild = child.map((item) {
+          //所属年月
+          DateTime study_time = DateTime.fromMillisecondsSinceEpoch(
+            item['study_time'] * 1000,
+          );
+
+          //格式化所属年月
+          String _study_time = formatDate(
+            study_time,
+            [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+          );
+
+          return {
+            "id": item["id"], //id
+            "name": item["name"], //标题
+            "status": item["status"], //1已查看，2未查看
+            "study_time": _study_time, //具体时间
+          };
+        }).toList();
+
+        return {
+          "time": _time, //所属年月
+          "child": newChild, //题目列表
+        };
+      }).toList();
+
+      setState(() {
+        dataList = newData;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+}
+
+// 一日一题成员组件
+class DayTopicItem extends StatelessWidget {
+  final Map item;
+
+  const DayTopicItem({Key key, this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List child = item['child'];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10.0),
+        Row(
+          children: [
+            Container(
+              width: 3.0,
+              height: 15.0,
+              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              color: Colors.blue,
+            ),
+            Text(
+              "${item['time']}",
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+            ),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: child.map((e) {
+              String status = e['status'] == 1 ? "已学习" : "未学习";
+              Color color = e['status'] == 1 ? Colors.blue : Colors.grey;
+
+              return InkWell(
+                onTap: (){
+                  print(e);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[300],
+                        blurRadius: 5.0,
+                        offset: Offset(0.0, 0.0),
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    title: Text("${e['name']}"),
+                    subtitle: Text(
+                      status,
+                      style: TextStyle(color: color),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
