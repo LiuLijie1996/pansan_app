@@ -23,14 +23,7 @@ class _StaffServeState extends State<StaffServe>
       "page": 1,
       "psize": 20,
       "total": 0,
-      "data": [
-        // {
-        //   "id":"1",
-        //   "idCard":"123456",
-        //   "name":"小明",
-        //   "dep":"掘进队",
-        // }
-      ],
+      "data": [],
     },
     {
       "id": "3",
@@ -38,15 +31,7 @@ class _StaffServeState extends State<StaffServe>
       "page": 1,
       "psize": 20,
       "total": 0,
-      "data": [
-        // {
-        //   "id":"1",
-        //   "pid":"2",
-        //   "title":"标题",
-        //   "addtime":"2020-01-01",
-        //   "link":"",
-        // }
-      ],
+      "data": [],
     },
     {
       "id": "1",
@@ -54,15 +39,7 @@ class _StaffServeState extends State<StaffServe>
       "page": 1,
       "psize": 20,
       "total": 0,
-      "data": [
-        // {
-        //   "id":"1",
-        //   "pid":"2",
-        //   "title":"标题",
-        //   "content":"内容内容内容内容",
-        //   "addtime":"2020-01-01",
-        // }
-      ],
+      "data": [],
     },
   ];
 
@@ -268,9 +245,8 @@ class _StaffServeState extends State<StaffServe>
         },
       );
 
-      List data = result['data'];
       int total = result['total'];
-
+      List data = result['data'];
       List newData = data.map((e) {
         if (_tabViewIndex == 0) {
           return {

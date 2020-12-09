@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/pages/dayTopic.dart';
 import 'package:pansan_app/pages/informAffiche.dart';
+import 'package:pansan_app/pages/myAdvisory.dart';
 import 'package:pansan_app/pages/myCollect.dart';
 import 'package:pansan_app/pages/myCourse.dart';
+import 'package:pansan_app/pages/myGrade.dart';
 import 'package:pansan_app/pages/myInformation.dart';
 import 'package:pansan_app/pages/myMistakes.dart';
 import 'package:pansan_app/pages/testRecords.dart';
@@ -27,6 +29,8 @@ Map<String, Function> routers = {
   "/myMistakes": (context) => MyMistakes(), //我的错题
   "/myCollect": (context) => MyCollect(), //我的收藏
   "/testRecords": (context) => TestRecords(), //考试记录
+  "/myGrade": (context) => MyGrade(), //我的班级
+  "/myAdvisory": (context) => MyAdvisory(), //我的咨询
 };
 
 Function onGenerateRoute = (RouteSettings settings) {

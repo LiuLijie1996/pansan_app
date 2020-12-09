@@ -21,4 +21,6 @@ var myIcon = {
   "phone": const IconData(0xe634, fontFamily: 'iconfont'), //手机
   "id_card": const IconData(0xe6ba, fontFamily: 'iconfont'), //身份证
   "bell": const IconData(0xe623, fontFamily: 'iconfont'), //身份证
+  "course_plan": const IconData(0xe815, fontFamily: 'iconfont'), //课程计划
+  "record": const IconData(0xe6f4, fontFamily: 'iconfont'), //考勤记录
 };

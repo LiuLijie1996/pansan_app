@@ -196,14 +196,22 @@ class FunctionList extends StatelessWidget {
         "title": "我的资料",
         "router": "/myInformation",
       },
-      {"icon": "assets/images/my_class.png", "title": "我的班级", "router": ""},
+      {
+        "icon": "assets/images/my_class.png",
+        "title": "我的班级",
+        "router": "/myGrade",
+      },
       {"icon": "assets/images/05.png", "title": "考试排行", "router": ""},
       {
         "icon": "assets/images/jifen.png",
         "title": "积分中心",
         "router": "/integralCentre"
       },
-      {"icon": "assets/images/FAQs.png", "title": "我的咨询", "router": ""},
+      {
+        "icon": "assets/images/FAQs.png",
+        "title": "我的咨询",
+        "router": "/myAdvisory",
+      },
       {"icon": "assets/images/set.png", "title": "设置", "router": "/settings"},
     ];
 
