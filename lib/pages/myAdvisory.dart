@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
@@ -58,7 +57,7 @@ class _MyAdvisoryState extends State<MyAdvisory> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          print("添加咨询");
+          Navigator.pushNamed(context, "/addAdvisory");
         },
       ),
       body: RefreshIndicator(

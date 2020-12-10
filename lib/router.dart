@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/pages/addAdvisory.dart';
+import 'package:pansan_app/pages/searchCourseList.dart';
 import 'package:pansan_app/pages/dayTopic.dart';
 import 'package:pansan_app/pages/informAffiche.dart';
 import 'package:pansan_app/pages/myAdvisory.dart';
@@ -31,6 +33,11 @@ Map<String, Function> routers = {
   "/testRecords": (context) => TestRecords(), //考试记录
   "/myGrade": (context) => MyGrade(), //我的班级
   "/myAdvisory": (context) => MyAdvisory(), //我的咨询
+  "/addAdvisory": (context) => AddAdvisory(), //添加咨询
+  "/courseList": (context, {arguments}) {
+    //课程列表
+    return SearchCourseList(arguments: arguments);
+  },
 };
 
 Function onGenerateRoute = (RouteSettings settings) {

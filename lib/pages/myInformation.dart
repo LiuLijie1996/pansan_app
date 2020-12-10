@@ -356,6 +356,9 @@ class _MyInformationState extends State<MyInformation> {
     PickedFile image = await ImagePicker().getImage(
       source: ImageSource.gallery, // 打开相册
     );
+    setState(() {
+      _image = image ?? _image;
+    });
 
     try {
       // 上传文件
@@ -367,9 +370,5 @@ class _MyInformationState extends State<MyInformation> {
     } catch (e) {
       print(e);
     }
-
-    setState(() {
-      _image = image;
-    });
   }
 }

@@ -56,8 +56,7 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                     });
                   },
                   onSubmitted: (String value) {
-                    // 搜索课程
-                    searchCourse(value);
+                    searchCourse();
                   },
                   decoration: InputDecoration(
                     hintText: "请输入你要搜索的内容",
@@ -78,7 +77,7 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                       ),
                       onTap: () {
                         // 搜索课程
-                        searchCourse(searchValue);
+                        searchCourse();
                       },
                     ),
                   ),
@@ -293,12 +292,12 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
         };
       }).toList();
 
+      // 刷新页面
       setState(() {
         // 如果分页从1开始，先清空数组
         if (page == 1) {
           this.tabs[this._currentIndex]['data'] = [];
         }
-        print("记录当前数据对应的导航id: $id");
         this._currentNavId = id; //记录当前数据对应的导航id
         this.tabs[this._currentIndex]['page'] = page; //记录当前导航对应的分页
         this.tabs[this._currentIndex]['total'] = total; //记录当前导航对应的总个数
@@ -310,7 +309,10 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
   }
 
   // 搜索课程
-  searchCourse(String value) {
-    print("搜索课程: $value");
+  searchCourse() {
+    // 搜索课程
+    Navigator.pushNamed(context, "/courseList", arguments: {
+      "searchValue": searchValue ?? '',
+    });
   }
 }

@@ -1,4 +1,4 @@
-// 我的课程
+// 课程列表
 
 import 'dart:async';
 
@@ -9,25 +9,36 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
-class MyCourse extends StatefulWidget {
-  MyCourse({Key key}) : super(key: key);
+class SearchCourseList extends StatefulWidget {
+  final arguments;
+  SearchCourseList({Key key, this.arguments}) : super(key: key);
 
   @override
-  _MyCourseState createState() => _MyCourseState();
+  _SearchCourseListState createState() => _SearchCourseListState();
 }
 
-class _MyCourseState extends State<MyCourse> {
+class _SearchCourseListState extends State<SearchCourseList> {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
 
-  Map myCourseData = {
+  Map _arguments;
+  Map courseListData = {
+    "page": 1,
+    "psize": 20,
     "total": 0,
     "data": [],
-    "page": 1,
   };
 
-  _MyCourseState() {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _arguments = {
+      "searchValue": widget.arguments['searchValue'],
+    };
+
     // 倒计时
     timer = Timer(Duration(seconds: 5), () {
       setState(() {
@@ -35,8 +46,8 @@ class _MyCourseState extends State<MyCourse> {
       });
     });
 
-    // 请求数据
-    getData();
+    // 搜索课程
+    searchCourseData();
   }
 
   @override
@@ -52,31 +63,31 @@ class _MyCourseState extends State<MyCourse> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("我的课程"),
-        centerTitle: true,
+        title: Text("课程列表"),
       ),
       body: RefreshIndicator(
-        // 下拉刷新的回调
         onRefresh: () {
-          return getData(page: 1);
+          return searchCourseData(page: 1);
         },
         child: Container(
           color: Colors.white,
-          child: myCourseData['data'].length == 0
+          child: courseListData['data'].length == 0
               ? myWidget[_currentMyWidget]
               : ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
-                    List data = myCourseData['data'];
-                    int total = myCourseData['total'];
+                    List data = courseListData['data'];
+                    int total = courseListData['total'];
                     var item = data[index];
 
                     // 判断是否需要请求数据
                     if (index == data.length - 1) {
                       // 判断后台是否还是有数据
                       if (data.length < total) {
+                        print('请求数据, ${data.length} : $total');
+
                         // 请求数据
-                        int page = myCourseData['page'];
-                        getData(page: ++page);
+                        int page = ++courseListData['page'];
+                        searchCourseData(page: page);
 
                         return MyProgress();
                       } else {
@@ -91,28 +102,26 @@ class _MyCourseState extends State<MyCourse> {
                       item: item,
                     );
                   },
-                  itemCount: myCourseData['data'].length,
+                  itemCount: courseListData['data'].length,
                 ),
         ),
       ),
     );
   }
 
-  // 请求数据
-  getData({
-    int page = 1,
-  }) async {
+  // 搜索课程
+  searchCourseData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/user/myCourse",
+        path: "/api/course/searchCourse",
         data: {
-          "user_id": "用户id",
+          "search_value": _arguments['searchValue'],
           "page": page,
         },
       );
-      List data = result['data'];
-      int total = result['total'];
 
+      int total = result['total'];
+      List data = result['data'];
       List newData = data.map((e) {
         //时间
         DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
@@ -134,17 +143,15 @@ class _MyCourseState extends State<MyCourse> {
         };
       }).toList();
 
+      // 刷新页面
       setState(() {
         if (page == 1) {
-          myCourseData['data'] = []; //清空数据
+          courseListData['data'] = [];
         }
-
-        myCourseData['data'].addAll(newData);
-        myCourseData['page'] = page;
-        myCourseData['total'] = total;
+        courseListData['page'] = page;
+        courseListData['total'] = total;
+        courseListData['data'].addAll(newData);
       });
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

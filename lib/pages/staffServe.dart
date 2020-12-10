@@ -123,6 +123,14 @@ class _StaffServeState extends State<StaffServe>
           }).toList(),
         ),
       ),
+      floatingActionButton: _tabViewIndex == 2
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.pushNamed(context, "/addAdvisory");
+              },
+            )
+          : null,
       body: TabBarView(
         controller: _tabController,
         children: tabBarList.map((e) {

@@ -20,7 +20,6 @@ class CardItem extends StatelessWidget {
     Color statusColor;
 
     if (item['status'] != null) {
-      print(item['status']);
       statusText = item['status'] == 1
           ? '已学完'
           : item['status'] == 2
