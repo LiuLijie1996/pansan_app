@@ -697,7 +697,8 @@ class _NewestTestState extends State<NewestTest> {
                           Container(
                             margin: EdgeInsets.only(top: 15, left: 10),
                             child: Text(
-                                "${item['start_date']} 至 ${item['end_date']}"),
+                              "${item['start_date']} 至 ${item['end_date']}",
+                            ),
                           ),
                         ],
                       ),
