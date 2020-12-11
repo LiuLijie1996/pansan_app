@@ -13,6 +13,7 @@ var myIcon = {
   "eye-off": const IconData(0xe633, fontFamily: 'iconfont'), //眼睛闭
   "view": const IconData(0xe65f, fontFamily: 'iconfont'), //观看
   "arrows_right": const IconData(0xe60b, fontFamily: 'iconfont'), //右箭头
+  "linear_arrows_right": const IconData(0xe6b0, fontFamily: 'iconfont'), //线性右箭头
   "bi": const IconData(0xe742, fontFamily: 'iconfont'), //笔
   "pwd": const IconData(0xe62d, fontFamily: 'iconfont'), //锁
   "update": const IconData(0xe675, fontFamily: 'iconfont'), //检查更新

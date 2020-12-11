@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:date_format/date_format.dart';
-
+// 扫码
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
@@ -101,15 +101,13 @@ class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage>
-    with AutomaticKeepAliveClientMixin {
+class _IndexPageState extends State<IndexPage> {
   int _currentIndex = 0;
   int _totalLength = 0;
   List<dynamic> list = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     // 请求数据
@@ -118,7 +116,6 @@ class _IndexPageState extends State<IndexPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Padding(
       padding: EdgeInsets.only(left: 10, right: 10),
       child: CustomScrollView(
@@ -248,7 +245,8 @@ class _IndexPageState extends State<IndexPage>
     // 判断是否需要请求数据
     if (index == list.length - 1) {
       // 判断后端是否还有数据
-      if (list.length - 1 < _totalLength) {
+      if (list.length < _totalLength) {
+        print('请求数据');
         // 请求数据
         isRequestList();
 
@@ -273,7 +271,8 @@ class _IndexPageState extends State<IndexPage>
     // 判断是否需要请求数据
     if (index == list.length - 1) {
       // 判断后端是否还有数据
-      if (list.length - 1 < _totalLength) {
+      if (list.length < _totalLength) {
+        print('请求数据');
         // 请求数据
         isRequestList();
 
@@ -373,10 +372,6 @@ class _IndexPageState extends State<IndexPage>
       print(e);
     }
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 // 轮播图
@@ -422,11 +417,12 @@ class _MyBannerState extends State<MyBanner> {
                   );
                 },
                 itemCount: _bannerList.length,
-                pagination: new SwiperPagination(
-                    builder: DotSwiperPaginationBuilder(
-                  color: Colors.black54,
-                  activeColor: Colors.white,
-                )),
+                pagination: SwiperPagination(
+                  builder: DotSwiperPaginationBuilder(
+                    color: Colors.black54,
+                    activeColor: Colors.white,
+                  ),
+                ),
                 // control: new SwiperControl(),
                 scrollDirection: Axis.horizontal,
                 autoplay: true,
@@ -649,58 +645,57 @@ class _NewestTestState extends State<NewestTest> {
                   right = 0.0;
                 }
 
-                return Container(
-                  margin: EdgeInsets.only(right: right),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      width: 280,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // tag标签
-                          MyTags(
-                            radius: BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                            ),
-                            bgColor: item['type'] == 0
-                                ? Colors.grey
-                                : item['type'] == 1
-                                    ? Colors.green
-                                    : Colors.red,
-                            title: item['type'] == 0
-                                ? "未开始"
-                                : item['type'] == 1
-                                    ? '进行中'
-                                    : "已结束",
-                          ),
-
-                          // 考试标题
-                          Container(
-                            margin: EdgeInsets.only(top: 15, left: 10),
-                            child: Text(
-                              "${item['title']}",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/examSiteInfo", arguments: {
+                      "test_id": item['test_id'],
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: right),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        width: 280,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // tag标签
+                            MyTags(
+                              radius: BorderRadius.only(
+                                bottomRight: Radius.circular(10),
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              bgColor: Colors.green,
+                              title: '进行中',
                             ),
-                          ),
 
-                          // 考试时间
-                          Container(
-                            margin: EdgeInsets.only(top: 15, left: 10),
-                            child: Text(
-                              "${item['start_date']} 至 ${item['end_date']}",
+                            // 考试标题
+                            Container(
+                              margin: EdgeInsets.only(top: 15, left: 10),
+                              child: Text(
+                                "${item['title']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                        ],
+
+                            // 考试时间
+                            Container(
+                              margin: EdgeInsets.only(top: 15, left: 10),
+                              child: Text(
+                                "${item['start_date']} 至 ${item['end_date']}",
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -721,7 +716,7 @@ class _NewestTestState extends State<NewestTest> {
 
       // 遍历获取的数据
       newsList.forEach((item) {
-        int testType = item['type']; //考试类型
+        int status = item['status']; //考试类型
         DateTime startDate = DateTime.fromMillisecondsSinceEpoch(
             item['start_date'] * 1000); //开始时间
         DateTime endDate =
@@ -732,16 +727,19 @@ class _NewestTestState extends State<NewestTest> {
         String endTime =
             formatDate(endDate, [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]);
 
-        if (testType != 2) {
+        if (status == 1) {
           // 添加数据到数组中
-          setState(() {
-            newsTest.add({
-              "type": item['type'], //考试类型
-              "start_date": startTime, //开始时间
-              "end_date": endTime, //结束时间
-              "title": item["title"], //考试标题
-            });
+          newsTest.add({
+            "test_id": item['test_id'], //考试id
+            "status": status, //考试状态 0未开始 1进行中 2已结束
+            "type": item['type'], //考试类型， 1模拟 2正式 3补考
+            "start_date": startTime, //开始时间
+            "end_date": endTime, //结束时间
+            "title": item["title"], //考试标题
           });
+
+          // 刷新页面
+          setState(() {});
         }
       });
     } catch (e) {

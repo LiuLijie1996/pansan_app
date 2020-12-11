@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/pages/addAdvisory.dart';
+import 'package:pansan_app/pages/examSelect.dart';
+import 'package:pansan_app/pages/examSiteInfo.dart';
 import 'package:pansan_app/pages/searchCourseList.dart';
 import 'package:pansan_app/pages/dayTopic.dart';
 import 'package:pansan_app/pages/informAffiche.dart';
@@ -37,6 +39,14 @@ Map<String, Function> routers = {
   "/courseList": (context, {arguments}) {
     //课程列表
     return SearchCourseList(arguments: arguments);
+  },
+  "/examSiteInfo": (context, {arguments}) {
+    //考场信息页面
+    return ExamSiteInfo(arguments: arguments);
+  },
+  "/examSelect": (context, {arguments}) {
+    //考试列表选择
+    return ExamSelect(arguments: arguments);
   },
 };
 

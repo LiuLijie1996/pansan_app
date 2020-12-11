@@ -47,6 +47,7 @@ class _ExamPageState extends State<ExamPage> {
         padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
         child: Column(
           children: [
+            // 我要考试
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -95,6 +96,7 @@ class _ExamPageState extends State<ExamPage> {
                       ],
                     ),
                   ),
+
                   // 我要考试列表
                   Column(
                     children: myExamNavList.length != null
@@ -114,8 +116,12 @@ class _ExamPageState extends State<ExamPage> {
                               ),
                               child: NavItem(
                                 item: e,
-                                onClick: (Map item) {
-                                  print(item);
+                                onClick: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/examSelect",
+                                    arguments: e,
+                                  );
                                 },
                               ),
                             );
@@ -125,6 +131,8 @@ class _ExamPageState extends State<ExamPage> {
                 ],
               ),
             ),
+
+            // 我要练习
             Container(
               margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
@@ -193,8 +201,8 @@ class _ExamPageState extends State<ExamPage> {
                               ),
                               child: NavItem(
                                 item: e,
-                                onClick: (Map item) {
-                                  print(item);
+                                onClick: () {
+                                  print(e);
                                 },
                               ),
                             );
@@ -259,12 +267,10 @@ class _ExamPageState extends State<ExamPage> {
   }
 }
 
-typedef MyFunc = Function(Map item);
-
 // 考试导航列表
 class NavItem extends StatelessWidget {
   final item;
-  final MyFunc onClick;
+  final Function() onClick;
   const NavItem({Key key, @required this.item, this.onClick}) : super(key: key);
 
   @override
@@ -272,7 +278,7 @@ class NavItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (onClick != null) {
-          onClick(item);
+          onClick();
         }
       },
       child: ListTile(
