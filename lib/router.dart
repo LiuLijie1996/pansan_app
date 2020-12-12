@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/pages/exerciseSpecialtySelect.dart';
+import 'package:pansan_app/pages/exerciseSelect.dart';
 import 'package:pansan_app/pages/addAdvisory.dart';
 import 'package:pansan_app/pages/examSelect.dart';
 import 'package:pansan_app/pages/examSiteInfo.dart';
@@ -47,6 +49,14 @@ Map<String, Function> routers = {
   "/examSelect": (context, {arguments}) {
     //考试列表选择
     return ExamSelect(arguments: arguments);
+  },
+  "/exerciseSelect": (context, {arguments}) {
+    //专项练习列表选择
+    return ExerciseSelect(arguments: arguments);
+  },
+  "/exerciseSpecialtySelect": (context, {arguments}) {
+    //专项练习列表选择
+    return ExerciseSpecialtySelect(arguments: arguments);
   },
 };
 

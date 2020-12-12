@@ -99,34 +99,31 @@ class _ExamPageState extends State<ExamPage> {
 
                   // 我要考试列表
                   Column(
-                    children: myExamNavList.length != null
-                        ? myExamNavList.map((e) {
-                            bool b =
-                                e == myExamNavList[myExamNavList.length - 1];
-                            return Container(
-                              decoration: BoxDecoration(
-                                border: b != true
-                                    ? Border(
-                                        bottom: BorderSide(
-                                          color: Colors.grey[200],
-                                          width: 0.5,
-                                        ),
-                                      )
-                                    : null,
-                              ),
-                              child: NavItem(
-                                item: e,
-                                onClick: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    "/examSelect",
-                                    arguments: e,
-                                  );
-                                },
-                              ),
+                    children: myExamNavList.map((e) {
+                      bool b = e == myExamNavList[myExamNavList.length - 1];
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: b != true
+                              ? Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey[200],
+                                    width: 0.5,
+                                  ),
+                                )
+                              : null,
+                        ),
+                        child: NavItem(
+                          item: e,
+                          onClick: () {
+                            Navigator.pushNamed(
+                              context,
+                              "/examSelect",
+                              arguments: e,
                             );
-                          }).toList()
-                        : null,
+                          },
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -182,32 +179,44 @@ class _ExamPageState extends State<ExamPage> {
                       ],
                     ),
                   ),
+
                   // 我要练习列表
                   Column(
-                    children: myExerciseNavList.length != null
-                        ? myExerciseNavList.map((e) {
-                            bool b = e ==
-                                myExerciseNavList[myExerciseNavList.length - 1];
-                            return Container(
-                              decoration: BoxDecoration(
-                                border: b != true
-                                    ? Border(
-                                        bottom: BorderSide(
-                                          color: Colors.grey[200],
-                                          width: 0.5,
-                                        ),
-                                      )
-                                    : null,
-                              ),
-                              child: NavItem(
-                                item: e,
-                                onClick: () {
-                                  print(e);
-                                },
-                              ),
-                            );
-                          }).toList()
-                        : null,
+                    children: myExerciseNavList.map((e) {
+                      bool border =
+                          e == myExerciseNavList[myExerciseNavList.length - 1];
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: border != true
+                              ? Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey[200],
+                                    width: 0.5,
+                                  ),
+                                )
+                              : null,
+                        ),
+                        child: NavItem(
+                          item: e,
+                          onClick: () {
+                            if (e['id'] != 0) {
+                              Navigator.pushNamed(
+                                context,
+                                "/exerciseSelect",
+                                arguments: e,
+                              );
+                            } else {
+                              // 跳转到专项练习列表选择页
+                              Navigator.pushNamed(
+                                context,
+                                "/exerciseSpecialtySelect",
+                                arguments: e,
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -257,10 +266,17 @@ class _ExamPageState extends State<ExamPage> {
         };
       }).toList();
 
-      setState(() {
-        myExamNavList = exams;
-        myExerciseNavList = exercises;
-      });
+      if (this.mounted) {
+        setState(() {
+          myExamNavList = exams;
+          myExerciseNavList = exercises;
+          myExerciseNavList.add({
+            "id": 0,
+            "name": "专项练习",
+            "icons": icons[Random().nextInt(5 - 0)],
+          });
+        });
+      }
     } catch (e) {
       print(e);
     }

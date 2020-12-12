@@ -312,19 +312,22 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
         "test_id": widget.arguments['test_id'],
       });
       Map data = result['data'];
-      setState(() {
-        examSiteInfo = {
-          "id": data['id'], //考试id
-          "type": data['type'], //考试类型
-          "address": data['address'], //考试地址
-          "duration": data['duration'], //考试限时
-          "passing_mark": data['passing_mark'], //及格分数
-          "test_num": data['test_num'], //考试次数
-          "cut_screen_type": data['cut_screen_type'], //是否开启切屏限制  1开启切屏限制
-          "cut_screen_num": data['cut_screen_num'], //考试时切屏最大次数
-          "cut_screen_time": data['cut_screen_time'], //考试切屏时最大等待时间
-        };
-      });
+
+      if (this.mounted) {
+        setState(() {
+          examSiteInfo = {
+            "id": data['id'], //考试id
+            "type": data['type'], //考试类型
+            "address": data['address'], //考试地址
+            "duration": data['duration'], //考试限时
+            "passing_mark": data['passing_mark'], //及格分数
+            "test_num": data['test_num'], //考试次数
+            "cut_screen_type": data['cut_screen_type'], //是否开启切屏限制  1开启切屏限制
+            "cut_screen_num": data['cut_screen_num'], //考试时切屏最大次数
+            "cut_screen_time": data['cut_screen_time'], //考试切屏时最大等待时间
+          };
+        });
+      }
     } catch (e) {
       print(e);
     }

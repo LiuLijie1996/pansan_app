@@ -1,8 +1,11 @@
 // 考试列表选择
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
+import 'package:pansan_app/components/EmptyBox.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamSelect extends StatefulWidget {
@@ -14,6 +17,10 @@ class ExamSelect extends StatefulWidget {
 }
 
 class _ExamSelectState extends State<ExamSelect> {
+  Timer timer;
+  int _currentMyWidget = 0;
+  List myWidget = [MyProgress(), EmptyBox()];
+
   Map examData = {
     "page": 1,
     "psize": 20,
@@ -26,8 +33,24 @@ class _ExamSelectState extends State<ExamSelect> {
     // TODO: implement initState
     super.initState();
 
+    // 倒计时
+    timer = Timer(Duration(seconds: 5), () {
+      setState(() {
+        _currentMyWidget = 1;
+      });
+    });
+
     // 获取数据
     getExamData();
+  }
+
+  @override
+  void dispose() {
+    // 清除定时器
+    timer?.cancel();
+    timer = null;
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -36,6 +59,7 @@ class _ExamSelectState extends State<ExamSelect> {
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.arguments['name']}"),
+        centerTitle: true,
       ),
       body: Container(
         // padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -43,159 +67,182 @@ class _ExamSelectState extends State<ExamSelect> {
           onRefresh: () {
             return getExamData(page: 1);
           },
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              double bottom = examData['data'].length - 1 == index ? 15.0 : 0.0;
-              Map item = examData['data'][index];
-              // 考试状态
-              String examStatus = item['status'] == 0
-                  ? '未开始'
-                  : item['status'] == 1
-                      ? '进行中'
-                      : item['status'] == 2
-                          ? '已结束'
-                          : '';
-
-              return Container(
-                margin: EdgeInsets.only(
-                  top: 15.0,
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: bottom,
-                ),
-                height: 200.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[300],
-                      blurRadius: 10.0,
-                      offset: Offset(5.0, 5.0),
-                    ),
-                    BoxShadow(
-                      color: Colors.blue[50],
-                      blurRadius: 10.0,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    // 标题
-                    Container(
-                      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                      child: Text(
-                        "${item['name']}",
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-
-                    // 时间
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "开始",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "${item['start_time']}",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/jiantou.png",
-                            width: 50.0,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "结束",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "${item['end_time']}",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // 分割线
-                    SizedBox(
-                      child: Divider(),
-                    ),
-
+          child: examData['data'].length == 0
+              ? myWidget[_currentMyWidget]
+              : ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    double bottom =
+                        examData['data'].length - 1 == index ? 15.0 : 0.0;
+                    Map item = examData['data'][index];
                     // 考试状态
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("$examStatus"),
-                        SizedBox(),
-                        SizedBox(),
-                        RaisedButton(
-                          color: item['is_test'] ? Colors.blue : Colors.grey,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                    String examStatus = '';
+                    switch (item['status']) {
+                      case 0:
+                        examStatus = '未开始';
+                        break;
+                      case 1:
+                        examStatus = '进行中';
+                        break;
+                      case 2:
+                        examStatus = '已结束';
+                        break;
+                    }
+
+                    return Container(
+                      margin: EdgeInsets.only(
+                        top: 15.0,
+                        left: 10.0,
+                        right: 10.0,
+                        bottom: bottom,
+                      ),
+                      height: 200.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[300],
+                            blurRadius: 10.0,
+                            offset: Offset(5.0, 5.0),
                           ),
-                          onPressed: () {
-                            // 判断是否可以进入考试
-                            if (item['is_test']) {
-                              // 进入考试
-                              Navigator.pushNamed(
-                                context,
-                                "/examSiteInfo",
-                                arguments: {
-                                  "test_id": item['id'],
-                                },
-                              );
-                            } else {
-                              print("不能进入考场");
-                            }
-                          },
-                          child: Text(
-                            "开始考试",
-                            style: TextStyle(
-                              color: Colors.white,
+                          BoxShadow(
+                            color: Colors.blue[50],
+                            blurRadius: 10.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // 标题
+                          Container(
+                            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            child: Text(
+                              "${item['name']}",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
 
-                    SizedBox(),
-                  ],
+                          // 时间
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "开始",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      "${item['start_time']}",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: Image.asset(
+                                  "assets/images/jiantou.png",
+                                  width: 50.0,
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(right: 10.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "结束",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      "${item['end_time']}",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          // 分割线
+                          SizedBox(
+                            child: Divider(),
+                          ),
+
+                          // 考试状态
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text("$examStatus"),
+                              SizedBox(),
+                              SizedBox(),
+                              RaisedButton(
+                                color:
+                                    item['is_test'] ? Colors.blue : Colors.grey,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                onPressed: () async {
+                                  // 判断是否可以进入考试
+                                  if (item['is_test'] == true) {
+                                    // 进入考试
+                                    Navigator.pushNamed(
+                                      context,
+                                      "/examSiteInfo",
+                                      arguments: {
+                                        "test_id": item['id'],
+                                      },
+                                    );
+                                  } else {
+                                    String text =
+                                        item['status'] == 0 ? '考试未开始' : '考试已结束';
+
+                                    if (item['status'] != 1) {
+                                      _showDialog(text);
+                                    } else {
+                                      _showDialog('不能重复参加考试');
+                                    }
+
+                                    Future.delayed(
+                                      Duration(milliseconds: 2000),
+                                    ).then((value) {
+                                      print("关闭弹窗");
+                                      Navigator.pop(context);
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  "开始考试",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: examData['data'].length,
                 ),
-              );
-            },
-            itemCount: examData['data'].length,
-          ),
         ),
       ),
     );
@@ -244,16 +291,57 @@ class _ExamSelectState extends State<ExamSelect> {
         };
       }).toList();
 
-      setState(() {
-        if (page == 1) {
-          examData['data'] = [];
-        }
-        examData['page'] = page;
-        examData['total'] = total;
-        examData['data'].addAll(newData);
-      });
+      if (this.mounted) {
+        setState(() {
+          if (page == 1) {
+            examData['data'] = [];
+          }
+          examData['page'] = page;
+          examData['total'] = total;
+          examData['data'].addAll(newData);
+        });
+      }
     } catch (e) {
       print(e);
     }
+  }
+
+  // 设置弹窗
+  Future _showDialog(String text) {
+    Future<bool> _onWillPop() => new Future.value(false);
+    return showDialog(
+      context: context,
+      barrierColor: Colors.transparent,
+      barrierDismissible: false,
+      builder: (context) {
+        // WillPopScope  可以用来屏蔽返回按键
+        return WillPopScope(
+          onWillPop: _onWillPop,
+          child: Container(
+            alignment: Alignment.center,
+            child: Container(
+              padding: EdgeInsets.only(
+                left: 10.0,
+                right: 10.0,
+                top: 10.0,
+                bottom: 10.0,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black45,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
