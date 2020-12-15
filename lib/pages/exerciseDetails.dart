@@ -1,12 +1,14 @@
 // 练习详情
 
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:pansan_app/components/TestSelect.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/choiceList.dart';
-import 'package:pansan_app/models/singleAndJudge.dart';
+import 'package:pansan_app/models/examIssueType.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final Map arguments;
+
   ExerciseDetails({Key key, this.arguments}) : super(key: key);
 
   @override
@@ -15,7 +17,10 @@ class ExerciseDetails extends StatefulWidget {
 
 class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
   // 题目列表
-  List<SingleAndJudge> dataList = [];
+  List<ExamIssueDataType> dataList = [];
+
+  //当前题目下标
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -28,7 +33,32 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
-    print("dataList.length  ${dataList.length}  ${dataList[0]}");
+    //当前题目是否确定选择了
+    var is_sure = dataList[_currentIndex].is_sure;
+
+    // 底部导航
+    List<BottomNavigationBarItem> bottomNav = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.keyboard_arrow_left),
+        label: "上一题",
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.grade),
+        label: "收藏",
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(
+          Icons.save,
+          color: is_sure ? Colors.grey : Colors.black,
+        ),
+        label: "确定",
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.keyboard_arrow_right),
+        label: "下一题",
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text("技术人员测试"),
@@ -50,20 +80,18 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard_arrow_left),
-            label: "上一题",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grade),
-            label: "收藏",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard_arrow_right),
-            label: "下一题",
-          ),
-        ],
+        onTap: (int index) {
+          if (index == 0) {
+          } else if (index == 1) {
+          } else if (index == 2) {
+            if (is_sure == false) {
+              setState(() {
+                dataList[_currentIndex].is_sure = true;
+              });
+            }
+          } else if (index == 3) {}
+        },
+        items: bottomNav,
       ),
       body: Column(
         children: [
@@ -90,19 +118,57 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: dp(30.0),
-                  right: dp(30.0),
-                  top: dp(20.0),
-                  bottom: dp(20.0),
-                ),
-                // 单选题
-                child: SingleChoice(
-                  data: dataList[0],
-                ),
-              ),
+            //轮播
+            child: Swiper(
+              loop: false,
+              onIndexChanged: (int index) {
+                setState(() {
+                  //判断用户是否选择了
+                  if (dataList[_currentIndex].user_answer.length != 0) {
+                    dataList[_currentIndex].is_sure = true;
+                  }
+                  _currentIndex = index;
+                });
+              },
+              itemCount: dataList.length,
+              itemBuilder: (BuildContext context, int index) {
+                ExamIssueDataType item = dataList[index];
+
+                Widget _choice = SingleChoice(
+                  data: item,
+                  onChange: (List<String> obj) {
+                    setState(() {
+                      dataList[index].user_answer = obj;
+                    });
+                  },
+                );
+
+                print("${item.type}");
+
+                if (item.type == 1) {
+                  //多选题
+                  _choice = MultipleChoice(
+                    data: item,
+                    onChange: (List<String> obj) {
+                      setState(() {
+                        dataList[index].user_answer = obj;
+                      });
+                    },
+                  );
+                }
+
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: dp(30.0),
+                      right: dp(30.0),
+                      top: dp(20.0),
+                      bottom: dp(20.0),
+                    ),
+                    child: _choice,
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -110,16 +176,38 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
     );
   }
 
+  // 获取数据
   getDataList() {
     List listData = [
       {
         "id": 13505,
+        "type": 3,
         "stem": "采掘工作面的空气温度超30℃，机电设备硐室的空气温度超过34℃时，必须停止作业。（对）",
         "option": [
-          {"lable": "A", "value": "对"},
-          {"lable": "B", "value": "错"}
+          {"label": "A", "value": "对"},
+          {"label": "B", "value": "错"}
         ],
-        "answer": "A", //正确答案
+        "answer": ["A"], //正确答案
+        "analysis": "", //答案解析
+        "disorder": "5", //当前题目分数
+        "userFavor": false, //用户是否收藏
+      },
+      {
+        "id": 13505,
+        "type": 1,
+        "stem": "采掘工作面的空气温度超30℃，机电设备硐室的空气温度超过34℃时，必须停止作业。（对）",
+        "option": [
+          {"label": "A", "value": "大家发的"},
+          {"label": "B", "value": "废话不说的"},
+          {"label": "C", "value": "v让法国人"},
+          {"label": "D", "value": "的发电厂"},
+          {"label": "E", "value": "发的发的"},
+          {"label": "F", "value": "人头就喝点水"},
+          {"label": "G", "value": "发给你不发给"},
+          {"label": "H", "value": "违法污染"},
+          {"label": "I", "value": "你干嘛"},
+        ],
+        "answer": ["C", "F", "H"], //正确答案
         "analysis": "", //答案解析
         "disorder": "5", //当前题目分数
         "userFavor": false, //用户是否收藏
@@ -130,165 +218,26 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
       List options = e['option'];
       List<ChoiceList> option = options.map((item) {
         return ChoiceList(
-          lable: item['lable'],
+          label: item['label'],
           value: item['value'],
         );
       }).toList();
-      return SingleAndJudge(
+
+      return ExamIssueDataType(
         id: e['id'],
         stem: e['stem'],
+        type: e['type'],
         option: option,
         answer: e['answer'],
         analysis: e['analysis'],
         disorder: e['disorder'],
         userFavor: e['userFavor'],
+        user_answer: [],
+        //用户选择的答案
+        is_sure: false, //是否确定选择
       );
     }).toList();
 
     setState(() {});
-  }
-}
-
-// 单选题
-class SingleChoice extends StatelessWidget with MyScreenUtil {
-  final SingleAndJudge data;
-  SingleChoice({Key key, this.data}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<ChoiceList> options = data.option;
-    return Column(
-      children: [
-        Text(
-          "${data.stem}",
-          style: TextStyle(
-            fontSize: dp(36.0),
-            height: 1.2,
-          ),
-        ),
-        Column(
-          children: options.map((e) {
-            return MyChoiceButton(
-              option: e,
-              select: null,
-            );
-          }).toList(),
-        )
-      ],
-    );
-  }
-}
-
-// 按钮
-class MyChoiceButton extends StatelessWidget with MyScreenUtil {
-  final bool select; //是否选择
-  final ChoiceList option; //选择项
-  final bool disabled; //是否禁止点击
-  const MyChoiceButton({
-    Key key,
-    this.select,
-    @required this.option,
-    this.disabled = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // 按钮
-    Map button = {
-      "borderColor": Colors.grey[300], //边框颜色
-      "textColor": Colors.black, //文字颜色
-      "backgroundColor": Colors.grey[100], //背景颜色
-    };
-
-    // lable
-    Map lable = {
-      "borderColor": Colors.grey[300], //边框颜色
-      "textColor": Colors.grey, //文字颜色
-      "backgroundColor": Colors.white, //背景颜色
-    };
-
-    if (select == false) {
-      // 选择错误时的颜色
-      button = {
-        "borderColor": Colors.red[300], //边框颜色
-        "textColor": Colors.red, //文字颜色
-        "backgroundColor": Colors.red[100], //背景颜色
-      };
-      lable = {
-        "borderColor": Colors.red[300], //边框颜色
-        "textColor": Colors.white, //文字颜色
-        "backgroundColor": Colors.red, //背景颜色
-      };
-    } else if (select == true) {
-      // 选择正确时的颜色
-      button = {
-        "borderColor": Colors.blue[300], //边框颜色
-        "textColor": Colors.blue, //文字颜色
-        "backgroundColor": Colors.blue[100], //背景颜色
-      };
-      lable = {
-        "borderColor": Colors.blue[300], //边框颜色
-        "textColor": Colors.white, //文字颜色
-        "backgroundColor": Colors.blue, //背景颜色
-      };
-    }
-
-    return Container(
-      margin: EdgeInsets.only(top: 20.0),
-      padding: EdgeInsets.only(
-        top: dp(20.0),
-        bottom: dp(20.0),
-        left: dp(20.0),
-        right: dp(20.0),
-      ),
-      decoration: BoxDecoration(
-        color: button['backgroundColor'],
-        border: Border.all(
-          color: button['borderColor'],
-        ),
-        borderRadius: BorderRadius.circular(dp(16.0)),
-      ),
-      child: InkWell(
-        onTap: () {
-          if (!disabled) {
-            print(option.toJson());
-          }
-        },
-        child: Row(
-          children: [
-            // lable
-            Container(
-              width: dp(60.0),
-              height: dp(60.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: lable['backgroundColor'], //lable的背景
-                border: Border.all(
-                  color: lable['borderColor'], //lable的边框
-                ),
-                borderRadius: BorderRadius.circular(dp(200.0)),
-              ),
-              child: Text(
-                "${option.lable}",
-                style: TextStyle(
-                  color: lable['textColor'], //lable的文字
-                ),
-              ),
-            ),
-            SizedBox(width: dp(20.0)),
-            Expanded(
-              child: Text(
-                "${option.value}",
-                style: TextStyle(
-                  fontSize: dp(32.0),
-                  height: 1.1,
-                  color: button['textColor'],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
