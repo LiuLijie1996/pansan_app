@@ -1,6 +1,7 @@
 // 添加咨询
 
 import 'package:flutter/material.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class AddAdvisory extends StatefulWidget {
@@ -10,7 +11,7 @@ class AddAdvisory extends StatefulWidget {
   _AddAdvisoryState createState() => _AddAdvisoryState();
 }
 
-class _AddAdvisoryState extends State<AddAdvisory> {
+class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>(); // 表单的key
   TextEditingController _titleController =
       TextEditingController(); //标题输入框使用到的控制器
@@ -34,7 +35,7 @@ class _AddAdvisoryState extends State<AddAdvisory> {
             children: [
               // 标题输入框
               Container(
-                padding: EdgeInsets.only(left: 5.0),
+                padding: EdgeInsets.only(left: dp(10.0)),
                 // decoration: BoxDecoration(
                 //   border: Border(
                 //     bottom: BorderSide(
@@ -47,7 +48,7 @@ class _AddAdvisoryState extends State<AddAdvisory> {
                   controller: _titleController,
                   decoration: InputDecoration(
                     icon: Container(
-                      width: 60.0,
+                      width: dp(120.0),
                       alignment: Alignment.centerRight,
                       child: Text("标题"),
                     ),
@@ -62,21 +63,13 @@ class _AddAdvisoryState extends State<AddAdvisory> {
 
               // 咨询内容
               Container(
-                padding: EdgeInsets.only(left: 5.0),
-                // decoration: BoxDecoration(
-                //   border: Border(
-                //     bottom: BorderSide(
-                //       color: Colors.grey,
-                //       width: 0.5,
-                //     ),
-                //   ),
-                // ),
+                padding: EdgeInsets.only(left: dp(10.0)),
                 child: TextFormField(
                   maxLines: null,
                   controller: _textController,
                   decoration: InputDecoration(
                     icon: Container(
-                      width: 60.0,
+                      width: dp(120.0),
                       alignment: Alignment.centerRight,
                       child: Text("咨询内容"),
                     ),
@@ -89,7 +82,7 @@ class _AddAdvisoryState extends State<AddAdvisory> {
                 ),
               ),
 
-              SizedBox(height: 10.0),
+              SizedBox(height: dp(20.0)),
 
               RaisedButton(
                 child: Text("提交"),

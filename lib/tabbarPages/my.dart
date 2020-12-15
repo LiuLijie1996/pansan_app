@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 
 // 我的页面
 class My extends StatelessWidget {
@@ -114,7 +115,7 @@ class My extends StatelessWidget {
 }
 
 // 快捷导航
-class FastNavList extends StatelessWidget {
+class FastNavList extends StatelessWidget with MyScreenUtil {
   const FastNavList({Key key}) : super(key: key);
 
   @override
@@ -143,13 +144,13 @@ class FastNavList extends StatelessWidget {
     ];
 
     return Container(
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+      padding: EdgeInsets.only(top: dp(20.0), bottom: dp(20.0)),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(dp(20.0)),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            blurRadius: 10.0, //阴影范围
+            blurRadius: dp(20.0), //阴影范围
             spreadRadius: 0.1, //阴影浓度
             color: Colors.grey[300], //阴影颜色
           ),
@@ -165,15 +166,15 @@ class FastNavList extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: 30.0,
+                  width: dp(60.0),
                   child: Image.asset("${e['icon']}"),
                 ),
                 SizedBox(
-                  height: 5.0,
+                  height: dp(10.0),
                 ),
                 Text(
                   "${e['title']}",
-                  style: TextStyle(fontSize: 12.0),
+                  style: TextStyle(fontSize: dp(24.0)),
                 ),
               ],
             ),
@@ -185,7 +186,7 @@ class FastNavList extends StatelessWidget {
 }
 
 // 功能列表
-class FunctionList extends StatelessWidget {
+class FunctionList extends StatelessWidget with MyScreenUtil {
   const FunctionList({Key key}) : super(key: key);
 
   @override
@@ -229,24 +230,24 @@ class FunctionList extends StatelessWidget {
             }
           },
           child: Container(
-            width: 25.0,
+            width: dp(50.0),
             padding: EdgeInsets.only(
-              left: 10.0,
-              right: 10.0,
-              top: 8.0,
-              bottom: 8.0,
+              left: dp(20.0),
+              right: dp(20.0),
+              top: dp(16.0),
+              bottom: dp(16.0),
             ),
             child: Row(
               children: [
                 SizedBox(
-                  width: 10.0,
+                  width: dp(20.0),
                 ),
                 Image.asset(
                   "${e['icon']}",
-                  width: 20.0,
+                  width: dp(40.0),
                 ),
                 SizedBox(
-                  width: 20.0,
+                  width: dp(40.0),
                 ),
                 Text("${e['title']}"),
               ],

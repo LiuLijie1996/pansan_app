@@ -1,6 +1,7 @@
 // 考场信息
 
 import 'package:flutter/material.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamSiteInfo extends StatefulWidget {
@@ -11,7 +12,7 @@ class ExamSiteInfo extends StatefulWidget {
   _ExamSiteInfoState createState() => _ExamSiteInfoState();
 }
 
-class _ExamSiteInfoState extends State<ExamSiteInfo> {
+class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
   Map examSiteInfo = {};
 
   @override
@@ -53,11 +54,11 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
               Container(
                 width: double.infinity,
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                padding: EdgeInsets.only(top: dp(40.0), bottom: dp(40.0)),
                 child: Text(
                   "技术部测试11月月考",
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: dp(40.0),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -69,15 +70,15 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.grey[200],
-                      width: 0.5,
+                      width: dp(1.0),
                     ),
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,15 +107,15 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.grey[200],
-                      width: 0.5,
+                      width: dp(1.0),
                     ),
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,15 +144,15 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.grey[200],
-                      width: 0.5,
+                      width: dp(1.0),
                     ),
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,15 +181,15 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.grey[200],
-                      width: 0.5,
+                      width: dp(1.0),
                     ),
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,15 +218,15 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.grey[200],
-                      width: 0.5,
+                      width: dp(1.0),
                     ),
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,10 +252,10 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 20.0,
-                  left: 10.0,
-                  right: 10.0,
+                  top: dp(40.0),
+                  bottom: dp(40.0),
+                  left: dp(20.0),
+                  right: dp(20.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,7 +268,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
                       ),
                     ),
                     Container(
-                      width: 200.0,
+                      width: dp(400.0),
                       child: Text(
                         "本场考试只能参加$test_num，只能在指定考场参加本次考试！${examSiteInfo['cut_screen_type'] == 1 ? '切屏次数不得大于' + examSiteInfo['cut_screen_num'].toString() + '次，离开页面不得超过' + examSiteInfo['cut_screen_time'].toString() + '秒' : ''}",
                         style: TextStyle(
@@ -281,19 +282,19 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> {
               ),
               Container(
                 width: double.infinity,
-                height: 45.0,
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                height: dp(90.0),
+                padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                 child: RaisedButton(
                   color: Colors.blue,
                   onPressed: () {},
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(dp(10.0)),
                   ),
                   child: Text(
                     "进入考试",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.0,
+                      fontSize: dp(32.0),
                     ),
                   ),
                 ),

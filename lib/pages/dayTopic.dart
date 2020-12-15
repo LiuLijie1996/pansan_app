@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class DayTopic extends StatefulWidget {
@@ -119,7 +120,7 @@ class _DayTopicState extends State<DayTopic> {
 }
 
 // 一日一题成员组件
-class DayTopicItem extends StatelessWidget {
+class DayTopicItem extends StatelessWidget with MyScreenUtil {
   final Map item;
 
   const DayTopicItem({Key key, this.item}) : super(key: key);
@@ -135,21 +136,21 @@ class DayTopicItem extends StatelessWidget {
         Row(
           children: [
             Container(
-              width: 3.0,
-              height: 15.0,
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              width: dp(6.0),
+              height: dp(30.0),
+              margin: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
               color: Colors.blue,
             ),
             Text(
               "${item['time']}",
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: dp(40.0),
               ),
             ),
           ],
         ),
         Container(
-          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+          padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
           child: Column(
             children: child.map((e) {
               String status = e['status'] == 1 ? "已学习" : "未学习";
@@ -160,14 +161,14 @@ class DayTopicItem extends StatelessWidget {
                   print(e);
                 },
                 child: Container(
-                  margin: EdgeInsets.only(top: 10.0),
+                  margin: EdgeInsets.only(top: dp(20.0)),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(dp(20.0)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey[300],
-                        blurRadius: 5.0,
+                        blurRadius: dp(10.0),
                         offset: Offset(0.0, 0.0),
                       ),
                     ],

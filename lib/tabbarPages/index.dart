@@ -7,6 +7,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
@@ -20,7 +21,7 @@ class Index extends StatefulWidget {
   _IndexState createState() => _IndexState();
 }
 
-class _IndexState extends State<Index> {
+class _IndexState extends State<Index> with MyScreenUtil {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +36,7 @@ class _IndexState extends State<Index> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Color.fromRGBO(0, 0, 0, 0.2),
-                borderRadius: BorderRadius.circular(40.0),
+                borderRadius: BorderRadius.circular(dp(80.0)),
               ),
               child: IconButton(
                 onPressed: () {
@@ -50,10 +51,10 @@ class _IndexState extends State<Index> {
               // width: 35.0,
               // height: 35.0,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              margin: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
               decoration: BoxDecoration(
                 color: Color.fromRGBO(0, 0, 0, 0.2),
-                borderRadius: BorderRadius.circular(40.0),
+                borderRadius: BorderRadius.circular(dp(80.0)),
               ),
               child: IconButton(
                 onPressed: () {
@@ -101,7 +102,7 @@ class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   int _currentIndex = 0;
   int _totalLength = 0;
   List<dynamic> list = [];
@@ -117,7 +118,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
       child: CustomScrollView(
         slivers: [
           // 轮播图
@@ -139,7 +140,7 @@ class _IndexPageState extends State<IndexPage> {
           SliverToBoxAdapter(
             child: Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 10, bottom: 10),
+              margin: EdgeInsets.only(top: dp(20.0), bottom: dp(20.0)),
               child: Container(
                 child: Column(
                   children: [
@@ -163,7 +164,7 @@ class _IndexPageState extends State<IndexPage> {
                               child: Text(
                                 "矿井动态",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: dp(32.0),
                                   fontWeight: FontWeight.bold,
                                   color: _currentIndex == 0
                                       ? Colors.black
@@ -171,7 +172,7 @@ class _IndexPageState extends State<IndexPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: dp(20.0)),
                             GestureDetector(
                               onTap: () {
                                 print("最新课程");
@@ -185,7 +186,7 @@ class _IndexPageState extends State<IndexPage> {
                               child: Text(
                                 "最新课程",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: dp(32.0),
                                   fontWeight: FontWeight.bold,
                                   color: _currentIndex == 1
                                       ? Colors.black
@@ -382,7 +383,7 @@ class MyBanner extends StatefulWidget {
   _MyBannerState createState() => _MyBannerState();
 }
 
-class _MyBannerState extends State<MyBanner> {
+class _MyBannerState extends State<MyBanner> with MyScreenUtil {
   List _bannerList;
 
   @override
@@ -397,7 +398,7 @@ class _MyBannerState extends State<MyBanner> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: dp(20.0)),
       child: AspectRatio(
         aspectRatio: 16 / 8, //设置子组件的宽高比例
         child: _bannerList == null
@@ -406,9 +407,9 @@ class _MyBannerState extends State<MyBanner> {
                 itemBuilder: (BuildContext context, int index) {
                   var item = _bannerList[index];
                   return Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.only(bottom: dp(20.0)),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(dp(20.0)),
                       child: Image.network(
                         item['img_src'],
                         fit: BoxFit.cover,
@@ -485,7 +486,7 @@ class _MyBannerState extends State<MyBanner> {
 }
 
 // 快捷导航
-class FastNavList extends StatelessWidget {
+class FastNavList extends StatelessWidget with MyScreenUtil {
   FastNavList({Key key}) : super(key: key);
 
   List<Map> _navList = [
@@ -507,7 +508,7 @@ class FastNavList extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(dp(20.0)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -541,20 +542,21 @@ class FastNavList extends StatelessWidget {
               }
             },
             child: Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(dp(30.0)),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(dp(10.0))),
               child: Column(
                 children: [
                   Image.asset(
                     item['icon'],
-                    width: 50,
-                    height: 50,
+                    width: dp(100.0),
+                    height: dp(100.0),
                   ),
                   SizedBox(height: 10),
                   Text(
                     item['title'],
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: dp(24.0)),
                   ),
                 ],
               ),
@@ -574,7 +576,7 @@ class NewestTest extends StatefulWidget {
   _NewestTestState createState() => _NewestTestState();
 }
 
-class _NewestTestState extends State<NewestTest> {
+class _NewestTestState extends State<NewestTest> with MyScreenUtil {
   List<Map> newsTest = [];
 
   _NewestTestState() {
@@ -590,7 +592,7 @@ class _NewestTestState extends State<NewestTest> {
       children: [
         // 头部标题
         Container(
-          padding: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: dp(20.0)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -598,7 +600,7 @@ class _NewestTestState extends State<NewestTest> {
               Text(
                 "最新考试",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: dp(32.0),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -632,14 +634,14 @@ class _NewestTestState extends State<NewestTest> {
 
         // x轴滚动
         Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(top: dp(20.0)),
           alignment: Alignment.topLeft,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             physics: BouncingScrollPhysics(),
             child: Row(
               children: newsTest.map((item) {
-                double right = 10.0;
+                double right = dp(20.0);
 
                 if (item == newsTest[newsTest.length - 1]) {
                   right = 0.0;
@@ -654,10 +656,10 @@ class _NewestTestState extends State<NewestTest> {
                   child: Container(
                     margin: EdgeInsets.only(right: right),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(dp(20.0)),
                       child: Container(
-                        width: 280,
-                        height: 120,
+                        width: dp(500.0),
+                        height: dp(240.0),
                         decoration: BoxDecoration(
                           color: Colors.white,
                         ),
@@ -667,7 +669,7 @@ class _NewestTestState extends State<NewestTest> {
                             // tag标签
                             MyTags(
                               radius: BorderRadius.only(
-                                bottomRight: Radius.circular(10),
+                                bottomRight: Radius.circular(dp(20.0)),
                               ),
                               bgColor: Colors.green,
                               title: '进行中',
@@ -675,7 +677,8 @@ class _NewestTestState extends State<NewestTest> {
 
                             // 考试标题
                             Container(
-                              margin: EdgeInsets.only(top: 15, left: 10),
+                              margin: EdgeInsets.only(
+                                  top: dp(30.0), left: dp(20.0)),
                               child: Text(
                                 "${item['title']}",
                                 style: TextStyle(
@@ -689,7 +692,8 @@ class _NewestTestState extends State<NewestTest> {
 
                             // 考试时间
                             Container(
-                              margin: EdgeInsets.only(top: 15, left: 10),
+                              margin: EdgeInsets.only(
+                                  top: dp(30.0), left: dp(20.0)),
                               child: Text(
                                 "${item['start_date']} 至 ${item['end_date']}",
                               ),

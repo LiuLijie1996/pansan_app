@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExerciseSpecialtySelect extends StatefulWidget {
@@ -16,7 +17,8 @@ class ExerciseSpecialtySelect extends StatefulWidget {
       _ExerciseSpecialtySelectState();
 }
 
-class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect> {
+class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
+    with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];

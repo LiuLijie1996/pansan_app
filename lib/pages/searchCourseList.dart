@@ -7,6 +7,7 @@ import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class SearchCourseList extends StatefulWidget {
@@ -17,7 +18,7 @@ class SearchCourseList extends StatefulWidget {
   _SearchCourseListState createState() => _SearchCourseListState();
 }
 
-class _SearchCourseListState extends State<SearchCourseList> {
+class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];

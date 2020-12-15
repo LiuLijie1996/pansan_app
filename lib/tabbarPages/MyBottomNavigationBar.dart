@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:pansan_app/tabbarPages/exam.dart';
@@ -41,15 +42,14 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+      context,
+      designSize: Size(750, 1335),
+      allowFontScaling: false,
+    );
+
     return WillPopScope(
       onWillPop: () async {
-        // if (_preTime == null || DateTime.now().difference(_preTime) > Duration(seconds: 1)) {
-        //   //两次点击间隔超过1秒则重新计时
-        //   _preTime = DateTime.now();
-        //   return false;
-        // }
-        // return true;
-
         // 点击返回键的操作
         if (_preTime == null ||
             DateTime.now().difference(_preTime) > Duration(seconds: 2)) {

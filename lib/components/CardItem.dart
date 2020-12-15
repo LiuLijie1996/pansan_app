@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'MyIcon.dart';
 
 // 新闻卡片、课程卡片
-class CardItem extends StatelessWidget {
+class CardItem extends StatelessWidget with MyScreenUtil {
   const CardItem({
     Key key,
     @required this.onClick,
@@ -51,7 +52,7 @@ class CardItem extends StatelessWidget {
           ),
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(dp(20.0)),
             child: Row(
               children: [
                 item['thumb_url'] != ''
@@ -59,7 +60,7 @@ class CardItem extends StatelessWidget {
                         child: AspectRatio(
                           aspectRatio: 16 / 9.5,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(dp(10.0)),
                             child: Image.network(
                               "${item['thumb_url']}", //封面地址
                               fit: BoxFit.cover,
@@ -71,7 +72,7 @@ class CardItem extends StatelessWidget {
                 Expanded(
                   child: Container(
                     alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: 10),
+                    padding: EdgeInsets.only(left: dp(20.0)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -96,21 +97,21 @@ class CardItem extends StatelessWidget {
                             child: statusText != null
                                 ? Container(
                                     padding: EdgeInsets.only(
-                                      left: 10.0,
-                                      right: 10.0,
-                                      top: 2.0,
-                                      bottom: 2.0,
+                                      left: dp(20.0),
+                                      right: dp(20.0),
+                                      top: dp(4.0),
+                                      bottom: dp(4.0),
                                     ),
                                     decoration: BoxDecoration(
                                       color: statusColor,
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0),
+                                        Radius.circular(dp(20.0)),
                                       ),
                                     ),
                                     child: Text(
                                       "$statusText",
                                       style: TextStyle(
-                                        fontSize: 10.0,
+                                        fontSize: dp(20.0),
                                         color: Colors.white,
                                       ),
                                     ),
@@ -132,7 +133,7 @@ class CardItem extends StatelessWidget {
                                   children: [
                                     Icon(
                                       myIcon['time'],
-                                      size: 12,
+                                      size: dp(24.0),
                                       color: Colors.grey,
                                     ),
                                     SizedBox(width: 5),
@@ -148,10 +149,10 @@ class CardItem extends StatelessWidget {
                                   children: [
                                     Icon(
                                       myIcon['view'],
-                                      size: 18,
+                                      size: dp(36.0),
                                       color: Colors.grey,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: dp(10.0)),
                                     Text(
                                       "${item['view_num']}", //观看人数
                                       style: TextStyle(

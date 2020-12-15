@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class MyInformation extends StatefulWidget {
@@ -12,7 +13,7 @@ class MyInformation extends StatefulWidget {
   _MyInformationState createState() => _MyInformationState();
 }
 
-class _MyInformationState extends State<MyInformation> {
+class _MyInformationState extends State<MyInformation> with MyScreenUtil {
   PickedFile _image;
 
   @override
@@ -25,17 +26,17 @@ class _MyInformationState extends State<MyInformation> {
         child: Column(
           children: [
             Container(
-              height: 150.0,
+              height: dp(300.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
               child: Container(
-                height: 110.0,
+                height: dp(220.0),
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 40.0,
+                      radius: dp(80.0),
                       backgroundImage: _image != null
                           ? AssetImage(_image.path)
                           : NetworkImage(
@@ -43,7 +44,7 @@ class _MyInformationState extends State<MyInformation> {
                             ),
                     ),
                     SizedBox(
-                      height: 10.0,
+                      height: dp(20.0),
                     ),
                     InkWell(
                       onTap: _openGallery,
@@ -57,7 +58,7 @@ class _MyInformationState extends State<MyInformation> {
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: dp(20.0),
             ),
             Container(
               color: Colors.white,
@@ -74,15 +75,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -97,15 +98,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -120,15 +121,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -143,15 +144,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -166,15 +167,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -189,15 +190,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -212,15 +213,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -235,15 +236,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -258,15 +259,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -281,15 +282,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -304,15 +305,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),
@@ -327,15 +328,15 @@ class _MyInformationState extends State<MyInformation> {
                         ],
                       ),
                       padding: EdgeInsets.only(
-                        top: 15.0,
-                        bottom: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            width: 0.3,
+                            width: dp(0.6),
                             color: Colors.grey[200],
                           ),
                         ),

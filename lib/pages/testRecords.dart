@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class TestRecords extends StatefulWidget {
@@ -12,7 +13,7 @@ class TestRecords extends StatefulWidget {
   _TestRecordsState createState() => _TestRecordsState();
 }
 
-class _TestRecordsState extends State<TestRecords> {
+class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
   Map testRecordsData = {
     "total": 0,
     "page": 1,
@@ -48,17 +49,17 @@ class _TestRecordsState extends State<TestRecords> {
                 ),
                 subtitle: Text("${item['update_time']}"),
                 trailing: Container(
-                  width: 90.0,
+                  width: dp(180.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "${item['fraction']} 分",
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: dp(32.0)),
                       ),
                       Icon(
                         myIcon['arrows_right'],
-                        size: 15.0,
+                        size: dp(30.0),
                       ),
                     ],
                   ),

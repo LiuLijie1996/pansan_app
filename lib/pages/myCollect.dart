@@ -5,6 +5,7 @@ import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class MyCollect extends StatefulWidget {
@@ -15,7 +16,7 @@ class MyCollect extends StatefulWidget {
 }
 
 class _MyCollectState extends State<MyCollect>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, MyScreenUtil {
   TabController _controller;
 
   int _currentIndex = 0;

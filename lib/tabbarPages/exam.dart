@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 考试页面
@@ -28,7 +29,7 @@ class ExamPage extends StatefulWidget {
   _ExamPageState createState() => _ExamPageState();
 }
 
-class _ExamPageState extends State<ExamPage> {
+class _ExamPageState extends State<ExamPage> with MyScreenUtil {
   List myExamNavList = new List(); //我要考试导航列表
   List myExerciseNavList = new List(); //我要练习导航列表
 
@@ -44,17 +45,18 @@ class _ExamPageState extends State<ExamPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+        padding:
+            EdgeInsets.only(top: dp(20.0), left: dp(20.0), right: dp(20.0)),
         child: Column(
           children: [
             // 我要考试
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: BorderRadius.all(Radius.circular(dp(20.0))),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 10.0, //阴影范围
+                    blurRadius: dp(20.0), //阴影范围
                     spreadRadius: 0.1, //阴影浓度
                     color: Colors.grey[300], //阴影颜色
                   ),
@@ -131,10 +133,10 @@ class _ExamPageState extends State<ExamPage> {
 
             // 我要练习
             Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              margin: EdgeInsets.only(top: dp(20.0), bottom: dp(20.0)),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: BorderRadius.all(Radius.circular(dp(20.0))),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 10.0, //阴影范围
@@ -147,10 +149,10 @@ class _ExamPageState extends State<ExamPage> {
                 children: [
                   Container(
                     padding: EdgeInsets.only(
-                      left: 20.0,
-                      right: 20.0,
-                      top: 10.0,
-                      bottom: 20.0,
+                      left: dp(40.0),
+                      right: dp(40.0),
+                      top: dp(20.0),
+                      bottom: dp(40.0),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,20 +162,20 @@ class _ExamPageState extends State<ExamPage> {
                           children: [
                             Text(
                               "我要练习",
-                              style: TextStyle(fontSize: 18.0),
+                              style: TextStyle(fontSize: dp(36.0)),
                             ),
                             SizedBox(
-                              height: 10.0,
+                              height: dp(20.0),
                             ),
                             Text(
                               "多种练习，轻松掌握",
-                              style:
-                                  TextStyle(fontSize: 12.0, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: dp(24.0), color: Colors.grey),
                             ),
                           ],
                         ),
                         Container(
-                          width: 70.0,
+                          width: dp(140.0),
                           child: Image.asset("assets/images/test_head.png"),
                         ),
                       ],
@@ -284,7 +286,7 @@ class _ExamPageState extends State<ExamPage> {
 }
 
 // 考试导航列表
-class NavItem extends StatelessWidget {
+class NavItem extends StatelessWidget with MyScreenUtil {
   final item;
   final Function() onClick;
   const NavItem({Key key, @required this.item, this.onClick}) : super(key: key);
@@ -299,22 +301,21 @@ class NavItem extends StatelessWidget {
       },
       child: ListTile(
         leading: Container(
-          width: 50.0,
-          height: 50.0,
-          padding: EdgeInsets.all(5.0),
+          width: dp(100.0),
+          height: dp(100.0),
+          padding: EdgeInsets.all(dp(10.0)),
           child: Image.asset(
             "${item['icons']}",
           ),
         ),
         trailing: Icon(
           myIcon['arrows_right'],
-          size: 20.0,
+          size: dp(30.0),
         ),
         title: Text(
           "${item['name']}",
           style: TextStyle(
-            fontSize: 18.0,
-            // fontWeight: FontWeight.w600,
+            fontSize: dp(32.0),
             color: Color(int.parse("333333", radix: 16) | 0xff000000),
           ),
         ),

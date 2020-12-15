@@ -1,9 +1,10 @@
 // 设置页面
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/pages/login.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatelessWidget with MyScreenUtil {
   const Settings({Key key}) : super(key: key);
 
   @override
@@ -45,21 +46,21 @@ class Settings extends StatelessWidget {
               }
             },
             child: Container(
-              width: 25.0,
+              width: dp(50.0),
               padding: EdgeInsets.only(
-                left: 10.0,
-                right: 10.0,
-                top: index == 0 ? 12.0 : 8.0,
-                bottom: 8.0,
+                left: dp(20.0),
+                right: dp(20.0),
+                top: index == 0 ? dp(24.0) : dp(16.0),
+                bottom: dp(16.0),
               ),
               child: Row(
                 children: [
                   SizedBox(
-                    width: 10.0,
+                    width: dp(20.0),
                   ),
                   Icon(e['icon']),
                   SizedBox(
-                    width: 20.0,
+                    width: dp(40.0),
                   ),
                   Text("${e['title']}"),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 //职工服务
@@ -11,7 +12,7 @@ class StaffServe extends StatefulWidget {
 }
 
 class _StaffServeState extends State<StaffServe>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, MyScreenUtil {
   TextEditingController _searchInput = TextEditingController(); //搜索框的控制器
   String searchValue; //需要搜索的内容
   TabController _tabController;
@@ -173,7 +174,7 @@ class _StaffServeState extends State<StaffServe>
 
                   if (_tabViewIndex == 0) {
                     return Container(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -194,8 +195,8 @@ class _StaffServeState extends State<StaffServe>
                     );
                   } else if (_tabViewIndex == 1) {
                     return Container(
-                      height: 30.0,
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      height: dp(60.0),
+                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                       child: InkWell(
                         onTap: () {
                           print(item);
@@ -213,7 +214,7 @@ class _StaffServeState extends State<StaffServe>
 
                   return Container(
                     height: 30.0,
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                    padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                     child: InkWell(
                       onTap: () {
                         print(item);

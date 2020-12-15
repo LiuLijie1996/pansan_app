@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 
-class EmptyBox extends StatelessWidget {
+class EmptyBox extends StatelessWidget with MyScreenUtil {
   const EmptyBox({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 120.0,
+        height: dp(240.0),
         child: Column(
           children: [
             Image.asset(
               "assets/images/no_data.png",
-              width: 100,
+              width: dp(200.0),
             ),
             Text(
               "空空如也...",

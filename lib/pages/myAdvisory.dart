@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class MyAdvisory extends StatefulWidget {
@@ -15,7 +16,7 @@ class MyAdvisory extends StatefulWidget {
   _MyAdvisoryState createState() => _MyAdvisoryState();
 }
 
-class _MyAdvisoryState extends State<MyAdvisory> {
+class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
@@ -81,18 +82,18 @@ class _MyAdvisoryState extends State<MyAdvisory> {
                         getAdvisoryData(page: ++myAdvData['page']);
 
                         return MyProgress(
-                          padding: EdgeInsets.only(top: 0.0, bottom: 10.0),
+                          padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
                         );
                       } else {
                         return MyProgress(
                           status: false,
-                          padding: EdgeInsets.only(top: 0.0, bottom: 10.0),
+                          padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
                         );
                       }
                     }
                     return Container(
                       height: 30.0,
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                       child: InkWell(
                         onTap: () {
                           print(item);

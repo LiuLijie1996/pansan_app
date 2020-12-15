@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyIcon.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 新闻页面
@@ -14,7 +13,8 @@ class News extends StatefulWidget {
   _NewsState createState() => _NewsState();
 }
 
-class _NewsState extends State<News> with SingleTickerProviderStateMixin {
+class _NewsState extends State<News>
+    with SingleTickerProviderStateMixin, MyScreenUtil {
   TabController _tabController; //需要定义一个Controller
   List tabs = [];
   int _currentIndex = 0;

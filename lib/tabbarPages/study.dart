@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 学习页面
@@ -12,7 +13,8 @@ class Study extends StatefulWidget {
   _StudyState createState() => _StudyState();
 }
 
-class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
+class _StudyState extends State<Study>
+    with SingleTickerProviderStateMixin, MyScreenUtil {
   TabController _tabController; //需要定义一个tab的Controller
   TextEditingController _searchInput = TextEditingController(); //搜索框的控制器
   String searchValue; //需要搜索的内容
@@ -42,10 +44,10 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
         : Scaffold(
             appBar: AppBar(
               title: Container(
-                height: 35.0,
+                height: dp(70.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(dp(60.0)),
                 ),
                 child: TextField(
                   controller: _searchInput,
@@ -60,12 +62,14 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                   },
                   decoration: InputDecoration(
                     hintText: "请输入你要搜索的内容",
-                    contentPadding: EdgeInsets.only(bottom: 0.0, left: 10.0),
+                    contentPadding:
+                        EdgeInsets.only(bottom: 0.0, left: dp(20.0)),
                     labelStyle: TextStyle(
                       color: Colors.grey,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(dp(100.0))),
                       borderSide: BorderSide(
                         width: 0.5,
                         color: Colors.grey[100],
@@ -124,11 +128,11 @@ class _StudyState extends State<Study> with SingleTickerProviderStateMixin {
                                   children: children.map((child) {
                                     double right =
                                         child == children[children.length - 1]
-                                            ? 10.0
+                                            ? dp(20.0)
                                             : 0;
                                     return Container(
                                       margin: EdgeInsets.only(
-                                        left: 10,
+                                        left: dp(20.0),
                                         right: right,
                                       ),
                                       child: RaisedButton(

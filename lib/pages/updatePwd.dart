@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class UpdatePwd extends StatefulWidget {
@@ -10,7 +11,7 @@ class UpdatePwd extends StatefulWidget {
   _UpdatePwdState createState() => _UpdatePwdState();
 }
 
-class _UpdatePwdState extends State<UpdatePwd> {
+class _UpdatePwdState extends State<UpdatePwd> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _controller1 = TextEditingController(); //输入框使用到的控制器
   TextEditingController _controller2 = TextEditingController(); //输入框使用到的控制器
@@ -48,12 +49,12 @@ class _UpdatePwdState extends State<UpdatePwd> {
           child: Column(
             children: [
               SizedBox(
-                height: 50.0,
+                height: dp(100.0),
               ),
               Image.asset(
                 "assets/images/login_logo.png",
-                width: 120.0,
-                height: 120.0,
+                width: dp(240.0),
+                height: dp(240.0),
               ),
               Form(
                 key: _formKey,
@@ -61,21 +62,21 @@ class _UpdatePwdState extends State<UpdatePwd> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 20.0,
+                      height: dp(40.0),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           scrollPadding: EdgeInsets.all(0.0),
@@ -102,16 +103,17 @@ class _UpdatePwdState extends State<UpdatePwd> {
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               myIcon['pwd'],
-                              size: 20.0,
+                              size: dp(40.0),
                             ),
                           ),
                         ),
                       ),
                     ),
                     Container(
-                      height: validatorPwd1() == '' ? 20.0 : 30.0,
+                      height: validatorPwd1() == '' ? dp(40.0) : dp(60.0),
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 20.0),
+                      padding: EdgeInsets.only(
+                          top: dp(10.0), bottom: dp(10.0), left: dp(40.0)),
                       child: Text(
                         "${validatorPwd1()}",
                         style: TextStyle(
@@ -120,18 +122,18 @@ class _UpdatePwdState extends State<UpdatePwd> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           controller: _controller2,
@@ -156,16 +158,17 @@ class _UpdatePwdState extends State<UpdatePwd> {
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               myIcon['pwd'],
-                              size: 20.0,
+                              size: dp(40.0),
                             ),
                           ),
                         ),
                       ),
                     ),
                     Container(
-                      height: validatorPwd2() == '' ? 20.0 : 30.0,
+                      height: validatorPwd2() == '' ? dp(40.0) : dp(60.0),
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 20.0),
+                      padding: EdgeInsets.only(
+                          top: dp(10.0), bottom: dp(10.0), left: dp(40.0)),
                       child: Text(
                         "${validatorPwd2()}",
                         style: TextStyle(
@@ -175,15 +178,15 @@ class _UpdatePwdState extends State<UpdatePwd> {
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: RaisedButton(
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(dp(20.0)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
                         ),
                         child: Text(
                           "确认修改",
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: dp(32.0)),
                         ),
                         color: pwd1 == ''
                             ? Colors.grey
@@ -214,25 +217,26 @@ class _UpdatePwdState extends State<UpdatePwd> {
     );
   }
 
-  String validatorPwd1(){
-    if(pwd1.trim() != null){
-      if(pwd1.trim() != ''){
+  String validatorPwd1() {
+    if (pwd1.trim() != null) {
+      if (pwd1.trim() != '') {
         return pwd1.trim().length >= 6 ? '' : '密码长度最少6位';
-      }else{
+      } else {
         return "";
       }
-    }else{
+    } else {
       return "";
     }
   }
-  String validatorPwd2(){
-    if(pwd2.trim() != null){
-      if(pwd2.trim() != ''){
+
+  String validatorPwd2() {
+    if (pwd2.trim() != null) {
+      if (pwd2.trim() != '') {
         return pwd2.trim() == pwd1.trim() ? '' : '两次密码不一致';
-      }else{
+      } else {
         return "";
       }
-    }else{
+    } else {
       return "";
     }
   }

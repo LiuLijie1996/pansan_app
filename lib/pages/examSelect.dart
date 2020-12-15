@@ -6,6 +6,7 @@ import 'package:date_format/date_format.dart';
 
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamSelect extends StatefulWidget {
@@ -16,7 +17,7 @@ class ExamSelect extends StatefulWidget {
   _ExamSelectState createState() => _ExamSelectState();
 }
 
-class _ExamSelectState extends State<ExamSelect> {
+class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
@@ -72,7 +73,7 @@ class _ExamSelectState extends State<ExamSelect> {
               : ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     double bottom =
-                        examData['data'].length - 1 == index ? 15.0 : 0.0;
+                        examData['data'].length - 1 == index ? dp(30.0) : 0.0;
                     Map item = examData['data'][index];
                     // 考试状态
                     String examStatus = '';
@@ -90,24 +91,24 @@ class _ExamSelectState extends State<ExamSelect> {
 
                     return Container(
                       margin: EdgeInsets.only(
-                        top: 15.0,
-                        left: 10.0,
-                        right: 10.0,
+                        top: dp(30.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
                         bottom: bottom,
                       ),
                       height: 200.0,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(dp(20.0)),
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey[300],
-                            blurRadius: 10.0,
-                            offset: Offset(5.0, 5.0),
+                            blurRadius: dp(20.0),
+                            offset: Offset(dp(10.0), dp(10.0)),
                           ),
                           BoxShadow(
                             color: Colors.blue[50],
-                            blurRadius: 10.0,
+                            blurRadius: dp(20.0),
                           ),
                         ],
                       ),
@@ -116,11 +117,12 @@ class _ExamSelectState extends State<ExamSelect> {
                         children: [
                           // 标题
                           Container(
-                            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            padding: EdgeInsets.only(
+                                top: dp(20.0), bottom: dp(20.0)),
                             child: Text(
                               "${item['name']}",
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: dp(36.0),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -131,16 +133,16 @@ class _ExamSelectState extends State<ExamSelect> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(left: 10.0),
+                                padding: EdgeInsets.only(left: dp(20.0)),
                                 child: Column(
                                   children: [
                                     Text(
                                       "开始",
                                       style: TextStyle(
-                                        fontSize: 16.0,
+                                        fontSize: dp(32.0),
                                       ),
                                     ),
-                                    SizedBox(height: 10.0),
+                                    SizedBox(height: dp(20.0)),
                                     Text(
                                       "${item['start_time']}",
                                       style: TextStyle(
@@ -153,20 +155,20 @@ class _ExamSelectState extends State<ExamSelect> {
                               Container(
                                 child: Image.asset(
                                   "assets/images/jiantou.png",
-                                  width: 50.0,
+                                  width: dp(100.0),
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.only(right: 10.0),
+                                padding: EdgeInsets.only(right: dp(20.0)),
                                 child: Column(
                                   children: [
                                     Text(
                                       "结束",
                                       style: TextStyle(
-                                        fontSize: 16.0,
+                                        fontSize: dp(32.0),
                                       ),
                                     ),
-                                    SizedBox(height: 10.0),
+                                    SizedBox(height: dp(20.0)),
                                     Text(
                                       "${item['end_time']}",
                                       style: TextStyle(
@@ -195,7 +197,7 @@ class _ExamSelectState extends State<ExamSelect> {
                                 color:
                                     item['is_test'] ? Colors.blue : Colors.grey,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(dp(40.0)),
                                 ),
                                 onPressed: () async {
                                   // 判断是否可以进入考试
@@ -321,20 +323,20 @@ class _ExamSelectState extends State<ExamSelect> {
             alignment: Alignment.center,
             child: Container(
               padding: EdgeInsets.only(
-                left: 10.0,
-                right: 10.0,
-                top: 10.0,
-                bottom: 10.0,
+                left: dp(20.0),
+                right: dp(20.0),
+                top: dp(20.0),
+                bottom: dp(20.0),
               ),
               decoration: BoxDecoration(
                 color: Colors.black45,
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(dp(10.0)),
               ),
               child: Text(
                 text,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16.0,
+                  fontSize: dp(32.0),
                   decoration: TextDecoration.none,
                 ),
               ),

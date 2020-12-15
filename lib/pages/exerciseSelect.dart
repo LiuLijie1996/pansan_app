@@ -7,6 +7,7 @@ import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/GradientCircularProgressIndicator.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExerciseSelect extends StatefulWidget {
@@ -18,7 +19,7 @@ class ExerciseSelect extends StatefulWidget {
 }
 
 class _ExerciseSelectState extends State<ExerciseSelect>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
@@ -42,11 +43,11 @@ class _ExerciseSelectState extends State<ExerciseSelect>
     // 初始化 controller
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 10), //持续时间
+      duration: Duration(seconds: 5), //持续时间
     );
 
     // 设置曲线
-    animation = CurvedAnimation(curve: Curves.bounceIn, parent: _controller);
+    animation = CurvedAnimation(curve: Curves.easeIn, parent: _controller);
     // 添加监听器
     animation.addListener(() {
       setState(() {});
@@ -112,23 +113,26 @@ class _ExerciseSelectState extends State<ExerciseSelect>
           : ListView.separated(
               itemBuilder: (BuildContext context, int index) {
                 Map item = exerciseData['data'][index];
-                double progress = double.parse("${item['progress'] / 100}");
+                double progress = Tween(
+                  begin: 0.0,
+                  end: double.parse("${item['progress'] / 100}"),
+                ).animate(animation).value;
                 return Container(
                   padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: ListTile(
                     leading: Container(
-                      width: 50.0,
-                      height: 50.0,
+                      width: dp(100.0),
+                      height: dp(100.0),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           GradientCircularProgressIndicator(
                             colors: [
-                              Colors.blue[100],
+                              Colors.blue[200],
                               Colors.blue,
                             ],
-                            radius: 25.0,
-                            stokeWidth: 5.0,
+                            radius: dp(50.0),
+                            stokeWidth: dp(10.0),
                             strokeCapRound: true,
                             value: progress,
                           ),
@@ -139,20 +143,25 @@ class _ExerciseSelectState extends State<ExerciseSelect>
                     title: Text(
                       "${item['name']}",
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: dp(32.0),
                       ),
                     ),
                     subtitle: Container(
-                      margin: EdgeInsets.only(top: 10.0),
+                      margin: EdgeInsets.only(top: dp(20.0)),
                       child: Text("${item['add_time']}"),
                     ),
                     trailing: RaisedButton(
                       color: Colors.blue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(dp(100.0)),
                       ),
                       onPressed: () {
                         print("去答题");
+                        Navigator.pushNamed(
+                          context,
+                          "/exerciseDetails",
+                          arguments: item,
+                        );
                       },
                       child: Text(
                         "去答题",
@@ -161,9 +170,6 @@ class _ExerciseSelectState extends State<ExerciseSelect>
                         ),
                       ),
                     ),
-                    onTap: () {
-                      print("跳转到答题页面");
-                    },
                   ),
                 );
               },

@@ -40,6 +40,44 @@ exerciseOver             	练习结束页
 examSelect					考试列表选择
 exerciseSelect				练习列表选择
 exerciseSpecialtySelect		专项练习列表选择
+exerciseDetails				练习详情
+examDetails					考试详情
+exerciseOver				练习结束
+examOver					考试结束
+```
+
+
+
+## 题目数据格式解析
+
+```json
+{
+  "id": 13505,
+  "d_id": 202,
+  "mid": 0,
+  "pid": 114,
+  "name": "2020年10月月考题库",
+  "type": 3,
+  "stem": "采掘工作面的空气温度超30℃，机电设备硐室的空气温度超过34℃时，必须停止作业。（对）",
+  "option": [
+    {
+      "label": "A",
+      "value": "对"
+    },
+    {
+      "label": "B",
+      "value": "错"
+    }
+  ],
+  "answer": "A",//正确答案
+  "analysis": "",//答案解析
+  "addtime": "1602836160",
+  "disorder": "5",//当前题目分数
+  "sorts": 0,
+  "difficulty": 1,
+  "status": 1,
+  "userFavor": false//用户是否收藏
+}
 ```
 
 

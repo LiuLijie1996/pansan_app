@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class InformAffiche extends StatefulWidget {
@@ -11,7 +12,7 @@ class InformAffiche extends StatefulWidget {
   _InformAfficheState createState() => _InformAfficheState();
 }
 
-class _InformAfficheState extends State<InformAffiche> {
+class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
   List dataList = [];
 
   _InformAfficheState() {

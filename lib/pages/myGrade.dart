@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class MyGrade extends StatefulWidget {
@@ -15,7 +16,7 @@ class MyGrade extends StatefulWidget {
   _MyGradeState createState() => _MyGradeState();
 }
 
-class _MyGradeState extends State<MyGrade> {
+class _MyGradeState extends State<MyGrade> with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
@@ -62,36 +63,36 @@ class _MyGradeState extends State<MyGrade> {
                     index == myGradeData['data'].length - 1 ? 10.0 : 0.0;
                 return Container(
                   margin: EdgeInsets.only(
-                    top: 10.0,
+                    top: dp(20.0),
                     bottom: bottom,
-                    left: 10.0,
-                    right: 10.0,
+                    left: dp(20.0),
+                    right: dp(20.0),
                   ),
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey[200],
-                        blurRadius: 5.0,
+                        blurRadius: dp(10.0),
                       )
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(dp(20.0)),
                     child: Column(
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(
-                            top: 15.0,
-                            bottom: 15.0,
-                            left: 10.0,
-                            right: 10.0,
+                            top: dp(30.0),
+                            bottom: dp(30.0),
+                            left: dp(20.0),
+                            right: dp(20.0),
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border(
                               bottom: BorderSide(
-                                width: 0.5,
+                                width: dp(1.0),
                                 color: Colors.grey[200],
                               ),
                             ),
@@ -105,16 +106,16 @@ class _MyGradeState extends State<MyGrade> {
                           child: Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(
-                              top: 15.0,
-                              bottom: 15.0,
-                              left: 10.0,
-                              right: 10.0,
+                              top: dp(30.0),
+                              bottom: dp(30.0),
+                              left: dp(20.0),
+                              right: dp(20.0),
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border(
                                 bottom: BorderSide(
-                                  width: 0.5,
+                                  width: dp(1.0),
                                   color: Colors.grey[200],
                                 ),
                               ),
@@ -126,17 +127,17 @@ class _MyGradeState extends State<MyGrade> {
                                   children: [
                                     Icon(
                                       myIcon['course_plan'],
-                                      size: 20.0,
+                                      size: dp(40.0),
                                     ),
                                     SizedBox(
-                                      width: 5.0,
+                                      width: dp(10.0),
                                     ),
                                     Text("课程计划"),
                                   ],
                                 ),
                                 Icon(
                                   myIcon['arrows_right'],
-                                  size: 12.0,
+                                  size: dp(24.0),
                                   color: Colors.grey,
                                 ),
                               ],
@@ -153,10 +154,10 @@ class _MyGradeState extends State<MyGrade> {
                               color: Colors.white,
                             ),
                             padding: EdgeInsets.only(
-                              top: 15.0,
-                              bottom: 15.0,
-                              left: 10.0,
-                              right: 10.0,
+                              top: dp(30.0),
+                              bottom: dp(30.0),
+                              left: dp(20.0),
+                              right: dp(20.0),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,17 +166,17 @@ class _MyGradeState extends State<MyGrade> {
                                   children: [
                                     Icon(
                                       myIcon['record'],
-                                      size: 20.0,
+                                      size: dp(40.0),
                                     ),
                                     SizedBox(
-                                      width: 5.0,
+                                      width: dp(10.0),
                                     ),
                                     Text("考勤记录"),
                                   ],
                                 ),
                                 Icon(
                                   myIcon['arrows_right'],
-                                  size: 12.0,
+                                  size: dp(24.0),
                                   color: Colors.grey,
                                 ),
                               ],

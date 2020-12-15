@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "2.5.0-nullsafety.1"
   barcode_scan:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: barcode_scan
       url: "https://pub.flutter-io.cn"
@@ -58,14 +58,14 @@ packages:
     source: hosted
     version: "1.0.0"
   date_format:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: date_format
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.9"
   dio:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dio
       url: "https://pub.flutter-io.cn"
@@ -111,8 +111,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.11"
+  flutter_screenutil:
+    dependency: "direct main"
+    description:
+      name: flutter_screenutil
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.0"
   flutter_swiper:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_swiper
       url: "https://pub.flutter-io.cn"
@@ -129,7 +136,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fluttertoast:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: fluttertoast
       url: "https://pub.flutter-io.cn"
@@ -150,7 +157,7 @@ packages:
     source: hosted
     version: "3.1.4"
   image_picker:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: image_picker
       url: "https://pub.flutter-io.cn"
@@ -241,7 +248,7 @@ packages:
     source: hosted
     version: "3.0.13"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"

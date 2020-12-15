@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 登录页面
@@ -12,7 +13,7 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Login> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _controller1 = TextEditingController(); //输入框使用到的控制器
   TextEditingController _controller2 = TextEditingController(); //输入框使用到的控制器
@@ -46,33 +47,33 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               SizedBox(
-                height: 100.0,
+                height: dp(200.0),
               ),
               Image.asset(
                 "assets/images/login_logo.png",
-                width: 120.0,
-                height: 120.0,
+                width: dp(240.0),
+                height: dp(240.0),
               ),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 20.0,
+                      height: dp(40.0),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           scrollPadding: EdgeInsets.all(0.0),
@@ -96,21 +97,21 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: dp(40.0),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           controller: _controller2,
@@ -140,7 +141,7 @@ class _LoginState extends State<Login> {
                             // ),
                             prefixIcon: Icon(
                               myIcon['pwd'],
-                              size: 20.0,
+                              size: dp(40.0),
                             ),
                           ),
                         ),
@@ -148,10 +149,10 @@ class _LoginState extends State<Login> {
                     ),
                     Container(
                       padding: EdgeInsets.only(
-                        left: 30.0,
-                        right: 30.0,
-                        top: 20.0,
-                        bottom: 20.0,
+                        left: dp(60.0),
+                        right: dp(60.0),
+                        top: dp(40.0),
+                        bottom: dp(40.0),
                       ),
                       // padding: EdgeInsets.all(25.0),
                       child: Row(
@@ -188,15 +189,15 @@ class _LoginState extends State<Login> {
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: RaisedButton(
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(dp(20.0)),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: Text(
                           "立即登录",
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: dp(32.0)),
                         ),
                         color: account == ''
                             ? Colors.grey
@@ -236,7 +237,7 @@ class Register extends StatefulWidget {
   _RegisterState createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterState extends State<Register> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _controller1 = TextEditingController(); //输入框使用到的控制器
   TextEditingController _controller2 = TextEditingController(); //输入框使用到的控制器
@@ -284,33 +285,33 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: [
               SizedBox(
-                height: 50.0,
+                height: dp(100.0),
               ),
               Image.asset(
                 "assets/images/login_logo.png",
-                width: 120.0,
-                height: 120.0,
+                width: dp(240.0),
+                height: dp(240.0),
               ),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 20.0,
+                      height: dp(40.0),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           scrollPadding: EdgeInsets.all(0.0),
@@ -327,18 +328,18 @@ class _RegisterState extends State<Register> {
                       height: 20.0,
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           controller: _controller2,
@@ -384,7 +385,7 @@ class _RegisterState extends State<Register> {
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               myIcon['verify'],
-                              size: 20.0,
+                              size: dp(40.0),
                             ),
                           ),
                         ),
@@ -395,15 +396,15 @@ class _RegisterState extends State<Register> {
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: RaisedButton(
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(dp(20.0)),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: Text(
                           "立即注册",
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: dp(32.0)),
                         ),
                         color: phone == ''
                             ? Colors.grey
@@ -446,7 +447,7 @@ class ForgetPwd extends StatefulWidget {
   _ForgetPwdState createState() => _ForgetPwdState();
 }
 
-class _ForgetPwdState extends State<ForgetPwd> {
+class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _controller1 = TextEditingController(); //输入框使用到的控制器
   TextEditingController _controller2 = TextEditingController(); //输入框使用到的控制器
@@ -482,12 +483,12 @@ class _ForgetPwdState extends State<ForgetPwd> {
           child: Column(
             children: [
               SizedBox(
-                height: 50.0,
+                height: dp(100.0),
               ),
               Image.asset(
                 "assets/images/login_logo.png",
-                width: 120.0,
-                height: 120.0,
+                width: dp(240.0),
+                height: dp(240.0),
               ),
               Form(
                 key: _formKey,
@@ -497,18 +498,18 @@ class _ForgetPwdState extends State<ForgetPwd> {
                       height: 20.0,
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           scrollPadding: EdgeInsets.all(0.0),
@@ -527,18 +528,18 @@ class _ForgetPwdState extends State<ForgetPwd> {
                       height: 20.0,
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 10, //阴影范围
+                              blurRadius: dp(20.0), //阴影范围
                               spreadRadius: 0.1, //阴影浓度
                               color: Colors.blue[100], //阴影颜色
                             ),
                           ],
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: TextFormField(
                           controller: _controller2,
@@ -547,7 +548,7 @@ class _ForgetPwdState extends State<ForgetPwd> {
                             hintText: "请输入身份证号码",
                             prefixIcon: Icon(
                               myIcon['id_card'],
-                              size: 20.0,
+                              size: dp(40.0),
                             ),
                           ),
                         ),
@@ -558,15 +559,15 @@ class _ForgetPwdState extends State<ForgetPwd> {
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
                       child: RaisedButton(
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(dp(20.0)),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(dp(6.0)),
                         ),
                         child: Text(
                           "重置密码",
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: dp(32.0)),
                         ),
                         color: userName == ''
                             ? Colors.grey
