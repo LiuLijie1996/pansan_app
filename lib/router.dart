@@ -21,9 +21,11 @@ import 'package:pansan_app/pages/login.dart';
 import 'package:pansan_app/pages/settings.dart';
 import 'package:pansan_app/pages/integralCentre.dart';
 import 'package:pansan_app/pages/updatePwd.dart';
+import 'package:pansan_app/tabbarPages/startPage.dart';
 
 Map<String, Function> routers = {
-  "/": (context) => MyBottomNavigationBar(),
+  "/": (context) => StartPage(), //启动页
+  "/home": (context) => MyBottomNavigationBar(),
   "/integralCentre": (context) => IntegralCentre(),
   "/settings": (context) => Settings(), //设置页面
   "/login": (context) => Login(), //登录页面

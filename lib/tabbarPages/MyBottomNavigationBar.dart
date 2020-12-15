@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:pansan_app/tabbarPages/exam.dart';
@@ -42,12 +41,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-      context,
-      designSize: Size(750, 1335),
-      allowFontScaling: false,
-    );
-
     return WillPopScope(
       onWillPop: () async {
         // 点击返回键的操作
