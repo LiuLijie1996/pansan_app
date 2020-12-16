@@ -32,9 +32,10 @@ class ExamIssueDataType {
   final List<String> answer; //正确答案
   final String analysis; //答案解析
   final String disorder; //当前题目分数
-  final bool userFavor; //用户是否收藏
+  bool userFavor; //用户是否收藏
   List<String> user_answer; //用户选择的答案
-  bool is_sure; //是否确定选择
+  bool correct; //选择的答案是否正确
+  int expend_time; //考试所用时长
 
   ExamIssueDataType({
     @required this.id,
@@ -46,7 +47,8 @@ class ExamIssueDataType {
     @required this.disorder,
     @required this.userFavor,
     @required this.user_answer,
-    @required this.is_sure,
+    @required this.correct,
+    @required this.expend_time,
   });
 
   ExamIssueDataType.fromJson(Map<String, dynamic> map)
@@ -59,7 +61,8 @@ class ExamIssueDataType {
         disorder = map['disorder'],
         userFavor = map['userFavor'],
         user_answer = map['user_answer'],
-        is_sure = map['is_sure'];
+        correct = map['correct'],
+        expend_time = map['expend_time'];
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -72,7 +75,8 @@ class ExamIssueDataType {
       "disorder": disorder,
       "userFavor": userFavor,
       "user_answer": user_answer,
-      "is_sure": is_sure,
+      "correct": correct,
+      "expend_time": expend_time,
     };
   }
 }
