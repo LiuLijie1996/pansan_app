@@ -35,7 +35,6 @@ class ExamIssueDataType {
   bool userFavor; //用户是否收藏
   List<String> user_answer; //用户选择的答案
   bool correct; //选择的答案是否正确
-  int expend_time; //考试所用时长
 
   ExamIssueDataType({
     @required this.id,
@@ -48,7 +47,6 @@ class ExamIssueDataType {
     @required this.userFavor,
     @required this.user_answer,
     @required this.correct,
-    @required this.expend_time,
   });
 
   ExamIssueDataType.fromJson(Map<String, dynamic> map)
@@ -61,8 +59,7 @@ class ExamIssueDataType {
         disorder = map['disorder'],
         userFavor = map['userFavor'],
         user_answer = map['user_answer'],
-        correct = map['correct'],
-        expend_time = map['expend_time'];
+        correct = map['correct'];
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -76,7 +73,6 @@ class ExamIssueDataType {
       "userFavor": userFavor,
       "user_answer": user_answer,
       "correct": correct,
-      "expend_time": expend_time,
     };
   }
 }

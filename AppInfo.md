@@ -44,6 +44,7 @@ exerciseDetails				练习详情
 examDetails					考试详情
 exerciseOver				练习结束
 examOver					考试结束
+examResultAnalyse			考试结果分析（查看解析）
 ```
 
 

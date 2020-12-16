@@ -22,6 +22,8 @@ import 'package:pansan_app/pages/settings.dart';
 import 'package:pansan_app/pages/integralCentre.dart';
 import 'package:pansan_app/pages/updatePwd.dart';
 import 'package:pansan_app/tabbarPages/startPage.dart';
+import 'package:pansan_app/pages/exerciseOver.dart';
+import 'package:pansan_app/pages/examResultAnalyse.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -54,7 +56,7 @@ Map<String, Function> routers = {
     return ExamSelect(arguments: arguments);
   },
   "/exerciseSelect": (context, {arguments}) {
-    //专项练习列表选择
+    //练习列表选择
     return ExerciseSelect(arguments: arguments);
   },
   "/exerciseSpecialtySelect": (context, {arguments}) {
@@ -62,8 +64,21 @@ Map<String, Function> routers = {
     return ExerciseSpecialtySelect(arguments: arguments);
   },
   "/exerciseDetails": (context, {arguments}) {
-    //专项练习列表选择
+    //练习详情
     return ExerciseDetails(arguments: arguments);
+  },
+  "/exerciseOver": (context, {arguments}) {
+    // 练习结束页
+    return ExerciseOver(
+      dataList: arguments['dataList'],
+      expend_time: arguments['expend_time'],
+    );
+  },
+  "/examResultAnalyse": (context, {arguments}) {
+    // 考试结果分析
+    return ExamResultAnalyse(
+      dataList: arguments['dataList'],
+    );
   },
 };
 
