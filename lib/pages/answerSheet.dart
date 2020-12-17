@@ -7,10 +7,21 @@ import 'package:pansan_app/models/examIssueType.dart';
 class AnswerSheet extends StatelessWidget with MyScreenUtil {
   // 题目列表
   final List<ExamIssueDataType> dataList;
-  AnswerSheet({Key key, @required this.dataList}) : super(key: key);
+  final bool reminder; //是否需要错误提示
+  AnswerSheet({Key key, @required this.dataList, this.reminder = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // 未答个数
+    int not_answer_num = dataList.where((e) => e.correct == null).length;
+    // 答对的题目
+    var correct = dataList.where((e) => e.correct == true);
+    // 答对的个数
+    int correct_num = correct.length;
+    // 答错个数
+    int mistake_num = dataList.where((e) => e.correct == false).length;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -20,13 +31,16 @@ class AnswerSheet extends StatelessWidget with MyScreenUtil {
         padding: EdgeInsets.all(dp(20.0)),
         child: ListView(
           children: [
-            Text(
-              "本次作答共计8题，答对3题，答错5题，未答0题",
-              style: TextStyle(
-                fontSize: dp(32.0),
-              ),
-            ),
-            SizedBox(height: dp(20.0)),
+            reminder
+                ? Text(
+                    "本次作答共计${correct_num + mistake_num}题，答对$correct_num题，答错$mistake_num题，未答$not_answer_num题",
+                    style: TextStyle(
+                      fontSize: dp(32.0),
+                    ),
+                    maxLines: 2,
+                  )
+                : SizedBox(),
+            SizedBox(height: dp(reminder ? 20.0 : 0.0)),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +85,7 @@ class AnswerSheet extends StatelessWidget with MyScreenUtil {
                       ),
                       SizedBox(width: dp(5.0)),
                       Text(
-                        "答对了",
+                        reminder == false ? '已作答' : "答对了",
                         style: TextStyle(
                           fontSize: dp(26.0),
                           color: Colors.grey[700],
@@ -82,26 +96,28 @@ class AnswerSheet extends StatelessWidget with MyScreenUtil {
                 ),
 
                 // 答错了
-                Row(
-                  children: [
-                    Container(
-                      width: dp(20.0),
-                      height: dp(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(dp(10.0)),
-                      ),
-                    ),
-                    SizedBox(width: dp(5.0)),
-                    Text(
-                      "答错了",
-                      style: TextStyle(
-                        fontSize: dp(26.0),
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
+                reminder == true
+                    ? Row(
+                        children: [
+                          Container(
+                            width: dp(20.0),
+                            height: dp(20.0),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(dp(10.0)),
+                            ),
+                          ),
+                          SizedBox(width: dp(5.0)),
+                          Text(
+                            "答错了",
+                            style: TextStyle(
+                              fontSize: dp(26.0),
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(""),
               ],
             ),
 
@@ -119,7 +135,12 @@ class AnswerSheet extends StatelessWidget with MyScreenUtil {
                 if (e.correct == true) {
                   _color = Colors.blue;
                 } else if (e.correct == false) {
-                  _color = Colors.red;
+                  // 判断是否需要错误提示
+                  if (reminder) {
+                    _color = Colors.red;
+                  } else {
+                    _color = Colors.blue;
+                  }
                 }
 
                 return InkWell(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/pages/answerSheet.dart';
+import 'package:pansan_app/pages/examDetails.dart';
+import 'package:pansan_app/pages/examOver.dart';
 import 'package:pansan_app/pages/exerciseDetails.dart';
 import 'package:pansan_app/pages/exerciseSpecialtyDetails.dart';
 import 'package:pansan_app/pages/exerciseSpecialtySelect.dart';
@@ -99,6 +101,21 @@ Map<String, Function> routers = {
     // 答题卡
     return AnswerSheet(
       dataList: arguments['dataList'],
+      reminder: arguments['reminder'] == null ? true : arguments['reminder'],
+    );
+  },
+  "/examDetails": (context, {arguments}) {
+    // 考试详情
+    return ExamDetails(
+      examSiteInfo: arguments['examSiteInfo'],
+    );
+  },
+  "/examOver": (context, {arguments}) {
+    // 考试结束页
+    return ExamOver(
+      dataList: arguments['dataList'],
+      examSiteInfo: arguments['examSiteInfo'],
+      expend_time: arguments['expend_time'],
     );
   },
 };

@@ -10,6 +10,7 @@ import 'package:pansan_app/components/MyIcon.dart';
 
 // 模拟的数据
 import 'package:pansan_app/models/mockData.dart';
+import 'package:pansan_app/utils/myRequest.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final Map arguments;
@@ -151,8 +152,8 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                         margin: EdgeInsets.only(bottom: dp(6.0)),
                         child: Icon(
                           dataList[_currentIndex - 1].userFavor
-                              ? myIcon['full_collect']
-                              : myIcon['collect'],
+                              ? aliIconfont.full_collect
+                              : aliIconfont.collect,
                           color: dataList[_currentIndex - 1].userFavor
                               ? Colors.red
                               : Colors.blue,
@@ -190,7 +191,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                       Container(
                         margin: EdgeInsets.only(bottom: dp(6.0)),
                         child: Icon(
-                          myIcon['correct'],
+                          aliIconfont.correct,
                           color: Colors.blue,
                           size: dp(40.0),
                         ),
@@ -361,32 +362,38 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
   }
 
   // 获取数据
-  getDataList() {
-    // listData 获取到的考题
-    dataList = listData.map((e) {
-      List options = e['option'];
-      List<ChoiceList> option = options.map((item) {
-        return ChoiceList(
-          label: item['label'],
-          value: item['value'],
+  getDataList() async {
+    try {
+      // var result = await myRequest(path: "");
+
+      // listData 获取到的考题
+      dataList = listData.map((e) {
+        List options = e['option'];
+        List<ChoiceList> option = options.map((item) {
+          return ChoiceList(
+            label: item['label'],
+            value: item['value'],
+          );
+        }).toList();
+
+        return ExamIssueDataType(
+          id: e['id'], //id
+          stem: e['stem'], //标题
+          type: e['type'], //题目类型
+          option: option, //题目选项
+          answer: e['answer'], //正确答案
+          analysis: e['analysis'], //答案解析
+          disorder: e['disorder'], //当前题目分数
+          userFavor: e['userFavor'], //用户是否收藏
+          user_answer: [], //用户选择的答案
+          correct: null, //用户的选择是否正确
         );
       }).toList();
 
-      return ExamIssueDataType(
-        id: e['id'], //id
-        stem: e['stem'], //标题
-        type: e['type'], //题目类型
-        option: option, //题目选项
-        answer: e['answer'], //正确答案
-        analysis: e['analysis'], //答案解析
-        disorder: e['disorder'], //当前题目分数
-        userFavor: e['userFavor'], //用户是否收藏
-        user_answer: [], //用户选择的答案
-        correct: null, //用户的选择是否正确
-      );
-    }).toList();
-
-    setState(() {});
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   // 弹窗

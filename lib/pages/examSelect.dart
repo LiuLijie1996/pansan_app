@@ -7,6 +7,7 @@ import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
+import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamSelect extends StatefulWidget {
@@ -120,7 +121,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                             padding: EdgeInsets.only(
                                 top: dp(20.0), bottom: dp(20.0)),
                             child: Text(
-                              "${item['name']}",
+                              "${item['title']}",
                               style: TextStyle(
                                 fontSize: dp(36.0),
                                 fontWeight: FontWeight.w700,
@@ -202,13 +203,13 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                                 onPressed: () async {
                                   // 判断是否可以进入考试
                                   if (item['is_test'] == true) {
-                                    // 进入考试
+                                    print(item);
+                                    // 进入考场信息页
                                     Navigator.pushNamed(
                                       context,
                                       "/examSiteInfo",
-                                      arguments: {
-                                        "test_id": item['id'],
-                                      },
+                                      arguments:
+                                          ExamItemDataType.fromJson(item),
                                     );
                                   } else {
                                     String text =
@@ -283,12 +284,12 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
         );
 
         return {
-          "id": e["id"], //考试的id
-          "type": e["type"], //考试类型
-          "name": e["name"], //考试的标题
+          "test_id": "${e["id"]}", //考试的id
+          "title": e["name"], //考试的标题
+          "status": int.parse("${e["status"]}"), //考试状态  0未开始 1进行中 2已结束
+          "type": int.parse("${e["type"]}"), //考试类型
           "start_time": _start_time, //开始时间
           "end_time": _end_time, //结束时间
-          "status": e["status"], //考试状态  0未开始 1进行中 2已结束
           "is_test": e["is_test"], // 当前用户是否可以进入考试
         };
       }).toList();

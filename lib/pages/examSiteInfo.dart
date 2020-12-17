@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
+import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamSiteInfo extends StatefulWidget {
-  final Map arguments;
+  final ExamItemDataType arguments;
   ExamSiteInfo({Key key, this.arguments}) : super(key: key);
 
   @override
@@ -13,7 +14,7 @@ class ExamSiteInfo extends StatefulWidget {
 }
 
 class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
-  Map examSiteInfo = {};
+  Map<String, dynamic> examSiteInfo = {};
 
   @override
   void initState() {
@@ -26,6 +27,8 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
+    ExamItemDataType arguments = widget.arguments;
+
     Color textColor = Color(int.parse('666666', radix: 16) | 0xff000000);
     double fontSize = 16.0;
 
@@ -56,7 +59,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: dp(40.0), bottom: dp(40.0)),
                 child: Text(
-                  "技术部测试11月月考",
+                  "${arguments.title}",
                   style: TextStyle(
                     fontSize: dp(40.0),
                     fontWeight: FontWeight.w700,
@@ -128,7 +131,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                       ),
                     ),
                     Text(
-                      "${examSiteInfo['duration']}分钟",
+                      "${examSiteInfo['duration'] == null ? '' : (examSiteInfo['duration'] / 60).ceil()}分钟",
                       style: TextStyle(
                         fontSize: fontSize,
                         color: textColor,
@@ -286,7 +289,19 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                 padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                 child: RaisedButton(
                   color: Colors.blue,
-                  onPressed: () {},
+                  onPressed: () {
+                    if (examSiteInfo['id'] != null) {
+                      // 进入考试
+                      Navigator.pushNamed(
+                        context,
+                        "/examDetails",
+                        arguments: {
+                          "examSiteInfo":
+                              ExamSiteDataType.fromJson(examSiteInfo)
+                        },
+                      );
+                    }
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(dp(10.0)),
                   ),
@@ -310,7 +325,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
   getExamSiteInfo() async {
     try {
       var result = await myRequest(path: "/api/test/examSiteInfo", data: {
-        "test_id": widget.arguments['test_id'],
+        "test_id": widget.arguments.test_id,
       });
       Map data = result['data'];
 
@@ -318,6 +333,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
         setState(() {
           examSiteInfo = {
             "id": data['id'], //考试id
+            "title": widget.arguments.title, //考试标题
             "type": data['type'], //考试类型
             "address": data['address'], //考试地址
             "duration": data['duration'], //考试限时

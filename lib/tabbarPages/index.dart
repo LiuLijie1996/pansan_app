@@ -8,6 +8,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
+import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
@@ -577,7 +578,7 @@ class NewestTest extends StatefulWidget {
 }
 
 class _NewestTestState extends State<NewestTest> with MyScreenUtil {
-  List<Map> newsTest = [];
+  List<Map<String, dynamic>> newsTest = [];
 
   _NewestTestState() {
     createWidget();
@@ -649,9 +650,11 @@ class _NewestTestState extends State<NewestTest> with MyScreenUtil {
 
                 return InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, "/examSiteInfo", arguments: {
-                      "test_id": item['test_id'],
-                    });
+                    Navigator.pushNamed(
+                      context,
+                      "/examSiteInfo",
+                      arguments: ExamItemDataType.fromJson(item),
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: right),
@@ -727,26 +730,35 @@ class _NewestTestState extends State<NewestTest> with MyScreenUtil {
 
       // 遍历获取的数据
       newsList.forEach((item) {
-        int status = item['status']; //考试类型
-        DateTime startDate = DateTime.fromMillisecondsSinceEpoch(
-            item['start_date'] * 1000); //开始时间
-        DateTime endDate =
-            DateTime.fromMillisecondsSinceEpoch(item['end_date'] * 1000); //结束时间
+        int status = int.parse("${item['status']}"); //考试类型
 
-        String startTime =
-            formatDate(startDate, [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]);
-        String endTime =
-            formatDate(endDate, [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]);
+        //开始时间
+        DateTime startDate = DateTime.fromMillisecondsSinceEpoch(
+          item['start_date'] * 1000,
+        );
+        String startTime = formatDate(
+          startDate,
+          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+        );
+
+        //结束时间
+        DateTime endDate = DateTime.fromMillisecondsSinceEpoch(
+          item['end_date'] * 1000,
+        );
+        String endTime = formatDate(
+          endDate,
+          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+        );
 
         if (status == 1) {
           // 添加数据到数组中
           newsTest.add({
-            "test_id": item['test_id'], //考试id
+            "test_id": item['test_id'].toString(), //考试id
+            "title": item["title"], //考试标题
             "status": status, //考试状态 0未开始 1进行中 2已结束
-            "type": item['type'], //考试类型， 1模拟 2正式 3补考
+            "type": int.parse("${item['type']}"), //考试类型， 1模拟 2正式 3补考
             "start_date": startTime, //开始时间
             "end_date": endTime, //结束时间
-            "title": item["title"], //考试标题
           });
 
           // 刷新页面
