@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 
-class MyTags extends StatelessWidget {
+class MyTags extends StatelessWidget with MyScreenUtil {
   final double width;
   final double height;
   final Color bgColor;
@@ -9,8 +10,8 @@ class MyTags extends StatelessWidget {
   final String title;
   const MyTags({
     Key key,
-    this.width = 100.0,
-    this.height = 30.0,
+    this.width = 120.0,
+    this.height = 40.0,
     this.bgColor = Colors.grey,
     this.textColor = Colors.white,
     @required this.radius,
@@ -20,8 +21,8 @@ class MyTags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: dp(width),
+      height: dp(height),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: bgColor,
@@ -29,7 +30,7 @@ class MyTags extends StatelessWidget {
       ),
       child: Text(
         "$title",
-        style: TextStyle(color: textColor),
+        style: TextStyle(color: textColor, fontSize: dp(28.0)),
       ),
     );
   }

@@ -156,7 +156,13 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
           actions: [
             FlatButton(
               onPressed: () {
-                print("纠错");
+                Navigator.pushNamed(
+                  context,
+                  "/questionsCorrection",
+                  arguments: {
+                    "issueData": dataList[_currentIndex - 1],
+                  },
+                );
               },
               child: Text(
                 "纠错",
@@ -195,13 +201,17 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                   child: Column(
                     children: [
                       SizedBox(height: dp(5.0)),
-                      Icon(
-                        dataList[_currentIndex - 1].userFavor
-                            ? myIcon['full_collect']
-                            : myIcon['collect'],
-                        color: dataList[_currentIndex - 1].userFavor
-                            ? Colors.red
-                            : Colors.blue,
+                      Container(
+                        margin: EdgeInsets.only(bottom: dp(6.0)),
+                        child: Icon(
+                          dataList[_currentIndex - 1].userFavor
+                              ? myIcon['full_collect']
+                              : myIcon['collect'],
+                          color: dataList[_currentIndex - 1].userFavor
+                              ? Colors.red
+                              : Colors.blue,
+                          size: dp(40.0),
+                        ),
                       ),
                       Text(
                         dataList[_currentIndex - 1].userFavor ? "已收藏" : "收藏",
@@ -209,6 +219,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                           color: dataList[_currentIndex - 1].userFavor
                               ? Colors.red
                               : Colors.blue,
+                          fontSize: dp(28.0),
                         ),
                       ),
                       SizedBox(height: dp(5.0)),
@@ -230,14 +241,19 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                   child: Column(
                     children: [
                       SizedBox(height: dp(5.0)),
-                      Icon(
-                        myIcon['correct'],
-                        color: Colors.blue,
+                      Container(
+                        margin: EdgeInsets.only(bottom: dp(6.0)),
+                        child: Icon(
+                          myIcon['correct'],
+                          color: Colors.blue,
+                          size: dp(40.0),
+                        ),
                       ),
                       Text(
                         "交卷",
                         style: TextStyle(
                           color: Colors.blue,
+                          fontSize: dp(28.0),
                         ),
                       ),
                       SizedBox(height: dp(5.0)),

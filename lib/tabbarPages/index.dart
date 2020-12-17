@@ -678,11 +678,13 @@ class _NewestTestState extends State<NewestTest> with MyScreenUtil {
                             // 考试标题
                             Container(
                               margin: EdgeInsets.only(
-                                  top: dp(30.0), left: dp(20.0)),
+                                top: dp(30.0),
+                                left: dp(20.0),
+                              ),
                               child: Text(
                                 "${item['title']}",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: dp(32.0),
                                   fontWeight: FontWeight.w600,
                                 ),
                                 maxLines: 1,
@@ -693,9 +695,14 @@ class _NewestTestState extends State<NewestTest> with MyScreenUtil {
                             // 考试时间
                             Container(
                               margin: EdgeInsets.only(
-                                  top: dp(30.0), left: dp(20.0)),
+                                top: dp(30.0),
+                                left: dp(20.0),
+                              ),
                               child: Text(
                                 "${item['start_date']} 至 ${item['end_date']}",
+                                style: TextStyle(
+                                  fontSize: dp(26.0),
+                                ),
                               ),
                             ),
                           ],

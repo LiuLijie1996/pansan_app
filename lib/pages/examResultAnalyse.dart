@@ -6,7 +6,6 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/components/TestSelect.dart';
-import 'package:pansan_app/components/MyIcon.dart';
 
 class ExamResultAnalyse extends StatefulWidget {
   // 题目列表
@@ -267,6 +266,9 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
               children: [
                 Text(
                   "本次作答共计8题，答对3题，答错5题，未答0题",
+                  style: TextStyle(
+                    fontSize: dp(32.0),
+                  ),
                 ),
                 SizedBox(height: dp(20.0)),
 
@@ -275,14 +277,14 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                   children: [
                     // 未答的
                     Container(
-                      margin: EdgeInsets.only(right: dp(10.0)),
+                      margin: EdgeInsets.only(right: dp(20.0)),
                       child: Row(
                         children: [
                           Container(
-                            width: dp(15.0),
-                            height: dp(15.0),
+                            width: dp(20.0),
+                            height: dp(20.0),
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: Colors.grey,
                               borderRadius: BorderRadius.circular(dp(10.0)),
                             ),
                           ),
@@ -300,12 +302,12 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
 
                     // 答对的
                     Container(
-                      margin: EdgeInsets.only(right: dp(10.0)),
+                      margin: EdgeInsets.only(right: dp(20.0)),
                       child: Row(
                         children: [
                           Container(
-                            width: dp(15.0),
-                            height: dp(15.0),
+                            width: dp(20.0),
+                            height: dp(20.0),
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(dp(10.0)),
@@ -327,8 +329,8 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                     Row(
                       children: [
                         Container(
-                          width: dp(15.0),
-                          height: dp(15.0),
+                          width: dp(20.0),
+                          height: dp(20.0),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(dp(10.0)),
@@ -347,14 +349,14 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                   ],
                 ),
 
-                SizedBox(height: dp(20.0)),
+                SizedBox(height: dp(50.0)),
 
                 // 选项卡
                 Wrap(
-                  spacing: dp(20.0),
-                  runSpacing: dp(20.0),
+                  spacing: dp(30.0),
+                  runSpacing: dp(30.0),
                   children: dataList.map((e) {
-                    Color _color = Colors.green;
+                    Color _color = Colors.grey;
                     // 获取下标
                     int index = dataList.indexOf(e);
 
@@ -370,7 +372,7 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                           '${index + 1}',
                           style: TextStyle(color: Colors.white),
                         ),
-                        radius: dp(30.0),
+                        radius: dp(50.0),
                         backgroundColor: _color,
                       ),
                       onTap: () {

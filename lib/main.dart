@@ -18,6 +18,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/", //默认显示的路由
       onGenerateRoute: onGenerateRoute, //路由匹配
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child,
+        );
+      },
     );
   }
 }

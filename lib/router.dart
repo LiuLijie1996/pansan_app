@@ -5,6 +5,7 @@ import 'package:pansan_app/pages/exerciseSelect.dart';
 import 'package:pansan_app/pages/addAdvisory.dart';
 import 'package:pansan_app/pages/examSelect.dart';
 import 'package:pansan_app/pages/examSiteInfo.dart';
+import 'package:pansan_app/pages/questionsCorrection.dart';
 import 'package:pansan_app/pages/searchCourseList.dart';
 import 'package:pansan_app/pages/dayTopic.dart';
 import 'package:pansan_app/pages/informAffiche.dart';
@@ -78,6 +79,12 @@ Map<String, Function> routers = {
     // 考试结果分析
     return ExamResultAnalyse(
       dataList: arguments['dataList'],
+    );
+  },
+  "/questionsCorrection": (context, {arguments}) {
+    // 题目纠错
+    return QuestionsCorrection(
+      issueData: arguments['issueData'],
     );
   },
 };

@@ -60,35 +60,36 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                                 TextSpan(
                                   text: '$not_answer_num',
                                   style: TextStyle(
-                                    fontSize: dp(38.0),
+                                    fontSize: dp(50.0),
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '题',
                                   style: TextStyle(
-                                    fontSize: dp(18.0),
+                                    fontSize: dp(26.0),
                                     color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: dp(5.0)),
                           Row(
                             children: [
                               Container(
-                                width: dp(10.0),
-                                height: dp(10.0),
+                                width: dp(20.0),
+                                height: dp(20.0),
                                 decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(dp(10.0)),
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(dp(20.0)),
                                 ),
                               ),
                               SizedBox(width: dp(5.0)),
                               Text(
-                                "未作答",
+                                "未答题",
                                 style: TextStyle(
-                                  fontSize: dp(14.0),
+                                  fontSize: dp(28.0),
                                   color: Colors.grey[700],
                                 ),
                               ),
@@ -107,25 +108,26 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                                 TextSpan(
                                   text: '$correct_num',
                                   style: TextStyle(
-                                    fontSize: dp(38.0),
+                                    fontSize: dp(50.0),
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '题',
                                   style: TextStyle(
-                                    fontSize: dp(18.0),
+                                    fontSize: dp(26.0),
                                     color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: dp(5.0)),
                           Row(
                             children: [
                               Container(
-                                width: dp(10.0),
-                                height: dp(10.0),
+                                width: dp(20.0),
+                                height: dp(20.0),
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   borderRadius: BorderRadius.circular(dp(10.0)),
@@ -135,7 +137,7 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                               Text(
                                 "答对了",
                                 style: TextStyle(
-                                  fontSize: dp(14.0),
+                                  fontSize: dp(28.0),
                                   color: Colors.grey[700],
                                 ),
                               ),
@@ -154,25 +156,26 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                                 TextSpan(
                                   text: '$mistake_num',
                                   style: TextStyle(
-                                    fontSize: dp(38.0),
+                                    fontSize: dp(50.0),
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '题',
                                   style: TextStyle(
-                                    fontSize: dp(18.0),
+                                    fontSize: dp(26.0),
                                     color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: dp(5.0)),
                           Row(
                             children: [
                               Container(
-                                width: dp(10.0),
-                                height: dp(10.0),
+                                width: dp(20.0),
+                                height: dp(20.0),
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(dp(10.0)),
@@ -182,7 +185,7 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                               Text(
                                 "答错了",
                                 style: TextStyle(
-                                  fontSize: dp(14.0),
+                                  fontSize: dp(28.0),
                                   color: Colors.grey[700],
                                 ),
                               ),
@@ -201,26 +204,27 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                                 TextSpan(
                                   text: '$correct_rate',
                                   style: TextStyle(
-                                    fontSize: dp(38.0),
+                                    fontSize: dp(50.0),
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '%',
                                   style: TextStyle(
-                                    fontSize: dp(18.0),
+                                    fontSize: dp(26.0),
                                     color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: dp(5.0)),
                           Row(
                             children: [
                               Text(
                                 "正确率",
                                 style: TextStyle(
-                                  fontSize: dp(14.0),
+                                  fontSize: dp(28.0),
                                   color: Colors.grey[700],
                                 ),
                               ),
@@ -238,15 +242,15 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
                       children: [
                         Icon(
                           aliIconfont.chronograph,
-                          size: dp(25.0),
+                          size: dp(30.0),
                         ),
                         SizedBox(width: dp(10.0)),
                         Text(
                           "用时${minute <= 9 && minute > 0 ? '0' + minute.toString() : minute}分${second <= 9 ? '0' + second.toString() : second}秒",
                           style: TextStyle(
                             color: Colors.grey[700],
-                            fontSize: dp(16.0),
-                            height: 1.8,
+                            fontSize: dp(28.0),
+                            height: 1.3,
                           ),
                         ),
                       ],
