@@ -29,6 +29,7 @@ class MyIcon {
   IconData full_collect = const IconData(0xe63e, fontFamily: 'iconfont'); //收藏
   IconData correct = const IconData(0xe632, fontFamily: 'iconfont'); //正确
   IconData chronograph = const IconData(0xe606, fontFamily: 'iconfont'); //秒表
+  IconData answer_sheet = const IconData(0xe76c, fontFamily: 'iconfont'); //答题卡
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

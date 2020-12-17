@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/pages/answerSheet.dart';
 import 'package:pansan_app/pages/exerciseDetails.dart';
+import 'package:pansan_app/pages/exerciseSpecialtyDetails.dart';
 import 'package:pansan_app/pages/exerciseSpecialtySelect.dart';
 import 'package:pansan_app/pages/exerciseSelect.dart';
 import 'package:pansan_app/pages/addAdvisory.dart';
@@ -85,6 +87,18 @@ Map<String, Function> routers = {
     // 题目纠错
     return QuestionsCorrection(
       issueData: arguments['issueData'],
+    );
+  },
+  "/exerciseSpecialtyDetails": (context, {arguments}) {
+    // 题目纠错
+    return ExerciseSpecialtyDetails(
+      arguments: arguments,
+    );
+  },
+  "/answerSheet": (context, {arguments}) {
+    // 答题卡
+    return AnswerSheet(
+      dataList: arguments['dataList'],
     );
   },
 };

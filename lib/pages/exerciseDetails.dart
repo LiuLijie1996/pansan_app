@@ -8,62 +8,8 @@ import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/components/TestSelect.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 
-// 1单选 3判断 2多选 4填空
-List listData = [
-  {
-    "id": 13505,
-    "type": 3,
-    "stem": "采掘工作面的空气温度超30℃，机电设备硐室的空气温度超过34℃时，必须停止作业。（对）",
-    "option": [
-      {"label": "A", "value": "对"},
-      {"label": "B", "value": "错"}
-    ],
-    "answer": ["A"], //正确答案
-    "analysis": "", //答案解析
-    "disorder": "5", //当前题目分数
-    "userFavor": false, //用户是否收藏
-  },
-  {
-    "id": 13505,
-    "type": 2,
-    "stem": "采掘工作面的空气温度超30℃，机电设备硐室的空气温度超过34℃时，必须停止作业。（对）",
-    "option": [
-      {"label": "A", "value": "大家发的"},
-      {"label": "B", "value": "废话不说的"},
-      {"label": "C", "value": "v让法国人"},
-      {"label": "D", "value": "的发电厂"},
-      {"label": "E", "value": "发的发的"},
-      {"label": "F", "value": "人头就喝点水"},
-      {"label": "G", "value": "发给你不发给"},
-      {"label": "H", "value": "违法污染"},
-      {"label": "I", "value": "你干嘛"},
-    ],
-    "answer": ["C", "F", "H"], //正确答案
-    "analysis": "", //答案解析
-    "disorder": "5", //当前题目分数
-    "userFavor": false, //用户是否收藏
-  },
-  {
-    "id": 13505,
-    "type": 2,
-    "stem": "谁离开的风景粮食局公司就两三点尽量少就过来说了疯狂过",
-    "option": [
-      {"label": "A", "value": "创建"},
-      {"label": "B", "value": "额外"},
-      {"label": "C", "value": "的疯狂了"},
-      {"label": "D", "value": "破副本"},
-      {"label": "E", "value": "丹佛排水沟IE"},
-      {"label": "F", "value": "v传播ID片"},
-      {"label": "G", "value": "诶无"},
-      {"label": "H", "value": "阿佛风"},
-      {"label": "I", "value": "比偶当然"},
-    ],
-    "answer": ["A", "C", "I"], //正确答案
-    "analysis": "绿色的风景水果机的", //答案解析
-    "disorder": "5", //当前题目分数
-    "userFavor": true, //用户是否收藏
-  },
-];
+// 模拟的数据
+import 'package:pansan_app/models/mockData.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final Map arguments;
@@ -393,6 +339,11 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
                           // 判断和标准答案是否相同
                           item.correct = equals(item.user_answer, item.answer);
+
+                          // 如果选项为空将是否正确的字段改成null，表示没选
+                          if (item.user_answer.isEmpty) {
+                            item.correct = null;
+                          }
 
                           // 刷新页面
                           setState(() {});

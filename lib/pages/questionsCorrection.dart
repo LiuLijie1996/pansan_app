@@ -127,6 +127,7 @@ class _QuestionsCorrectionState extends State<QuestionsCorrection>
                 child: RaisedButton(
                   onPressed: () {
                     Map data = {
+                      "id": issueData.id,
                       "err_type": _currentErrIndex,
                       "content": _inputValue,
                     };

@@ -1,7 +1,7 @@
 // 单选和判断题的数据类型
 import 'package:flutter/cupertino.dart';
 
-// 题目选择时的列表项数据类型
+// 题目选择项的数据类型
 class ChoiceList {
   final String label;
   final String value;

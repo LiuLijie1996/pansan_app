@@ -78,7 +78,12 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
                         arguments: item,
                       );
                     } else {
-                      print("跳转到答题页面");
+                      // 跳转到答题页面
+                      Navigator.pushNamed(
+                        context,
+                        "/exerciseSpecialtyDetails",
+                        arguments: item,
+                      );
                     }
                   },
                 );
@@ -107,9 +112,9 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
 
       List newData = data.map((e) {
         return {
-          "id": e['id'],
-          "name": e['name'],
-          "is_child": e['is_child'],
+          "id": e['id'], //id
+          "name": e['name'], //标题
+          "is_child": e['is_child'], //是否有子选项
         };
       }).toList();
 

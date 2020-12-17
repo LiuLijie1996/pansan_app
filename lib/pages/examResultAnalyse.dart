@@ -22,13 +22,13 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
   // 轮播图控制器
   SwiperController _swiperController = SwiperController();
   //当前题目下标
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     List<ExamIssueDataType> dataList = widget.dataList;
     // 当前显示的题目
-    ExamIssueDataType _currentItem = dataList[_currentIndex - 1];
+    ExamIssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -53,7 +53,15 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
-              int result = await answerSheetAlter();
+              print("答题卡");
+              var result = await Navigator.pushNamed(
+                context,
+                '/answerSheet',
+                arguments: {
+                  "dataList": dataList,
+                },
+              );
+
               if (result != null) {
                 _swiperController.move(result);
               }
@@ -79,7 +87,7 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                   style: TextStyle(color: Colors.white),
                 ),
                 Text(
-                  "$_currentIndex/${dataList.length}",
+                  "${_currentIndex + 1}/${dataList.length}",
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -92,7 +100,7 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
               controller: _swiperController,
               onIndexChanged: (int index) {
                 setState(() {
-                  _currentIndex = index + 1;
+                  _currentIndex = index;
                 });
               },
               itemCount: dataList.length,
@@ -226,12 +234,12 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                               SizedBox(height: dp(20.0)),
 
                               // 正确答案
-                              Row(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("正确答案："),
-                                  Text("$_answer，"),
-                                  Text("你答案："),
-                                  Text("$_user_answer"),
+                                  Text("正确答案：$_answer"),
+                                  SizedBox(height: dp(10.0)),
+                                  Text("你的答案：$_user_answer"),
                                 ],
                               ),
                             ],
@@ -246,146 +254,6 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
           ),
         ],
       ),
-    );
-  }
-
-  // 答题卡弹窗
-  answerSheetAlter() {
-    List<ExamIssueDataType> dataList = widget.dataList;
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text("答题卡"),
-          ),
-          body: Container(
-            padding: EdgeInsets.all(dp(20.0)),
-            child: ListView(
-              children: [
-                Text(
-                  "本次作答共计8题，答对3题，答错5题，未答0题",
-                  style: TextStyle(
-                    fontSize: dp(32.0),
-                  ),
-                ),
-                SizedBox(height: dp(20.0)),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // 未答的
-                    Container(
-                      margin: EdgeInsets.only(right: dp(20.0)),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: dp(20.0),
-                            height: dp(20.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(dp(10.0)),
-                            ),
-                          ),
-                          SizedBox(width: dp(5.0)),
-                          Text(
-                            "未答题",
-                            style: TextStyle(
-                              fontSize: dp(20.0),
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 答对的
-                    Container(
-                      margin: EdgeInsets.only(right: dp(20.0)),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: dp(20.0),
-                            height: dp(20.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(dp(10.0)),
-                            ),
-                          ),
-                          SizedBox(width: dp(5.0)),
-                          Text(
-                            "答对了",
-                            style: TextStyle(
-                              fontSize: dp(20.0),
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 答错了
-                    Row(
-                      children: [
-                        Container(
-                          width: dp(20.0),
-                          height: dp(20.0),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(dp(10.0)),
-                          ),
-                        ),
-                        SizedBox(width: dp(5.0)),
-                        Text(
-                          "答错了",
-                          style: TextStyle(
-                            fontSize: dp(20.0),
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: dp(50.0)),
-
-                // 选项卡
-                Wrap(
-                  spacing: dp(30.0),
-                  runSpacing: dp(30.0),
-                  children: dataList.map((e) {
-                    Color _color = Colors.grey;
-                    // 获取下标
-                    int index = dataList.indexOf(e);
-
-                    if (e.correct == true) {
-                      _color = Colors.blue;
-                    } else if (e.correct == false) {
-                      _color = Colors.red;
-                    }
-
-                    return InkWell(
-                      child: CircleAvatar(
-                        child: Text(
-                          '${index + 1}',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        radius: dp(50.0),
-                        backgroundColor: _color,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context, index);
-                      },
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
