@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/components/TestSelect.dart';
 
 class ExamResultAnalyse extends StatefulWidget {
   // 题目列表
-  final List<ExamIssueDataType> dataList;
+  final List<IssueDataType> dataList;
 
   ExamResultAnalyse({Key key, this.dataList}) : super(key: key);
 
@@ -26,9 +26,9 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
 
   @override
   Widget build(BuildContext context) {
-    List<ExamIssueDataType> dataList = widget.dataList;
+    List<IssueDataType> dataList = widget.dataList;
     // 当前显示的题目
-    ExamIssueDataType _currentItem = dataList[_currentIndex];
+    IssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -105,12 +105,12 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
               },
               itemCount: dataList.length,
               itemBuilder: (BuildContext context, int index) {
-                ExamIssueDataType item = dataList[index];
+                IssueDataType item = dataList[index];
 
                 // 正确答案
                 List<String> answer = item.answer;
                 // 用户的答案
-                List<String> user_answer = item.user_answer;
+                List<String> user_answer = item.userAnswer;
 
                 // 拼接正确答案
                 String _answer = '';
@@ -151,31 +151,31 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                           data: item,
                           reminder: true, //是否需要提示
                           disabled: true, //是否禁止点击
-                          onChange: (ChoiceList choiceList) {
+                          onChange: (Option choiceList) {
                             // 判断是单选还是多选
                             if (item.type == 3 || item.type == 1) {
-                              item.user_answer = [];
+                              item.userAnswer = [];
 
                               _swiperController.next();
                             }
 
                             // 判断当前选择的是否已经选择过了
                             bool is_select =
-                                item.user_answer.contains(choiceList.label);
+                                item.userAnswer.contains(choiceList.label);
                             // 如果已经选了，那么就删除
                             if (is_select) {
                               int index =
-                                  item.user_answer.indexOf(choiceList.label);
+                                  item.userAnswer.indexOf(choiceList.label);
 
                               // 删除选项
-                              item.user_answer.removeAt(index);
+                              item.userAnswer.removeAt(index);
                             } else {
                               // 如果没有选择，就添加选项
-                              item.user_answer.add(choiceList.label);
+                              item.userAnswer.add(choiceList.label);
                             }
 
                             // 数组排序
-                            item.user_answer.sort((left, right) {
+                            item.userAnswer.sort((left, right) {
                               return left.compareTo(right);
                             });
 
@@ -189,8 +189,7 @@ class _ExamResultAnalyseState extends State<ExamResultAnalyse>
                             }
 
                             // 判断和标准答案是否相同
-                            item.correct =
-                                equals(item.user_answer, item.answer);
+                            item.correct = equals(item.userAnswer, item.answer);
 
                             // 刷新页面
                             setState(() {});

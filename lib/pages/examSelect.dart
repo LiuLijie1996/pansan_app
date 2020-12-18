@@ -7,6 +7,7 @@ import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
+import 'package:pansan_app/models/ExamListDataType.dart';
 import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
@@ -57,7 +58,6 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.arguments['name']}"),
@@ -73,12 +73,41 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
               ? myWidget[_currentMyWidget]
               : ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
-                    double bottom =
-                        examData['data'].length - 1 == index ? dp(30.0) : 0.0;
-                    Map item = examData['data'][index];
+                    List data = examData['data'];
+
+                    double bottom = data.length - 1 == index ? dp(30.0) : 0.0;
+                    ExamListDataType item = data[index];
+
+                    //开始时间
+                    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(
+                      item.startTime * 1000,
+                    );
+
+                    //格式化开始时间
+                    String _startTime = formatDate(
+                      startTime,
+                      [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+                    );
+
+                    //结束时间
+                    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(
+                      item.endTime * 1000,
+                    );
+
+                    //格式化结束时间
+                    String _endTime = formatDate(
+                      endTime,
+                      [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+                    );
+
+                    // 开始时间
+                    // startTime
+                    // 结束时间
+                    // endTime
+
                     // 考试状态
                     String examStatus = '';
-                    switch (item['status']) {
+                    switch (item.status) {
                       case 0:
                         examStatus = '未开始';
                         break;
@@ -121,7 +150,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                             padding: EdgeInsets.only(
                                 top: dp(20.0), bottom: dp(20.0)),
                             child: Text(
-                              "${item['title']}",
+                              "${item.name}",
                               style: TextStyle(
                                 fontSize: dp(36.0),
                                 fontWeight: FontWeight.w700,
@@ -145,7 +174,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                                     ),
                                     SizedBox(height: dp(20.0)),
                                     Text(
-                                      "${item['start_time']}",
+                                      "$_startTime",
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -171,7 +200,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                                     ),
                                     SizedBox(height: dp(20.0)),
                                     Text(
-                                      "${item['end_time']}",
+                                      "$_endTime",
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -195,27 +224,24 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
                               SizedBox(),
                               SizedBox(),
                               RaisedButton(
-                                color:
-                                    item['is_test'] ? Colors.blue : Colors.grey,
+                                color: item.isTest ? Colors.blue : Colors.grey,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(dp(40.0)),
                                 ),
                                 onPressed: () async {
                                   // 判断是否可以进入考试
-                                  if (item['is_test'] == true) {
-                                    print(item);
+                                  if (item.isTest == true) {
                                     // 进入考场信息页
                                     Navigator.pushNamed(
                                       context,
                                       "/examSiteInfo",
-                                      arguments:
-                                          ExamItemDataType.fromJson(item),
+                                      arguments: item,
                                     );
                                   } else {
                                     String text =
-                                        item['status'] == 0 ? '考试未开始' : '考试已结束';
+                                        item.status == 0 ? '考试未开始' : '考试已结束';
 
-                                    if (item['status'] != 1) {
+                                    if (item.status != 1) {
                                       _showDialog(text);
                                     } else {
                                       _showDialog('不能重复参加考试');
@@ -254,44 +280,16 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
   // 获取数据
   getExamData({page = 1}) async {
     try {
-      var result = await myRequest(path: "/api/test/examSelect", data: {
+      var result = await myRequest(path: "/api/exam/getTestList", data: {
+        "user_id": 1,
         "id": widget.arguments['id'],
       });
 
       int total = result['total'] ?? 0;
       List data = result['data'];
-      List newData = data.map((e) {
-        //开始时间
-        DateTime start_time = DateTime.fromMillisecondsSinceEpoch(
-          e['start_time'] * 1000,
-        );
-
-        //格式化开始时间
-        String _start_time = formatDate(
-          start_time,
-          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
-        );
-
-        //结束时间
-        DateTime end_time = DateTime.fromMillisecondsSinceEpoch(
-          e['end_time'] * 1000,
-        );
-
-        //格式化结束时间
-        String _end_time = formatDate(
-          end_time,
-          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
-        );
-
-        return {
-          "test_id": "${e["id"]}", //考试的id
-          "title": e["name"], //考试的标题
-          "status": int.parse("${e["status"]}"), //考试状态  0未开始 1进行中 2已结束
-          "type": int.parse("${e["type"]}"), //考试类型
-          "start_time": _start_time, //开始时间
-          "end_time": _end_time, //结束时间
-          "is_test": e["is_test"], // 当前用户是否可以进入考试
-        };
+      List<ExamListDataType> newData = data.map((e) {
+        e['cut_screen_time'] = int.parse("${e['cut_screen_time']}");
+        return ExamListDataType.fromJson(e);
       }).toList();
 
       if (this.mounted) {

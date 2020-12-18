@@ -1,9 +1,3 @@
-import 'dart:io';
-import 'dart:convert';
-
-// 模拟的数据
-import 'package:pansan_app/mock/mockData.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:date_format/date_format.dart';
@@ -14,7 +8,6 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
@@ -362,8 +355,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 获取最新考试
   getExamList() async {
     try {
-      print('获取最新考试');
-
       var result = await myRequest(path: "/api/exam/newKaoshi");
       List data = result['data'];
 
@@ -384,8 +375,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     page = 1,
   }) async {
     try {
-      print('获取新闻');
-
       var result = await myRequest(
         path: "/api/news/getIndexNewsList",
         data: {
@@ -416,8 +405,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     page = 1,
   }) async {
     try {
-      print('获取课程');
-
       var result = await myRequest(
         path: "/api/course/courseList",
         data: {

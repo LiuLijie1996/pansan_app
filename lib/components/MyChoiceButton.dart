@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 
 //考试选项的按钮
 class MyChoiceButton extends StatelessWidget with MyScreenUtil {
   final bool status; //状态  null未选择  true选择正确  false选择错误
-  final ChoiceList option; //选项
+  final Option option; //选项
   final bool disabled; //是否禁止点击
   final Function onClick; //点击的回调
   MyChoiceButton({
@@ -14,7 +14,7 @@ class MyChoiceButton extends StatelessWidget with MyScreenUtil {
     @required this.option,
     this.disabled = false,
     this.onClick,
-  }) : super(key: key){
+  }) : super(key: key) {
     //初始化按钮的颜色值
     initStatus();
   }

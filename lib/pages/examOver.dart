@@ -3,13 +3,14 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyTags.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
+import 'package:pansan_app/models/ExamListDataType.dart';
 
 class ExamOver extends StatelessWidget with MyScreenUtil {
   // 题目列表
-  final List<ExamIssueDataType> dataList;
+  final List<IssueDataType> dataList;
   // 考场信息
-  final ExamSiteDataType examSiteInfo;
+  final ExamListDataType examSiteInfo;
   // 练习消耗的时间
   int expend_time;
   ExamOver({
@@ -45,10 +46,10 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
     String _minute = minute <= 9 ? "0$minute" : "$minute";
     // 秒
     int second = expend_time % 60;
-    String _second = minute <= 9 ? "0$second" : "$second";
+    String _second = second <= 9 ? "0$second" : "$second";
 
     // 是否及格
-    bool passing_mark = examSiteInfo.passing_mark <= total_points;
+    bool passing_mark = examSiteInfo.passingMark <= total_points;
     // 考试类型
     String examType = examSiteInfo.type == 1
         ? '模拟考试'

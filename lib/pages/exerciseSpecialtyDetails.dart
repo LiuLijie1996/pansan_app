@@ -4,7 +4,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 import 'package:pansan_app/components/TestSelect.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 
 // 模拟的数据
@@ -28,7 +28,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
   SwiperController _swiperController = SwiperController();
 
   // 题目列表
-  List<ExamIssueDataType> dataList = [];
+  List<IssueDataType> dataList = [];
 
   //当前题目下标
   int _currentIndex = 0;
@@ -46,7 +46,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
   Widget build(BuildContext context) {
     Map arguments = widget.arguments;
     // 当前显示的题目
-    ExamIssueDataType _currentItem = dataList[_currentIndex];
+    IssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -264,12 +264,12 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
                 },
                 itemCount: dataList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  ExamIssueDataType item = dataList[index];
+                  IssueDataType item = dataList[index];
 
                   // 正确答案
                   List<String> answer = item.answer;
                   // 用户的答案
-                  List<String> user_answer = item.user_answer;
+                  List<String> user_answer = item.userAnswer;
 
                   // 拼接正确答案
                   String _answer = '';
@@ -310,31 +310,31 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
                             data: item,
                             reminder: true, //是否需要提示
                             // disabled: true, //是否禁止点击
-                            onChange: (ChoiceList choiceList) {
+                            onChange: (Option choiceList) {
                               // 判断是单选还是多选
                               if (item.type == 3 || item.type == 1) {
-                                item.user_answer = [];
+                                item.userAnswer = [];
 
                                 _swiperController.next();
                               }
 
                               // 判断当前选择的是否已经选择过了
                               bool is_select =
-                                  item.user_answer.contains(choiceList.label);
+                                  item.userAnswer.contains(choiceList.label);
                               // 如果已经选了，那么就删除
                               if (is_select) {
                                 int index =
-                                    item.user_answer.indexOf(choiceList.label);
+                                    item.userAnswer.indexOf(choiceList.label);
 
                                 // 删除选项
-                                item.user_answer.removeAt(index);
+                                item.userAnswer.removeAt(index);
                               } else {
                                 // 如果没有选择，就添加选项
-                                item.user_answer.add(choiceList.label);
+                                item.userAnswer.add(choiceList.label);
                               }
 
                               // 数组排序
-                              item.user_answer.sort((left, right) {
+                              item.userAnswer.sort((left, right) {
                                 return left.compareTo(right);
                               });
 
@@ -350,10 +350,10 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
 
                               // 判断和标准答案是否相同
                               item.correct =
-                                  equals(item.user_answer, item.answer);
+                                  equals(item.userAnswer, item.answer);
 
                               // 如果选项为空将是否正确的字段改成null，表示没选
-                              if (item.user_answer.isEmpty) {
+                              if (item.userAnswer.isEmpty) {
                                 item.correct = null;
                               }
 
@@ -438,14 +438,14 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
       // listData 获取到的考题
       dataList = listData.map((e) {
         List options = e['option'];
-        List<ChoiceList> option = options.map((item) {
-          return ChoiceList(
+        List<Option> option = options.map((item) {
+          return Option(
             label: item['label'],
             value: item['value'],
           );
         }).toList();
 
-        return ExamIssueDataType(
+        return IssueDataType(
           id: e['id'], //id
           stem: e['stem'], //标题
           type: e['type'], //题目类型
@@ -454,7 +454,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
           analysis: e['analysis'], //答案解析
           disorder: e['disorder'], //当前题目分数
           userFavor: e['userFavor'], //用户是否收藏
-          user_answer: [], //用户选择的答案
+          userAnswer: [], //用户选择的答案
           correct: null, //用户的选择是否正确
         );
       }).toList();

@@ -18,6 +18,7 @@ class ExamListDataType {
   int cutScreenTime;
   int type;
   bool isTest;
+  int status;
 
   ExamListDataType(
       {this.id,
@@ -56,6 +57,7 @@ class ExamListDataType {
     cutScreenTime = json['cut_screen_time'];
     type = json['type'];
     isTest = json['is_test'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +79,7 @@ class ExamListDataType {
     data['cut_screen_time'] = this.cutScreenTime;
     data['type'] = this.type;
     data['is_test'] = this.isTest;
+    data['status'] = this.status;
     return data;
   }
 }

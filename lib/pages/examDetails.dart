@@ -1,17 +1,20 @@
 // 考试详情页
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pansan_app/components/MyIcon.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/components/TestSelect.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
-import 'package:pansan_app/models/mockData.dart';
+import 'package:pansan_app/models/ExamListDataType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
+import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamDetails extends StatefulWidget {
-  final ExamSiteDataType examSiteInfo;
+  final ExamListDataType examSiteInfo;
   ExamDetails({Key key, @required this.examSiteInfo}) : super(key: key);
 
   @override
@@ -20,7 +23,7 @@ class ExamDetails extends StatefulWidget {
 
 class _ExamDetailsState extends State<ExamDetails>
     with MyScreenUtil, WidgetsBindingObserver {
-  ExamSiteDataType examSiteInfo;
+  ExamListDataType examSiteInfo;
 
   // 轮播图控制器
   SwiperController _swiperController = SwiperController();
@@ -37,7 +40,7 @@ class _ExamDetailsState extends State<ExamDetails>
   int _appCount = 0;
 
   // 题目列表
-  List<ExamIssueDataType> dataList = [];
+  List<IssueDataType> dataList = [];
 
   //当前题目下标
   int _currentIndex = 0;
@@ -79,7 +82,7 @@ class _ExamDetailsState extends State<ExamDetails>
 
       // 判断切屏次数
       _appCount++;
-      if (_appCount >= examSiteInfo.cut_screen_num) {
+      if (_appCount >= examSiteInfo.cutScreenNum) {
         // 弹出提示
         fn() async {
           await _showLeaveNumAlert("离开应用次数过多，自动交卷");
@@ -102,7 +105,7 @@ class _ExamDetailsState extends State<ExamDetails>
     } else if (state == AppLifecycleState.resumed) {
       // APP进入前台
       print('APP进入前台');
-      if (_appTime >= examSiteInfo.cut_screen_time) {
+      if (_appTime >= examSiteInfo.cutScreenTime) {
         // 弹出提示
         fn() async {
           await _showLeaveNumAlert("离开考试时间过长，自动交卷");
@@ -138,6 +141,12 @@ class _ExamDetailsState extends State<ExamDetails>
 
   @override
   Widget build(BuildContext context) {
+    if (dataList.length == 0) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
+
     // 考试剩余的时间
     int remainTime = examSiteInfo.duration - expend_time;
     int minute = (remainTime / 60).floor(); //分钟
@@ -146,7 +155,7 @@ class _ExamDetailsState extends State<ExamDetails>
     String _second = second <= 9 ? '0$second' : "$second";
 
     // 当前显示的题目
-    ExamIssueDataType _currentItem = dataList[_currentIndex];
+    IssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -437,7 +446,7 @@ class _ExamDetailsState extends State<ExamDetails>
                 },
                 itemCount: dataList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  ExamIssueDataType item = dataList[index];
+                  IssueDataType item = dataList[index];
 
                   return SingleChildScrollView(
                     child: Container(
@@ -451,31 +460,31 @@ class _ExamDetailsState extends State<ExamDetails>
                         data: item,
                         // reminder: true, //是否需要提示
                         // disabled: true, //是否禁止点击
-                        onChange: (ChoiceList choiceList) {
+                        onChange: (Option choiceList) {
                           // 判断是单选还是多选
                           if (item.type == 3 || item.type == 1) {
-                            item.user_answer = [];
+                            item.userAnswer = [];
 
                             _swiperController.next();
                           }
 
                           // 判断当前选择的是否已经选择过了
                           bool is_select =
-                              item.user_answer.contains(choiceList.label);
+                              item.userAnswer.contains(choiceList.label);
                           // 如果已经选了，那么就删除
                           if (is_select) {
                             int index =
-                                item.user_answer.indexOf(choiceList.label);
+                                item.userAnswer.indexOf(choiceList.label);
 
                             // 删除选项
-                            item.user_answer.removeAt(index);
+                            item.userAnswer.removeAt(index);
                           } else {
                             // 如果没有选择，就添加选项
-                            item.user_answer.add(choiceList.label);
+                            item.userAnswer.add(choiceList.label);
                           }
 
                           // 数组排序
-                          item.user_answer.sort((left, right) {
+                          item.userAnswer.sort((left, right) {
                             return left.compareTo(right);
                           });
 
@@ -489,10 +498,10 @@ class _ExamDetailsState extends State<ExamDetails>
                           }
 
                           // 判断和标准答案是否相同
-                          item.correct = equals(item.user_answer, item.answer);
+                          item.correct = equals(item.userAnswer, item.answer);
 
                           // 如果选项为空将是否正确的字段改成null，表示没选
-                          if (item.user_answer.isEmpty) {
+                          if (item.userAnswer.isEmpty) {
                             item.correct = null;
                           }
 
@@ -514,33 +523,50 @@ class _ExamDetailsState extends State<ExamDetails>
   // 获取数据
   getDataList() async {
     try {
-      // var result = await myRequest(path: "");
+      var result = await myRequest(
+        path: "/api/exam/kaoTi",
+        data: {
+          "user_id": 1,
+          "id": examSiteInfo.id,
+          "type": examSiteInfo.type,
+        },
+      );
 
-      // listData 获取到的考题
-      dataList = listData.map((e) {
-        List options = e['option'];
-        List<ChoiceList> option = options.map((item) {
-          return ChoiceList(
-            label: item['label'],
-            value: item['value'],
-          );
+      List data = result['data']['list'];
+
+      dataList = data.map((e) {
+        List options = json.decode(e['option']);
+
+        List<Option> option = options.map((item) {
+          Map<String, dynamic> newItem = {
+            "label": item['label'],
+            "value": item['value'],
+          };
+          return Option.fromJson(newItem);
         }).toList();
 
-        return ExamIssueDataType(
+        List answer = e['answer'] ?? [];
+        List<String> newAnswer = answer.map((item) {
+          return item.toString();
+        }).toList();
+
+        return IssueDataType(
           id: e['id'], //id
           stem: e['stem'], //标题
           type: e['type'], //题目类型
           option: option, //题目选项
-          answer: e['answer'], //正确答案
+          answer: newAnswer, //正确答案
           analysis: e['analysis'], //答案解析
           disorder: e['disorder'], //当前题目分数
           userFavor: e['userFavor'], //用户是否收藏
-          user_answer: [], //用户选择的答案
+          userAnswer: [], //用户选择的答案
           correct: null, //用户的选择是否正确
         );
       }).toList();
 
-      setState(() {});
+      if (this.mounted) {
+        setState(() {});
+      }
     } catch (e) {
       print(e);
     }

@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 
 class QuestionsCorrection extends StatefulWidget {
-  final ExamIssueDataType issueData;
+  final IssueDataType issueData;
   QuestionsCorrection({Key key, this.issueData}) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class _QuestionsCorrectionState extends State<QuestionsCorrection>
 
   @override
   Widget build(BuildContext context) {
-    ExamIssueDataType issueData = widget.issueData;
+    IssueDataType issueData = widget.issueData;
 
     return Scaffold(
       appBar: AppBar(

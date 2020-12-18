@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 
 class AnswerSheet extends StatelessWidget with MyScreenUtil {
   // 题目列表
-  final List<ExamIssueDataType> dataList;
+  final List<IssueDataType> dataList;
   final bool reminder; //是否需要错误提示
   AnswerSheet({Key key, @required this.dataList, this.reminder = true})
       : super(key: key);

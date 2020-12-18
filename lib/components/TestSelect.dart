@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyChoiceButton.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 
 // 题目选择
 class MultipleChoice extends StatelessWidget with MyScreenUtil {
   final bool reminder; //是否需要错误提示
-  final ExamIssueDataType data; //数据
+  final IssueDataType data; //数据
   final Function onChange; //选择答案时触发的回调
   final bool disabled; //是否禁止点击
   MultipleChoice({
@@ -33,7 +33,7 @@ class MultipleChoice extends StatelessWidget with MyScreenUtil {
         Column(
           children: data.option.map((e) {
             // 用户选择的答案
-            List<String> user_answer = data.user_answer;
+            List<String> user_answer = data.userAnswer;
             bool status = null;
             // 判断用户是否选择了
             if (user_answer.length == 0) {

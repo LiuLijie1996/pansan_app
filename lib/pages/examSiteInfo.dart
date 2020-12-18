@@ -2,46 +2,42 @@
 
 import 'package:flutter/material.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/examIssueType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/ExamListDataType.dart';
 
 class ExamSiteInfo extends StatefulWidget {
-  final ExamItemDataType arguments;
-  ExamSiteInfo({Key key, this.arguments}) : super(key: key);
+  final ExamListDataType arguments;
+  ExamSiteInfo({Key key, @required this.arguments}) : super(key: key);
 
   @override
   _ExamSiteInfoState createState() => _ExamSiteInfoState();
 }
 
 class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
-  Map<String, dynamic> examSiteInfo = {};
+  ExamListDataType examSiteInfo;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    // 请求数据
-    getExamSiteInfo();
+    examSiteInfo = widget.arguments;
   }
 
   @override
   Widget build(BuildContext context) {
-    ExamItemDataType arguments = widget.arguments;
-
     Color textColor = Color(int.parse('666666', radix: 16) | 0xff000000);
     double fontSize = 16.0;
 
     // 考试次数
     String test_num =
-        examSiteInfo['test_num'] == 0 ? '无限次' : "${examSiteInfo['test_num']}次";
+        examSiteInfo.testNum == 0 ? '无限次' : "${examSiteInfo.testNum}次";
 
     // 考试类型
-    String examType = examSiteInfo['type'] == 1
+    String examType = examSiteInfo.type == 1
         ? '模拟考试'
-        : examSiteInfo['type'] == 2
+        : examSiteInfo.type == 2
             ? '正式考试'
-            : examSiteInfo['type'] == 3
+            : examSiteInfo.type == 3
                 ? '补考'
                 : '';
 
@@ -59,7 +55,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: dp(40.0), bottom: dp(40.0)),
                 child: Text(
-                  "${arguments.title}",
+                  "${examSiteInfo.name}",
                   style: TextStyle(
                     fontSize: dp(40.0),
                     fontWeight: FontWeight.w700,
@@ -131,7 +127,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                       ),
                     ),
                     Text(
-                      "${examSiteInfo['duration'] == null ? '' : (examSiteInfo['duration'] / 60).ceil()}分钟",
+                      "${examSiteInfo.duration == null ? '' : (examSiteInfo.duration / 60).ceil()}分钟",
                       style: TextStyle(
                         fontSize: fontSize,
                         color: textColor,
@@ -168,7 +164,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                       ),
                     ),
                     Text(
-                      "${examSiteInfo['passing_mark']}分",
+                      "${examSiteInfo.passingMark}分",
                       style: TextStyle(
                         fontSize: fontSize,
                         color: textColor,
@@ -242,7 +238,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                       ),
                     ),
                     Text(
-                      "${examSiteInfo['address']}",
+                      "${examSiteInfo.address}",
                       style: TextStyle(
                         fontSize: fontSize,
                         color: textColor,
@@ -273,7 +269,7 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                     Container(
                       width: dp(400.0),
                       child: Text(
-                        "本场考试只能参加$test_num，只能在指定考场参加本次考试！${examSiteInfo['cut_screen_type'] == 1 ? '切屏次数不得大于' + examSiteInfo['cut_screen_num'].toString() + '次，离开页面不得超过' + examSiteInfo['cut_screen_time'].toString() + '秒' : ''}",
+                        "本场考试只能参加$test_num，只能在指定考场参加本次考试！${examSiteInfo.cutScreenType == 1 ? '切屏次数不得大于' + examSiteInfo.cutScreenNum.toString() + '次，离开页面不得超过' + examSiteInfo.cutScreenTime.toString() + '秒' : ''}",
                         style: TextStyle(
                           fontSize: fontSize,
                           color: textColor,
@@ -290,15 +286,12 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
                 child: RaisedButton(
                   color: Colors.blue,
                   onPressed: () {
-                    if (examSiteInfo['id'] != null) {
+                    if (examSiteInfo.id != null) {
                       // 进入考试
                       Navigator.pushNamed(
                         context,
                         "/examDetails",
-                        arguments: {
-                          "examSiteInfo":
-                              ExamSiteDataType.fromJson(examSiteInfo)
-                        },
+                        arguments: {"examSiteInfo": examSiteInfo},
                       );
                     }
                   },
@@ -319,34 +312,5 @@ class _ExamSiteInfoState extends State<ExamSiteInfo> with MyScreenUtil {
         ),
       ),
     );
-  }
-
-  // 请求数据
-  getExamSiteInfo() async {
-    try {
-      var result = await myRequest(path: "/api/test/examSiteInfo", data: {
-        "test_id": widget.arguments.test_id,
-      });
-      Map data = result['data'];
-
-      if (this.mounted) {
-        setState(() {
-          examSiteInfo = {
-            "id": data['id'], //考试id
-            "title": widget.arguments.title, //考试标题
-            "type": data['type'], //考试类型
-            "address": data['address'], //考试地址
-            "duration": data['duration'], //考试限时
-            "passing_mark": data['passing_mark'], //及格分数
-            "test_num": data['test_num'], //考试次数
-            "cut_screen_type": data['cut_screen_type'], //是否开启切屏限制  1开启切屏限制
-            "cut_screen_num": data['cut_screen_num'], //考试时切屏最大次数
-            "cut_screen_time": data['cut_screen_time'], //考试切屏时最大等待时间
-          };
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }
