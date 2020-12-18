@@ -232,11 +232,13 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
   // 获取导航
   getExamNav() async {
     try {
-      var result = await myRequest(path: "/api/nav/nav-all");
+      var result1 = await myRequest(path: "/api/exam/getTestItemList");
+      var result2 = await myRequest(path: "/api/exam/getPracticeItemList");
+
       // 获取我要考试列表
-      List myExam = result["data"]["exam"]["myExam"];
+      List myExam = result1["data"];
       // 获取我要练习列表
-      List myExercise = result["data"]["exam"]["myExercise"];
+      List myExercise = result2["data"];
 
       // 图标
       List icons = [
@@ -285,7 +287,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
   }
 }
 
-// 考试导航列表
+// 导航列表
 class NavItem extends StatelessWidget with MyScreenUtil {
   final item;
   final Function() onClick;

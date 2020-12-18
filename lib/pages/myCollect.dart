@@ -7,6 +7,7 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/NewsDataType.dart';
 
 class MyCollect extends StatefulWidget {
   MyCollect({Key key}) : super(key: key);
@@ -106,7 +107,7 @@ class _MyCollectState extends State<MyCollect>
 
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  Map item = data[index];
+                  NewsDataType item = data[index];
 
                   if (data.length - 1 == index) {
                     // 判断后台是否还有数据
@@ -120,7 +121,7 @@ class _MyCollectState extends State<MyCollect>
                     }
                   }
 
-                  return CardItem(
+                  return NewsCardItem(
                     onClick: () {
                       print(item);
                     },
@@ -151,11 +152,13 @@ class _MyCollectState extends State<MyCollect>
         return {};
       }).toList();
 
-      setState(() {
-        tabView[_currentIndex]['data'].addAll(newData);
-        tabView[_currentIndex]['total'] = total;
-        tabView[_currentIndex]['page'] = page;
-      });
+      if (this.mounted) {
+        setState(() {
+          tabView[_currentIndex]['data'].addAll(newData);
+          tabView[_currentIndex]['total'] = total;
+          tabView[_currentIndex]['page'] = page;
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -165,41 +168,46 @@ class _MyCollectState extends State<MyCollect>
   getNewsData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/user/myCollect/news",
+        path: "/api/news/getIndexNewsList",
         data: {
           "user_id": "用户id",
           "page": page,
+          "psize": 20,
         },
       );
 
       int total = result['total'];
       List data = result['data'];
-      List newData = data.map((e) {
-        //时间
-        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-          e['addtime'] * 1000,
-        );
-        // 时间转换
-        String addtime = formatDate(
-          dateTime,
-          [yyyy, '-', mm, '-', dd],
-        );
+      List<NewsDataType> newData = data.map((e) {
+        // //时间
+        // DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+        //   e['addtime'] * 1000,
+        // );
+        // // 时间转换
+        // String addtime = formatDate(
+        //   dateTime,
+        //   [yyyy, '-', mm, '-', dd],
+        // );
 
-        return {
-          "id": e['id'], //id
-          "thumb_url": e['thumb_url'], //封面图
-          "type": e['type'], //类型：1图文，2视频
-          "title": e['title'], //标题
-          "addtime": addtime, //发布时间
-          "view_num": e['view_num'], //观看人数
-        };
+        // return {
+        //   "id": e['id'], //id
+        //   "thumb_url": e['thumb_url'], //封面图
+        //   "type": e['type'], //类型：1图文，2视频
+        //   "title": e['title'], //标题
+        //   "addtime": addtime, //发布时间
+        //   "view_num": e['view_num'], //观看人数
+        // };
+
+        return NewsDataType.fromJson(e);
       }).toList();
 
-      setState(() {
-        tabView[_currentIndex]['data'].addAll(newData);
-        tabView[_currentIndex]['total'] = total;
-        tabView[_currentIndex]['page'] = page;
-      });
+      if (this.mounted) {
+        setState(() {
+          tabView[_currentIndex]['data'].addAll(newData);
+          tabView[_currentIndex]['total'] = total;
+          tabView[_currentIndex]['page'] = page;
+        });
+      }
     } catch (e) {
       print(e);
     }

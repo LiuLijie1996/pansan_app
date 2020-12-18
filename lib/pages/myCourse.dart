@@ -85,7 +85,7 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
                       }
                     }
 
-                    return CardItem(
+                    return CourseCardItem(
                       onClick: () {
                         print(item);
                       },

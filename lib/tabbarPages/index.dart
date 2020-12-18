@@ -1,3 +1,9 @@
+import 'dart:io';
+import 'dart:convert';
+
+// 模拟的数据
+import 'package:pansan_app/mock/mockData.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:date_format/date_format.dart';
@@ -14,15 +20,16 @@ import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
 import '../utils/myRequest.dart';
 
+// 数据类型
+import 'package:pansan_app/models/BannerDataType.dart';
+import 'package:pansan_app/models/ExamListDataType.dart';
+import 'package:pansan_app/models/NewsDataType.dart';
+import 'package:pansan_app/models/CourseDataType.dart';
+
 // 首页页面
-class Index extends StatefulWidget {
-  Index({Key key}) : super(key: key);
+class Index extends StatelessWidget with MyScreenUtil {
+  const Index({Key key}) : super(key: key);
 
-  @override
-  _IndexState createState() => _IndexState();
-}
-
-class _IndexState extends State<Index> with MyScreenUtil {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,27 +111,41 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> with MyScreenUtil {
+  List<BannerDataType> bannerList = []; //轮播图
+  List<ExamListDataType> examList = []; //最新考试
+  List<NewsDataType> newsList = []; //新闻列表
+  int newsPage = 1; //新闻分页
+  int newsTotal = 0; //新闻总个数
+
+  List<CourseDataType> courseList = []; //课程列表
+  int coursePage = 1; //课程分页
+  int courseTotal = 0; //课程总个数
+
+  // 当前显示的是新闻列表还是课程列表
   int _currentIndex = 0;
-  int _totalLength = 0;
-  List<dynamic> list = [];
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
 
-    // 请求数据
-    isRequestList();
+    // 获取数据
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
+    return RefreshIndicator(
+      onRefresh: () {
+        // 清空数据
+        deleteData();
+        return futureGetData();
+      },
       child: CustomScrollView(
         slivers: [
           // 轮播图
           SliverToBoxAdapter(
-            child: MyBanner(),
+            child: MyBanner(dataList: bannerList),
           ),
 
           // 快捷导航
@@ -134,242 +155,289 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
 
           // 最新考试
           SliverToBoxAdapter(
-            child: NewestTest(),
+            child: NewsExam(dataList: examList),
           ),
 
-          // 资讯
+          // 控制显示新闻还是课程
           SliverToBoxAdapter(
-            child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(top: dp(20.0), bottom: dp(20.0)),
-              child: Container(
-                child: Column(
-                  children: [
-                    // 头部标题
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: dp(20.0),
+                right: dp(20.0),
+                bottom: dp(20.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                print("矿井动态");
-                                setState(() {
-                                  this.list = [];
-                                  _currentIndex = 0;
-                                });
-                                // 请求数据
-                                this.isRequestList();
-                              },
-                              child: Text(
-                                "矿井动态",
-                                style: TextStyle(
-                                  fontSize: dp(32.0),
-                                  fontWeight: FontWeight.bold,
-                                  color: _currentIndex == 0
-                                      ? Colors.black
-                                      : Colors.grey,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: dp(20.0)),
-                            GestureDetector(
-                              onTap: () {
-                                print("最新课程");
-                                setState(() {
-                                  this.list = [];
-                                  _currentIndex = 1;
-                                });
-                                // 请求数据
-                                this.isRequestList();
-                              },
-                              child: Text(
-                                "最新课程",
-                                style: TextStyle(
-                                  fontSize: dp(32.0),
-                                  fontWeight: FontWeight.bold,
-                                  color: _currentIndex == 1
-                                      ? Colors.black
-                                      : Colors.grey,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         InkWell(
-                          child: Text("查看更多 >"),
                           onTap: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (
-                                  BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                ) {
-                                  //  FadeTransition 淡入淡出组件
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: MyBottomNavigationBar(
-                                      currentIndex: _currentIndex == 0 ? 1 : 2,
-                                    ),
-                                  );
-                                },
-                              ),
-                              (route) => route == null, //将所有路由清空
-                            );
+                            setState(() {
+                              _currentIndex = 0;
+                            });
                           },
+                          child: Text(
+                            "推荐新闻",
+                            style: TextStyle(
+                              color: _currentIndex == 0
+                                  ? Colors.black
+                                  : Colors.grey,
+                              fontSize: dp(32.0),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: dp(20.0)),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              _currentIndex = 1;
+                            });
+                          },
+                          child: Text(
+                            "最新课程",
+                            style: TextStyle(
+                              color: _currentIndex == 1
+                                  ? Colors.black
+                                  : Colors.grey,
+                              fontSize: dp(34.0),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  // 查看更多
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (
+                            BuildContext context,
+                            Animation<double> animation,
+                            Animation<double> secondaryAnimation,
+                          ) {
+                            //  FadeTransition 淡入淡出组件
+                            return FadeTransition(
+                              opacity: animation,
+                              child: MyBottomNavigationBar(
+                                currentIndex: _currentIndex == 0 ? 1 : 2,
+                              ),
+                            );
+                          },
+                        ),
+                        (route) => route == null, //将所有路由清空
+                      );
+                    },
+                    child: Text("查看更多>"),
+                  ),
+                ],
               ),
             ),
           ),
-          // MyInformation(currentIndex: _currentIndex),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              _currentIndex == 0 ? list1Widget : list2Widget,
-              childCount: list.length,
-            ),
-          ),
+
+          _currentIndex == 0
+              // 新闻列表
+              ? SliverList(
+                  // 构建代理
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      NewsDataType item = newsList[index];
+                      if (index + 1 == newsList.length) {
+                        // 判断后台还有没有数据了
+                        if (newsList.length >= newsTotal) {
+                          // 没有数据了
+                          return MyProgress(status: false);
+                        }
+                        // 到底了，请求数据
+                        getNewsList(page: ++newsPage);
+                        return MyProgress();
+                      }
+
+                      return NewsCardItem(
+                        item: item,
+                        onClick: () {
+                          print("${item.toJson()}");
+                        },
+                      );
+                    },
+                    // 指定子元素的个数
+                    childCount: newsList.length,
+                  ),
+                )
+              :
+              // 课程列表
+              SliverList(
+                  // 构建代理
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      CourseDataType item = courseList[index];
+                      if (index + 1 == courseList.length) {
+                        // 判断后台还有没有数据了
+                        if (courseList.length >= courseTotal) {
+                          // 没有数据了
+                          return MyProgress(status: false);
+                        }
+                        // 到底了，请求数据
+                        getCourseList(page: ++coursePage);
+                        return MyProgress();
+                      }
+
+                      return CourseCardItem(
+                        item: item,
+                        onClick: () {
+                          print("${item.toJson()}");
+                        },
+                      );
+                    },
+                    // 指定子元素的个数
+                    childCount: courseList.length,
+                  ),
+                ),
         ],
       ),
     );
   }
 
-  // 矿井动态对应的数据展示
-  Widget list1Widget(BuildContext context, int index) {
-    var item = list[index];
-
-    // 判断是否需要请求数据
-    if (index == list.length - 1) {
-      // 判断后端是否还有数据
-      if (list.length < _totalLength) {
-        print('请求数据');
-        // 请求数据
-        isRequestList();
-
-        return MyProgress();
-      } else {
-        return MyProgress(status: false);
-      }
-    }
-
-    return CardItem(
-      item: item,
-      onClick: () {
-        print(item);
-      },
-    );
+  // 获取数据
+  getData() {
+    // 获取轮播图
+    getBannerList();
+    // 获取最新考试
+    getExamList();
+    // 获取新闻
+    getNewsList();
+    // 获取课程
+    getCourseList();
   }
 
-  // 最新课程对应的数据展示
-  Widget list2Widget(BuildContext context, int index) {
-    var item = list[index];
-
-    // 判断是否需要请求数据
-    if (index == list.length - 1) {
-      // 判断后端是否还有数据
-      if (list.length < _totalLength) {
-        print('请求数据');
-        // 请求数据
-        isRequestList();
-
-        return MyProgress();
-      } else {
-        return MyProgress(status: false);
-      }
-    }
-
-    return CardItem(
-      item: item,
-      onClick: () {
-        print(item);
-      },
-    );
+  // 异步请求数据
+  futureGetData() async {
+    // 获取轮播图
+    await getBannerList();
+    // 获取最新考试
+    await getExamList();
+    // 获取新闻
+    await getNewsList();
+    // 获取课程
+    await getCourseList();
   }
 
-  // 分配资讯数据请求
-  void isRequestList() {
-    if (_currentIndex == 0) {
-      // 请求矿井动态数据
-      getList1Widget();
-    } else if (_currentIndex == 1) {
-      // 请求最新课程数据
-      getList2Widget();
-    }
+  // 清空数据
+  deleteData() {
+    bannerList = []; //轮播图
+    examList = []; //最新考试
+    newsList = []; //新闻列表
+    newsPage = 1; //新闻分页
+    newsTotal = 0; //新闻总个数
+    courseList = []; //课程列表
+    coursePage = 1; //课程分页
+    courseTotal = 0; //课程总个数
+    _currentIndex = 0; // 当前显示的是新闻列表还是课程列表
   }
 
-  // 请求矿井动态（新闻）数据
-  void getList1Widget() async {
+  // 获取轮播图
+  getBannerList() async {
     try {
-      var result = await myRequest(path: "/api/news/getNewsAll");
-      List data = result["data"];
-      List<Map> list = data.map((item) {
-        //时间
-        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-          item['addtime'] * 1000,
-        );
-        // 时间转换
-        String addtime = formatDate(
-          dateTime,
-          [yyyy, '-', mm, '-', dd],
-        );
+      var result = await myRequest(path: "/api/index/banner");
+      List data = result['data'];
 
-        return {
-          "id": item['id'], //id
-          "thumb_url": item['thumb_url'], //封面图
-          "type": item['type'], //类型：1图文，2视频
-          "title": item['title'], //标题
-          "addtime": addtime, //发布时间
-          "view_num": item['view_num'], //观看人数
-        };
+      bannerList = data.map((e) {
+        return BannerDataType.fromJson(e);
       }).toList();
 
-      setState(() {
-        _totalLength = result['total'];
-        this.list.addAll(list);
-      });
+      if (this.mounted) {
+        setState(() {});
+      }
     } catch (e) {
       print(e);
     }
   }
 
-  // 请求最新课程数据
-  void getList2Widget() async {
-    print('请求最新课程数据');
-
+  // 获取最新考试
+  getExamList() async {
     try {
-      var result = await myRequest(path: "/api/course/getCourseAll");
-      List data = result["data"];
-      List<Map> list = data.map((item) {
-        //时间
-        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-          item['addtime'] * 1000,
-        );
-        // 时间转换
-        String addtime = formatDate(
-          dateTime,
-          [yyyy, '-', mm, '-', dd],
-        );
+      print('获取最新考试');
 
-        return {
-          "id": item['course']['id'], //id
-          "thumb_url": item['thum_url'], //封面图
-          "title": item['name'], //标题
-          "status": item['status'], //状态，是否学完
-          "view_num": item['view_num'], //学习人数
-          "addtime": addtime, //添加时间
-        };
+      var result = await myRequest(path: "/api/exam/newKaoshi");
+      List data = result['data'];
+
+      examList = data.map((e) {
+        return ExamListDataType.fromJson(e);
       }).toList();
 
-      setState(() {
-        _totalLength = result['total'];
-        this.list.addAll(list);
-      });
+      if (this.mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 获取新闻
+  getNewsList({
+    page = 1,
+  }) async {
+    try {
+      print('获取新闻');
+
+      var result = await myRequest(
+        path: "/api/news/getIndexNewsList",
+        data: {
+          "page": page,
+          "psize": 20,
+        },
+      );
+      List data = result['data'];
+      newsTotal = result['total'];
+
+      if (page == 1) {
+        newsList = [];
+      }
+      newsList.addAll(data.map((e) {
+        return NewsDataType.fromJson(e);
+      }).toList());
+
+      if (this.mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 获取课程
+  getCourseList({
+    page = 1,
+  }) async {
+    try {
+      print('获取课程');
+
+      var result = await myRequest(
+        path: "/api/course/courseList",
+        data: {
+          "page": page,
+          "psize": 20,
+        },
+      );
+      List data = result['data'];
+      courseTotal = result['total'];
+
+      if (page == 1) {
+        courseList = [];
+      }
+      courseList.addAll(data.map((e) {
+        return CourseDataType.fromJson(e);
+      }).toList());
+
+      if (this.mounted) {
+        setState(() {});
+      }
     } catch (e) {
       print(e);
     }
@@ -377,236 +445,89 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
 }
 
 // 轮播图
-class MyBanner extends StatefulWidget {
-  MyBanner({Key key}) : super(key: key);
-
-  @override
-  _MyBannerState createState() => _MyBannerState();
-}
-
-class _MyBannerState extends State<MyBanner> with MyScreenUtil {
-  List _bannerList;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    // 获取轮播图
-    getBanner();
-  }
+class MyBanner extends StatelessWidget with MyScreenUtil {
+  final List<BannerDataType> dataList;
+  const MyBanner({Key key, @required this.dataList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: dp(20.0)),
-      child: AspectRatio(
-        aspectRatio: 16 / 8, //设置子组件的宽高比例
-        child: _bannerList == null
-            ? null
-            : Swiper(
-                itemBuilder: (BuildContext context, int index) {
-                  var item = _bannerList[index];
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: dp(20.0)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(dp(20.0)),
-                      child: Image.network(
-                        item['img_src'],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-                itemCount: _bannerList.length,
-                pagination: SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(
-                    color: Colors.black54,
-                    activeColor: Colors.white,
-                  ),
-                ),
-                // control: new SwiperControl(),
-                scrollDirection: Axis.horizontal,
-                autoplay: true,
-                onTap: (index) => print('点击了第$index个'),
+    if (dataList.length == 0) {
+      return AspectRatio(aspectRatio: 16 / 8);
+    }
+
+    return AspectRatio(
+      aspectRatio: 16 / 8,
+      child: Swiper(
+        itemCount: dataList.length,
+        itemBuilder: (BuildContext context, int index) {
+          BannerDataType item = dataList[index];
+          return Padding(
+            padding: EdgeInsets.all(dp(20.0)),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(dp(20.0)),
+              child: Image.network(
+                item.thumbUrl,
+                fit: BoxFit.cover,
               ),
+            ),
+          );
+        },
+        pagination: SwiperPagination(
+          builder: DotSwiperPaginationBuilder(
+            color: Colors.black54,
+            activeColor: Colors.white,
+          ),
+        ),
+        // control: new SwiperControl(),
+        scrollDirection: Axis.horizontal,
+        autoplay: true,
+        onTap: (int index) {
+          print("$index");
+        },
       ),
     );
-  }
-
-  // 获取banner图
-  getBanner() async {
-    try {
-      var result = await myRequest(path: '/api/index/getBanner');
-      List data = result["data"];
-      data = data.map((item) {
-        if (item['type_link'] == 1 || item['type_link'] == 3) {
-          return {
-            "img_src": item['thumb_url'], //图片地址
-            "type_link": item['type_link'], //链接类型
-            "page_name": "", //跳转到哪个页面
-          };
-        } else if (item['type_link'] == 2) {
-          return {
-            "img_src": item['thumb_url'], //图片地址
-            "type_link": item['type_link'], //链接类型
-            "page_name": "", //跳转到哪个页面
-          };
-        } else if (item['type_link'] == 5) {
-          if (item['news_type'] == 2) {
-            // 视频
-            return {
-              "img_src": item['thumb_url'], //图片地址
-              "type_link": item['type_link'], //链接类型
-              "page_name": "", //跳转到哪个页面
-            };
-          } else {
-            // 图文
-            return {
-              "img_src": item['thumb_url'], //图片地址
-              "type_link": item['type_link'], //链接类型
-              "page_name": "", //跳转到哪个页面
-            };
-          }
-        } else {
-          return {
-            "img_src": item['thumb_url'], //图片地址
-            "type_link": item['type_link'], //链接类型
-            "page_name": "", //跳转到哪个页面
-          };
-        }
-      }).toList();
-
-      setState(() {
-        _bannerList = data;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 }
 
 // 快捷导航
 class FastNavList extends StatelessWidget with MyScreenUtil {
-  FastNavList({Key key}) : super(key: key);
-
-  List<Map> _navList = [
-    {"icon": "assets/images/01.png", "title": "一日一题", "router": "/dayTopic"},
-    {
-      "icon": "assets/images/02.png",
-      "title": "课程学习",
-    },
-    {"icon": "assets/images/03.png", "title": "职工服务", "router": "/staffServe"},
-    {
-      "icon": "assets/images/04.png",
-      "title": "通知公告",
-      "router": "/informAffiche"
-    },
-  ];
+  const FastNavList({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(dp(20.0)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: _navList.map((item) {
-          // GestureDetector
-          return GestureDetector(
-            onTap: () {
-              print("点击了快捷导航：$item");
-              if (item['title'] == '课程学习') {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                    ) {
-                      //  FadeTransition 淡入淡出组件
-                      return FadeTransition(
-                        opacity: animation,
-                        child: MyBottomNavigationBar(
-                          currentIndex: 2,
-                        ),
-                      );
-                    },
-                  ),
-                  (route) => route == null, //将所有路由清空
-                );
-              } else {
-                Navigator.pushNamed(context, "${item['router']}");
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(dp(30.0)),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(dp(10.0))),
-              child: Column(
-                children: [
-                  Image.asset(
-                    item['icon'],
-                    width: dp(100.0),
-                    height: dp(100.0),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    item['title'],
-                    style: TextStyle(fontSize: dp(24.0)),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
+    List<Map> _navList = [
+      {"icon": "assets/images/01.png", "title": "一日一题", "router": "/dayTopic"},
+      {
+        "icon": "assets/images/02.png",
+        "title": "课程学习",
+      },
+      {
+        "icon": "assets/images/03.png",
+        "title": "职工服务",
+        "router": "/staffServe"
+      },
+      {
+        "icon": "assets/images/04.png",
+        "title": "通知公告",
+        "router": "/informAffiche"
+      },
+    ];
 
-// 最新考试
-class NewestTest extends StatefulWidget {
-  NewestTest({Key key}) : super(key: key);
-
-  @override
-  _NewestTestState createState() => _NewestTestState();
-}
-
-class _NewestTestState extends State<NewestTest> with MyScreenUtil {
-  List<Map<String, dynamic>> newsTest = [];
-
-  _NewestTestState() {
-    createWidget();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (newsTest.length == 0) {
-      return Text("");
-    }
-    return Column(
-      children: [
-        // 头部标题
-        Container(
-          padding: EdgeInsets.only(top: dp(20.0)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "最新考试",
-                style: TextStyle(
-                  fontSize: dp(32.0),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              InkWell(
-                onTap: () {
+    return Padding(
+      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(dp(20.0)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _navList.map((item) {
+            // GestureDetector
+            return GestureDetector(
+              onTap: () {
+                print("点击了快捷导航：$item");
+                if (item['title'] == '课程学习') {
                   Navigator.pushAndRemoveUntil(
                     context,
                     PageRouteBuilder(
@@ -619,154 +540,208 @@ class _NewestTestState extends State<NewestTest> with MyScreenUtil {
                         return FadeTransition(
                           opacity: animation,
                           child: MyBottomNavigationBar(
-                            currentIndex: 3,
+                            currentIndex: 2,
                           ),
                         );
                       },
                     ),
                     (route) => route == null, //将所有路由清空
                   );
-                },
-                child: Text("查看更多 >"),
-              ),
-            ],
-          ),
-        ),
-
-        // x轴滚动
-        Container(
-          margin: EdgeInsets.only(top: dp(20.0)),
-          alignment: Alignment.topLeft,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            physics: BouncingScrollPhysics(),
-            child: Row(
-              children: newsTest.map((item) {
-                double right = dp(20.0);
-
-                if (item == newsTest[newsTest.length - 1]) {
-                  right = 0.0;
+                } else {
+                  Navigator.pushNamed(context, "${item['router']}");
                 }
+              },
+              child: Container(
+                padding: EdgeInsets.all(dp(30.0)),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(dp(10.0))),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      item['icon'],
+                      width: dp(100.0),
+                      height: dp(100.0),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      item['title'],
+                      style: TextStyle(fontSize: dp(24.0)),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
 
-                return InkWell(
+// 最新考试
+class NewsExam extends StatelessWidget with MyScreenUtil {
+  final List<ExamListDataType> dataList;
+  const NewsExam({Key key, @required this.dataList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (dataList.length == 0) {
+      return Text('');
+    }
+    List<ExamListDataType> list = dataList;
+
+    return Padding(
+      padding: EdgeInsets.all(dp(20.0)),
+      child: Column(
+        children: [
+          // 头部标题
+          Container(
+            padding: EdgeInsets.only(top: dp(20.0)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "最新考试",
+                  style: TextStyle(
+                    fontSize: dp(32.0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                InkWell(
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      "/examSiteInfo",
-                      arguments: ExamItemDataType.fromJson(item),
+                      PageRouteBuilder(
+                        pageBuilder: (
+                          BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation,
+                        ) {
+                          //  FadeTransition 淡入淡出组件
+                          return FadeTransition(
+                            opacity: animation,
+                            child: MyBottomNavigationBar(
+                              currentIndex: 3,
+                            ),
+                          );
+                        },
+                      ),
+                      (route) => route == null, //将所有路由清空
                     );
                   },
-                  child: Container(
-                    margin: EdgeInsets.only(right: right),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(dp(20.0)),
-                      child: Container(
-                        width: dp(500.0),
-                        height: dp(240.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // tag标签
-                            MyTags(
-                              radius: BorderRadius.only(
-                                bottomRight: Radius.circular(dp(20.0)),
-                              ),
-                              bgColor: Colors.green,
-                              title: '进行中',
-                            ),
+                  child: Text("查看更多 >"),
+                ),
+              ],
+            ),
+          ),
 
-                            // 考试标题
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: dp(30.0),
-                                left: dp(20.0),
-                              ),
-                              child: Text(
-                                "${item['title']}",
-                                style: TextStyle(
-                                  fontSize: dp(32.0),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
+          // x轴滚动
+          Container(
+            margin: EdgeInsets.only(top: dp(20.0)),
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              child: Row(
+                children: list.map((item) {
+                  double right = dp(20.0);
 
-                            // 考试时间
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: dp(30.0),
-                                left: dp(20.0),
+                  if (item == list[list.length - 1]) {
+                    right = 0.0;
+                  }
+
+                  // 考试时间
+                  DateTime startTime = DateTime.fromMillisecondsSinceEpoch(
+                    item.startTime * 1000,
+                  );
+                  String _startTime = formatDate(
+                    startTime,
+                    [yyyy, '-', mm, '-', dd, " ", HH, ":", mm],
+                  );
+
+                  // 考试结束时间
+                  DateTime endTime = DateTime.fromMillisecondsSinceEpoch(
+                    item.endTime * 1000,
+                  );
+                  String _endTime = formatDate(
+                    endTime,
+                    [yyyy, '-', mm, '-', dd, " ", HH, ":", mm],
+                  );
+
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        "/examSiteInfo",
+                        arguments: item,
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: right),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(dp(20.0)),
+                        child: Container(
+                          width: dp(500.0),
+                          height: dp(240.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // tag标签
+                              MyTags(
+                                radius: BorderRadius.only(
+                                  bottomRight: Radius.circular(dp(20.0)),
+                                ),
+                                bgColor: Colors.green,
+                                title: '进行中',
                               ),
-                              child: Text(
-                                "${item['start_date']} 至 ${item['end_date']}",
-                                style: TextStyle(
-                                  fontSize: dp(26.0),
+
+                              // 考试标题
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: dp(30.0),
+                                  left: dp(20.0),
+                                ),
+                                child: Text(
+                                  "${item.name}",
+                                  style: TextStyle(
+                                    fontSize: dp(32.0),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
-                          ],
+
+                              // 考试时间
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: dp(30.0),
+                                  left: dp(20.0),
+                                ),
+                                child: Text(
+                                  "$_startTime 至 $_endTime",
+                                  style: TextStyle(
+                                    fontSize: dp(26.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
-  }
-
-  // 获取最新考试数据，并创建Widget
-  void createWidget() async {
-    try {
-      var result = await myRequest(path: "/api/test/newsTest");
-      List newsList = result['data'];
-
-      // 遍历获取的数据
-      newsList.forEach((item) {
-        int status = int.parse("${item['status']}"); //考试类型
-
-        //开始时间
-        DateTime startDate = DateTime.fromMillisecondsSinceEpoch(
-          item['start_date'] * 1000,
-        );
-        String startTime = formatDate(
-          startDate,
-          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
-        );
-
-        //结束时间
-        DateTime endDate = DateTime.fromMillisecondsSinceEpoch(
-          item['end_date'] * 1000,
-        );
-        String endTime = formatDate(
-          endDate,
-          [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
-        );
-
-        if (status == 1) {
-          // 添加数据到数组中
-          newsTest.add({
-            "test_id": item['test_id'].toString(), //考试id
-            "title": item["title"], //考试标题
-            "status": status, //考试状态 0未开始 1进行中 2已结束
-            "type": int.parse("${item['type']}"), //考试类型， 1模拟 2正式 3补考
-            "start_date": startTime, //开始时间
-            "end_date": endTime, //结束时间
-          });
-
-          // 刷新页面
-          setState(() {});
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 }

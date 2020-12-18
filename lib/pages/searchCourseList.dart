@@ -96,7 +96,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
                       }
                     }
 
-                    return CardItem(
+                    return CourseCardItem(
                       onClick: () {
                         print(item);
                       },
