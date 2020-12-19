@@ -8,11 +8,11 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/models/ExamListDataType.dart';
-import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/NavDataType.dart';
 
 class ExamSelect extends StatefulWidget {
-  final Map arguments;
+  final NavDataType arguments;
   ExamSelect({Key key, this.arguments}) : super(key: key);
 
   @override
@@ -60,7 +60,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.arguments['name']}"),
+        title: Text("${widget.arguments.name}"),
         centerTitle: true,
       ),
       body: Container(
@@ -282,7 +282,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
     try {
       var result = await myRequest(path: "/api/exam/getTestList", data: {
         "user_id": 1,
-        "id": widget.arguments['id'],
+        "id": widget.arguments.id,
       });
 
       int total = result['total'] ?? 0;
