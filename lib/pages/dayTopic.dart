@@ -7,18 +7,20 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/DayTopicDataType.dart';
+import 'package:pansan_app/mixins/withScreenUtil.dart';
 
 class DayTopic extends StatefulWidget {
   @override
   _DayTopicState createState() => _DayTopicState();
 }
 
-class _DayTopicState extends State<DayTopic> {
+class _DayTopicState extends State<DayTopic> with MyScreenUtil {
   Timer timer;
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
 
-  List dataList = [];
+  List<DayTopicDataType> dataList = [];
 
   _DayTopicState() {
     // 倒计时
@@ -69,50 +71,44 @@ class _DayTopicState extends State<DayTopic> {
 
   getDayTopic() async {
     try {
-      var result = await myRequest(path: "/api/day-topic");
+      var result = await myRequest(path: "/api/user/getTodayUserStudy", data: {
+        "id": 4374,
+      });
       List data = result['data'];
-      List newData = data.map((e) {
-        //所属年月
-        DateTime time = DateTime.fromMillisecondsSinceEpoch(
-          e['time'] * 1000,
-        );
 
-        //格式化所属年月
-        String _time = formatDate(
-          time,
-          [yyyy, '年', mm, '月'],
-        );
-
-        List child = e['child'];
-        List newChild = child.map((item) {
-          //所属年月
-          DateTime study_time = DateTime.fromMillisecondsSinceEpoch(
-            item['study_time'] * 1000,
-          );
-
-          //格式化所属年月
-          String _study_time = formatDate(
-            study_time,
-            [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
-          );
-
-          return {
-            "id": item["id"], //id
-            "name": item["name"], //标题
-            "status": item["status"], //1已查看，2未查看
-            "study_time": _study_time, //具体时间
+      // 遍历数据
+      dataList = data.map((e) {
+        // 遍历child成员
+        List child = e['child'].map((item) {
+          Map newItem = {
+            "status": item['status'],
+            "name": item['name'],
+            "id": item['id'],
+            "study_time": item["study_time"],
           };
+          return newItem;
         }).toList();
 
-        return {
-          "time": _time, //所属年月
-          "child": newChild, //题目列表
-        };
+        List<Child> newChild = child.map((item) {
+          Map<String, dynamic> newItem = {
+            "status": item['status'],
+            "name": item['name'],
+            "id": item['id'],
+            "study_time": item["study_time"],
+          };
+          return Child.fromJson(newItem);
+        }).toList();
+
+        // 返回新数据
+        return DayTopicDataType(
+          time: int.parse("${e['time']}"),
+          child: newChild,
+        );
       }).toList();
 
-      setState(() {
-        dataList = newData;
-      });
+      if (this.mounted) {
+        setState(() {});
+      }
     } catch (e) {
       print(e);
     }
@@ -121,13 +117,23 @@ class _DayTopicState extends State<DayTopic> {
 
 // 一日一题成员组件
 class DayTopicItem extends StatelessWidget with MyScreenUtil {
-  final Map item;
+  final DayTopicDataType item;
 
   const DayTopicItem({Key key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List child = item['child'];
+    List<Child> child = item.child;
+
+    //时间
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(
+      item.time * 1000,
+    );
+    // 时间转换
+    String _time = formatDate(
+      time,
+      [yyyy, '年', mm, '月'],
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +148,7 @@ class DayTopicItem extends StatelessWidget with MyScreenUtil {
               color: Colors.blue,
             ),
             Text(
-              "${item['time']}",
+              "$_time",
               style: TextStyle(
                 fontSize: dp(40.0),
               ),
@@ -153,8 +159,8 @@ class DayTopicItem extends StatelessWidget with MyScreenUtil {
           padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
           child: Column(
             children: child.map((e) {
-              String status = e['status'] == 1 ? "已学习" : "未学习";
-              Color color = e['status'] == 1 ? Colors.blue : Colors.grey;
+              String status = e.status == 1 ? "已学习" : "未学习";
+              Color color = e.status == 1 ? Colors.blue : Colors.grey;
 
               return InkWell(
                 onTap: () {
@@ -174,7 +180,7 @@ class DayTopicItem extends StatelessWidget with MyScreenUtil {
                     ],
                   ),
                   child: ListTile(
-                    title: Text("${e['name']}"),
+                    title: Text("${e.name}"),
                     subtitle: Text(
                       status,
                       style: TextStyle(color: color),

@@ -9,9 +9,11 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/NavDataType.dart';
+import 'package:pansan_app/models/ExerciseSelectDataType.dart';
 
 class ExerciseSelect extends StatefulWidget {
-  final Map arguments;
+  final NavDataType arguments;
   ExerciseSelect({Key key, this.arguments}) : super(key: key);
 
   @override
@@ -105,17 +107,44 @@ class _ExerciseSelectState extends State<ExerciseSelect>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.arguments['name']}"),
+        title: Text("${widget.arguments.name}"),
         centerTitle: true,
       ),
       body: exerciseData['data'].length == 0
           ? myWidget[_currentMyWidget]
           : ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                Map item = exerciseData['data'][index];
+                var dataItem = exerciseData['data'][index];
+                ExerciseSelectDataType item = ExerciseSelectDataType.fromJson(
+                  dataItem,
+                );
+
+                //添加时间
+                String _addtime;
+                try {
+                  DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+                    item.addtime * 1000,
+                  );
+
+                  //格式化添加时间
+                  _addtime = formatDate(
+                    addtime,
+                    [yyyy, '年', mm, '月', dd, '日'],
+                  );
+                } catch (e) {
+                  print("报错信息：$e");
+                }
+
+                String scale;
+                try {
+                  scale = "${(item.progress * 100).ceil()}%";
+                } catch (e) {
+                  print("报错信息：$e");
+                }
+
                 double progress = Tween(
                   begin: 0.0,
-                  end: double.parse("${item['progress'] / 100}"),
+                  end: double.parse("${item.progress}"),
                 ).animate(animation).value;
                 return Container(
                   padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -134,21 +163,21 @@ class _ExerciseSelectState extends State<ExerciseSelect>
                             radius: dp(50.0),
                             stokeWidth: dp(10.0),
                             strokeCapRound: true,
-                            value: progress,
+                            value: progress, //进度
                           ),
-                          Text("${item['progress']}%"),
+                          Text("$scale"),
                         ],
                       ),
                     ),
                     title: Text(
-                      "${item['name']}",
+                      "${item.name}",
                       style: TextStyle(
                         fontSize: dp(32.0),
                       ),
                     ),
                     subtitle: Container(
                       margin: EdgeInsets.only(top: dp(20.0)),
-                      child: Text("${item['add_time']}"),
+                      child: Text("$_addtime"),
                     ),
                     trailing: RaisedButton(
                       color: Colors.blue,
@@ -185,31 +214,31 @@ class _ExerciseSelectState extends State<ExerciseSelect>
   getDataList({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/test/exerciseSelect",
+        path: "/api/exercise/getPracticeList",
         data: {
-          "id": widget.arguments['id'],
+          "id": widget.arguments.id,
+          "user_id": 1,
         },
       );
       int total = result['total'] ?? 0;
       List data = result['data'];
 
       List newData = data.map((e) {
-        //添加时间
-        DateTime add_time = DateTime.fromMillisecondsSinceEpoch(
-          e['add_time'] * 1000,
-        );
-
-        //格式化添加时间
-        String _add_time = formatDate(
-          add_time,
-          [yyyy, '年', mm, '月', dd, '日'],
-        );
-
         return {
           "id": e['id'],
-          "name": e['name'], //标题
-          "progress": e['progress'], //进度
-          "add_time": _add_time, //添加时间
+          "d_id": e['d_id'],
+          "pid": e['pid'],
+          "name": e['name'],
+          "radio": e['radio'],
+          "multiple": e['multiple'],
+          "trueOrFalse": e['trueOrFalse'],
+          "practice_num_type": e['practice_num_type'],
+          "frequency": e['frequency'],
+          "q_id": e['q_id'],
+          "addtime": e['addtime'],
+          "status": e['status'],
+          "progress": e['progress'],
+          "sorts": e['sorts']
         };
       }).toList();
 

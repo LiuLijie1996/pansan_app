@@ -5,6 +5,7 @@ import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 import 'package:pansan_app/models/NewsDataType.dart';
 import 'package:pansan_app/models/NavDataType.dart';
+import 'package:pansan_app/components/EmptyBox.dart';
 
 // 新闻页面
 class News extends StatefulWidget {
@@ -54,12 +55,8 @@ class _NewsState extends State<News>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: tabs.map((item) {
-          List data = item.data; //导航对应的新闻
-
-          if (data.length == 0) {
-            return MyProgress();
-          }
+        children: tabs.map((tabItem) {
+          var data = tabItem.data; //导航对应的新闻
 
           // 下拉刷新
           return RefreshIndicator(
@@ -70,34 +67,47 @@ class _NewsState extends State<News>
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      // 判断是否需要请求数据
-                      if (index == data.length - 1) {
-                        // 判断后台是否还有数据
-                        if (data.length < item.total) {
-                          int page = ++item.page;
-                          // 请求数据
-                          this.getNewsList(
-                            index: _currentIndex,
-                            page: page,
-                          );
+                  child: data == null
+                      ? MyProgress()
+                      : data.length == 0
+                          ? EmptyBox()
+                          : ListView.builder(
+                              itemCount: data.length + 1,
+                              itemBuilder: (BuildContext context, int index) {
+                                var item;
 
-                          return MyProgress();
-                        } else {
-                          return MyProgress(status: false);
-                        }
-                      }
+                                // 判断后台是否还有数据
+                                if (index == tabItem.total) {
+                                  return MyProgress(status: false);
+                                }
 
-                      return NewsCardItem(
-                        item: data[index],
-                        onClick: () {
-                          print(data[index]);
-                        },
-                      );
-                    },
-                  ),
+                                try {
+                                  item = tabItem.data[index];
+                                } catch (err) {
+                                  print("报错信息：$err");
+                                  // 请求数据
+                                  this.getNewsList(
+                                    index: _currentIndex,
+                                    page: ++tabItem.page,
+                                  );
+
+                                  return MyProgress();
+                                }
+
+                                try {
+                                  NewsDataType dataItem =
+                                      NewsDataType.fromJson(item);
+                                  return NewsCardItem(
+                                    item: dataItem,
+                                    onClick: () {
+                                      print(dataItem);
+                                    },
+                                  );
+                                } catch (err) {
+                                  return Text("$err");
+                                }
+                              },
+                            ),
                 )
               ],
             ),
@@ -119,9 +129,9 @@ class _NewsState extends State<News>
           name: item['name'],
           pid: item['pid'],
           children: item['children'],
-          data: [], //用来装新闻的
-          page: item['page'], //第几页新闻
-          total: item['total'], //新闻总条数
+          data: null, //用来装新闻的
+          page: 1, //第几页新闻
+          total: null, //新闻总条数
         );
       }).toList();
 
@@ -134,13 +144,13 @@ class _NewsState extends State<News>
       _tabController = TabController(length: tabs.length, vsync: this);
       _tabController.addListener(() {
         int index = _tabController.index;
-        List data = tabs[index].data;
+        var data = tabs[index].data;
 
         // 记录当前显示的 TabBarView
         this._currentIndex = index;
 
         // 获取新闻
-        if (data.length == 0) {
+        if (data == null) {
           this.getNewsList(
             index: index,
           );
@@ -172,8 +182,24 @@ class _NewsState extends State<News>
       int total = result['total'];
 
       // 遍历获取到的新闻
-      List<NewsDataType> newData = data.map((e) {
-        return NewsDataType.fromJson(e);
+      List newData = data.map((e) {
+        return {
+          "id": e['id'], //新闻id
+          "pid": e['pid'], //导航id
+          "title": e['title'], //标题
+          "desc": e['desc'], //简介
+          "thumb_url": e['thumb_url'], //封面
+          "type": e['type'], //新闻类型 1图文  2视频
+          "materia_id": e['materia_id'], //资源id
+          "content": e['content'], //文章内容
+          "tuij": e['tuij'], //是否推荐 0不推荐 1推荐
+          "addtime": e['addtime'], //新闻添加时间
+          "view_num": e['view_num'], //观看次数
+          "materia": e['materia'], //视频链接
+          "newsImgText": e['newsImgText'], //阅读图文有效时间：1000字60秒
+          "newsVideo": e['newsVideo'], //视频有效观看时间 单位：秒
+          "collect": e['collect'], //是否收藏
+        };
       }).toList();
 
       if (this.mounted) {

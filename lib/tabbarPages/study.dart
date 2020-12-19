@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:date_format/date_format.dart';
 import 'package:pansan_app/components/CardItem.dart';
 import 'package:pansan_app/components/MyProgress.dart';
+import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 import 'package:pansan_app/models/CourseDataType.dart';
@@ -27,6 +29,8 @@ class _StudyState extends State<Study>
   _StudyState() {
     // 获取头部tabBar
     this.getTopTabBar();
+
+    // 倒计时
   }
 
   @override
@@ -45,6 +49,7 @@ class _StudyState extends State<Study>
     if (tabs.length == 0) {
       return MyProgress();
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -102,12 +107,8 @@ class _StudyState extends State<Study>
       body: TabBarView(
         controller: _tabController,
         children: tabs.map((tabItem) {
-          List data = tabItem.data; //导航对应的新闻
+          var data = tabItem.data; //导航对应的新闻
           List<Children> children = tabItem.children; //子导航
-
-          if (data.length == 0) {
-            return MyProgress();
-          }
 
           // 下拉刷新
           return RefreshIndicator(
@@ -161,35 +162,44 @@ class _StudyState extends State<Study>
                 // 列表
                 Expanded(
                   // 判断是否有数据
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      CourseDataType courseItem = data[index];
-                      // 判断是否需要请求数据
-                      if (index == data.length - 1) {
-                        // 判断后台是否还有数据
-                        if (data.length < tabItem.total) {
-                          // 请求数据
-                          this.getCourseList(
-                            id: _currentNavId,
-                            page: tabItem.page + 1,
-                          );
+                  child: data == null
+                      ? MyProgress()
+                      : data.length == 0
+                          ? EmptyBox()
+                          : ListView.builder(
+                              itemCount: data.length + 1,
+                              itemBuilder: (BuildContext context, int index) {
+                                var item;
+                                if (index == tabItem.total) {
+                                  return MyProgress(status: false);
+                                }
 
-                          return MyProgress();
-                        } else {
-                          return MyProgress(status: false);
-                        }
-                      }
+                                try {
+                                  item = data[index];
+                                } catch (err) {
+                                  // 请求数据
+                                  this.getCourseList(
+                                    id: _currentNavId,
+                                    page: tabItem.page + 1,
+                                  );
+                                  return MyProgress();
+                                }
 
-                      return CourseCardItem(
-                        item: courseItem,
-                        onClick: () {
-                          print("${courseItem.toJson()}");
-                        },
-                      );
-                    },
-                  ),
-                )
+                                try {
+                                  CourseDataType courseItem =
+                                      CourseDataType.fromJson(item);
+                                  return CourseCardItem(
+                                    item: courseItem,
+                                    onClick: () {
+                                      print("${courseItem.toJson()}");
+                                    },
+                                  );
+                                } catch (err) {
+                                  return Text("$err");
+                                }
+                              },
+                            ),
+                ),
               ],
             ),
           );
@@ -213,9 +223,9 @@ class _StudyState extends State<Study>
           children: children.map((e) {
             return Children.fromJson(e);
           }).toList(),
-          data: [], //用来装课程的
+          data: null, //用来装课程的
           page: 1, //第几页课程
-          total: 0, //课程总条数
+          total: null, //课程总条数
         );
       }).toList();
 
@@ -228,8 +238,10 @@ class _StudyState extends State<Study>
       // 创建Controller
       _tabController = TabController(length: tabs.length, vsync: this);
       _tabController.addListener(() {
+        setState(() {});
+
         int index = _tabController.index;
-        List data = this.tabs[index].data;
+        var data = this.tabs[index].data;
 
         // 记录当前显示的 TabBarView
         this._currentIndex = index;
@@ -237,7 +249,7 @@ class _StudyState extends State<Study>
         this._currentNavId = this.tabs[index].id;
 
         // 获取课程
-        if (data.length == 0) {
+        if (data == null) {
           this.getCourseList(
             id: tabs[index].id,
             page: 1,
@@ -257,6 +269,7 @@ class _StudyState extends State<Study>
   }) async {
     try {
       var result = await myRequest(path: "/api/course/courseList", data: {
+        "user_id": 1,
         "pid": id,
         "page": page,
         "psize": psize,
@@ -265,8 +278,27 @@ class _StudyState extends State<Study>
       int total = result['total']; //列表总个数
 
       // 遍历获取到的课程
-      List<CourseDataType> mapData = data.map((e) {
-        return CourseDataType.fromJson(e);
+      List newData = data.map((e) {
+        return {
+          "id": e['id'], //课程id
+          "pid": e['pid'], //导航id
+          "name": e['name'], //标题
+          "desc": e['desc'], //简介
+          "content": e['content'], //课程介绍
+          "addtime": e['addtime'], //添加时间
+          "thumb_url": e['thumb_url'], //封面
+          "study_status": e['study_status'], //学习状态 1已学完 2未学习 3学习中
+          "chapter": e['chapter'].map((ele) {
+            return {
+              "id": ele['id'], //章节id
+              "d_id": ele['d_id'], //部门id
+              "pid": ele['pid'], //分类id
+              "name": ele['name'], //章节名称
+              "addtime": ele['addtime'], //添加时间
+            };
+          }).toList(),
+          "view_num": e['view_num'] //在学人数
+        };
       }).toList();
 
       if (this.mounted) {
@@ -279,7 +311,7 @@ class _StudyState extends State<Study>
           this._currentNavId = id; //记录当前数据对应的导航id
           this.tabs[this._currentIndex].page = page; //记录当前导航对应的分页
           this.tabs[this._currentIndex].total = total; //记录当前导航对应的总个数
-          this.tabs[this._currentIndex].data.addAll(mapData); //记录当前导航对应的数据
+          this.tabs[this._currentIndex].data.addAll(newData); //记录当前导航对应的数据
         });
       }
     } catch (e) {

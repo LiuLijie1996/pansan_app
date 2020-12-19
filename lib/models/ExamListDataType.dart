@@ -1,23 +1,57 @@
 // 考试列表项数据类型
 
 class ExamListDataType {
+  ///列表项id
   int id;
+
+  ///分类id
   int pid;
+
+  ///补考id
   int mTestId;
+
+  ///班级id
   int classId;
+
+  ///试卷id
   int paperId;
+
+  ///考试标题
   String name;
+
+  ///考试地址
   String address;
+
+  ///开始时间
   int startTime;
+
+  ///结束时间
   int endTime;
+
+  ///考试时长
   int duration;
+
+  ///及格分数
   int passingMark;
+
+  /// 考试次数  0无限
   int testNum;
+
+  ///是否开启切屏  0未开启  1开启
   int cutScreenType;
+
+  ///切屏次数
   int cutScreenNum;
+
+  ///切屏时间
   int cutScreenTime;
+
+  /// 1模拟考试  2正式考试  3补考
   int type;
+
+  ///是否可以考试
   bool isTest;
+
   int status;
 
   ExamListDataType(

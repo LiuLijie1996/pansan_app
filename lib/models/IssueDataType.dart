@@ -1,16 +1,41 @@
 class IssueDataType {
+  ///题目id
   int id;
+
+  ///考试分类id
   int pid;
+
+  ///考试名称
   String name;
+
+  /// 1单选 3判断 2多选 4填空
   int type;
+
+  ///题目名称
   String stem;
+
+  ///答案可选项
   List<Option> option;
+
+  ///正确答案
   List<String> answer;
+
+  ///答案解析
   String analysis;
+
+  ///添加考试时间
   int addtime;
+
+  ///当前题目分数
   num disorder;
+
+  ///用户是否收藏
   bool userFavor;
+
+  ///用户选择的答案
   List<String> userAnswer;
+
+  ///用户选择的答案是否正确
   Object correct;
 
   IssueDataType(

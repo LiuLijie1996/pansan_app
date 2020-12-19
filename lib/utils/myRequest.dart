@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:math' as math;
 
-String test = "http://192.168.0.5:3000"; //测试接口
+String test = "http://192.168.0.5:80"; //测试接口
 String href = ""; //上线接口
 
 Future myRequest({

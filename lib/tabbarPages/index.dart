@@ -108,11 +108,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   List<ExamListDataType> examList = []; //最新考试
   List<NewsDataType> newsList = []; //新闻列表
   int newsPage = 1; //新闻分页
-  int newsTotal = 0; //新闻总个数
+  int newsTotal = null; //新闻总个数
 
   List<CourseDataType> courseList = []; //课程列表
   int coursePage = 1; //课程分页
-  int courseTotal = 0; //课程总个数
+  int courseTotal = null; //课程总个数
 
   // 当前显示的是新闻列表还是课程列表
   int _currentIndex = 0;
@@ -240,16 +240,21 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
                   // 构建代理
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      if (index == newsTotal) {
+                        return MyProgress(status: false);
+                      } else if (newsTotal == null ||
+                          index == newsList.length) {
+                        return Text("");
+                      }
+
                       NewsDataType item = newsList[index];
                       if (index + 1 == newsList.length) {
                         // 判断后台还有没有数据了
-                        if (newsList.length >= newsTotal) {
-                          // 没有数据了
-                          return MyProgress(status: false);
+                        if (newsList.length < newsTotal) {
+                          // 到底了，请求数据
+                          getNewsList(page: ++newsPage);
+                          return MyProgress();
                         }
-                        // 到底了，请求数据
-                        getNewsList(page: ++newsPage);
-                        return MyProgress();
                       }
 
                       return NewsCardItem(
@@ -260,7 +265,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
                       );
                     },
                     // 指定子元素的个数
-                    childCount: newsList.length,
+                    childCount: newsList.length + 1,
                   ),
                 )
               :
@@ -269,16 +274,20 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
                   // 构建代理
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      if (index == courseTotal) {
+                        return MyProgress(status: false);
+                      } else if (courseTotal == null ||
+                          index == courseList.length) {
+                        return Text("");
+                      }
+
                       CourseDataType item = courseList[index];
                       if (index + 1 == courseList.length) {
                         // 判断后台还有没有数据了
-                        if (courseList.length >= courseTotal) {
-                          // 没有数据了
-                          return MyProgress(status: false);
+                        if (courseList.length < courseTotal) {
+                          getCourseList(page: ++coursePage);
+                          return MyProgress();
                         }
-                        // 到底了，请求数据
-                        getCourseList(page: ++coursePage);
-                        return MyProgress();
                       }
 
                       return CourseCardItem(
@@ -289,7 +298,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
                       );
                     },
                     // 指定子元素的个数
-                    childCount: courseList.length,
+                    childCount: courseList.length + 1,
                   ),
                 ),
         ],
@@ -309,7 +318,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     getCourseList();
   }
 
-  // 异步请求数据
+  // 同步请求数据
   futureGetData() async {
     // 获取轮播图
     await getBannerList();
@@ -327,10 +336,10 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     examList = []; //最新考试
     newsList = []; //新闻列表
     newsPage = 1; //新闻分页
-    newsTotal = 0; //新闻总个数
+    newsTotal = null; //新闻总个数
     courseList = []; //课程列表
     coursePage = 1; //课程分页
-    courseTotal = 0; //课程总个数
+    courseTotal = null; //课程总个数
     _currentIndex = 0; // 当前显示的是新闻列表还是课程列表
   }
 
@@ -355,7 +364,9 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 获取最新考试
   getExamList() async {
     try {
-      var result = await myRequest(path: "/api/exam/newKaoshi");
+      var result = await myRequest(path: "/api/exam/newKaoshi", data: {
+        "user_id": 1,
+      });
       List data = result['data'];
 
       examList = data.map((e) {
@@ -408,6 +419,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       var result = await myRequest(
         path: "/api/course/courseList",
         data: {
+          "user_id": 1,
           "page": page,
           "psize": 20,
         },

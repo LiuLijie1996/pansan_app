@@ -1,14 +1,27 @@
 class BannerDataType {
+  ///banner的id
   int id;
+
+  ///banner标题
   String name;
   int position;
+
+  ///链接类型 0不跳转  1考试分类  3练习分类  2课程列表  4考试列表  5新闻详情
   int typeLink;
+
+  ///分类id 或 列表id
   String link;
+
+  ///封面图
   String thumbUrl;
+
+  ///添加时间
   int addtime;
   int status;
   String sorts;
   String linkName;
+
+  ///新闻类型 1图文  2视频
   int newsType;
 
   BannerDataType(

@@ -72,6 +72,24 @@ answerSheet					答题卡
 }
 ```
 
+### 一日一题类型
+
+```dart
+{
+    "time": 1606752000,//时间线上的时间
+    "child": [//时间线上的成员列表
+        {
+            "status": 2,//状态 1已学习  2未学习
+            "name": "就OK",//标题
+            "id": 1,//id
+            "study_time": 1608307200//具体时间
+        }
+    ]
+}
+```
+
+
+
 ### 考试列表项信息类型：ExamListDataType
 
 ```dart
@@ -174,7 +192,7 @@ answerSheet					答题卡
 }
 ```
 
-### 导航类型：NavDataType
+### (考试、练习、新闻、课程)导航类型：NavDataType
 
 ```dart
 {
@@ -191,6 +209,85 @@ answerSheet					答题卡
 }
 ```
 
+### 咨询类型  AdvisoryDataType
+
+```dart
+{
+    "id": 72,
+    "pid": 1,
+    "user_id": 1705,
+    "title": "查三违",
+    "content": "11月份较严重三违人员名单",
+    "link": "",
+    "key": "",
+    "addtime": 1606904780,
+    "status": 1,
+    "audit": 1,
+    "transfer_id": 0,
+    "reply": [
+        {
+            "id": 1,
+            "pid": 72,
+            "content": "可以的",
+            "addtime": 1608350026
+        }
+    ]
+}
+```
+
+### 证书类型  CertificateDataType
+
+```dart
+{
+    "id": 18290,
+    "idCard": "TM340405197805100433",
+    "name": "随贡献",
+    "dep": "通风区",
+    "addtime": 1605755116
+}
+```
+
+### 三违情况类型  IllegalManageDataType
+
+```dart
+{
+    "id": 73,
+    "pid": 3,
+    "user_id": 0,
+    "title": "11月23-30日三违统计",
+    "content": "11月23-30日三违统计",
+    "link": "http://pansan_api.fangda.net.cn/uploads/654e228b599ce90c2da0af22f845f876.doc",
+    "key": "doc/20201203/654e228b599ce90c2da0af22f845f876.doc",
+    "addtime": 1606956515,
+    "status": 1,
+    "audit": 1,
+    "transfer_id": 0
+}
+```
+
+### 练习列表数据类型：ExerciseSelectDataType
+
+```dart
+{
+    "id": 2,
+    "d_id": 2,
+    "pid": 2,
+    "name": "子管理员1",
+    "radio": 2,//单选题个数
+    "multiple": 20,//多选题个数
+    "trueOrFalse": 20,//判断题个数
+    "practice_num_type": 3,//1无限  2一次  3多次
+    "frequency": 20,//答题次数
+    "q_id": "7,4",//题目id
+    "addtime": 1606723039,//添加时间
+    "status": 1,
+    "sorts": "",
+    "is_practice": true,//是否能点击
+}
+```
+
+### 专项练习
+
 
 
 ## 接口
@@ -200,7 +297,9 @@ http://192.168.0.8:88/index.php/v2/test/getTestItemList				考试分类列表导
 http://192.168.0.8:88/index.php/v2/Practice/getPracticeItemList		获取练习分类列表导航
 http://192.168.0.8:88/index.php/v2/news/getNewsItemList				新闻分类列表导航
 http://192.168.0.8:88/index.php/v2/course/getCourseItemList			课程分类列表导航
+
 http://192.168.0.8:88/index.php/v2/index/indexBanner				轮播图
+http://192.168.0.8:88/index.php/v2/user/getUserServiceList			职工服务
 ```
 
 ```dart

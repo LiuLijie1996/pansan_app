@@ -6,7 +6,7 @@ import 'package:pansan_app/models/IssueDataType.dart';
 // 题目选择
 class MultipleChoice extends StatelessWidget with MyScreenUtil {
   final bool reminder; //是否需要错误提示
-  final IssueDataType data; //数据
+  final IssueDataType data; //题目的数据
   final Function onChange; //选择答案时触发的回调
   final bool disabled; //是否禁止点击
   MultipleChoice({

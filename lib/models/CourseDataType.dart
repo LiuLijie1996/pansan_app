@@ -1,15 +1,34 @@
 // 课程数据类型
 
 class CourseDataType {
+  ///课程id
   int id;
+
+  ///导航id
   int pid;
+
+  ///标题
   String name;
+
+  ///简介
   String desc;
+
+  ///课程介绍
   String content;
+
+  ///添加时间
   int addtime;
+
+  ///封面
   String thumbUrl;
+
+  ///学习状态 1已学完 2未学习 3学习中
   int studyStatus;
+
+  ///章节列表信息
   List<Chapter> chapter;
+
+  ///在学人数
   int viewNum;
 
   CourseDataType(
@@ -61,10 +80,19 @@ class CourseDataType {
 }
 
 class Chapter {
+  ///章节id
   int id;
+
+  ///部门id
   int dId;
+
+  ///分类id
   int pid;
+
+  ///章节名称
   String name;
+
+  ///添加时间
   int addtime;
 
   Chapter({this.id, this.dId, this.pid, this.name, this.addtime});

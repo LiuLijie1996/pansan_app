@@ -1,19 +1,19 @@
 // 练习详情
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
-// import 'package:pansan_app/models/examIssueType.dart';
 import 'package:pansan_app/models/IssueDataType.dart';
 import 'package:pansan_app/components/TestSelect.dart';
 import 'package:pansan_app/components/MyIcon.dart';
-
-// 模拟的数据
-import 'package:pansan_app/models/mockData.dart';
+import 'package:pansan_app/models/ExerciseSelectDataType.dart';
+import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 
 class ExerciseDetails extends StatefulWidget {
-  final Map arguments;
+  final ExerciseSelectDataType arguments;
 
   ExerciseDetails({Key key, this.arguments}) : super(key: key);
 
@@ -33,7 +33,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
   List<IssueDataType> dataList = [];
 
   //当前题目下标
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -60,8 +60,13 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
+    if (dataList.length == 0) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     // 当前显示的题目
-    IssueDataType _currentItem = dataList[_currentIndex - 1];
+    IssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -107,7 +112,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                   context,
                   "/questionsCorrection",
                   arguments: {
-                    "issueData": dataList[_currentIndex - 1],
+                    "issueData": dataList[_currentIndex],
                   },
                 );
               },
@@ -131,11 +136,11 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                 child: Text(
                   "上一题",
                   style: TextStyle(
-                    color: _currentIndex == 1 ? Colors.grey : Colors.blue,
+                    color: _currentIndex == 0 ? Colors.grey : Colors.blue,
                   ),
                 ),
                 onPressed: () {
-                  if (_currentIndex - 1 != 0) {
+                  if (_currentIndex != 0) {
                     _swiperController.previous();
                   }
                 },
@@ -151,19 +156,19 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                       Container(
                         margin: EdgeInsets.only(bottom: dp(6.0)),
                         child: Icon(
-                          dataList[_currentIndex - 1].userFavor
+                          dataList[_currentIndex].userFavor
                               ? aliIconfont.full_collect
                               : aliIconfont.collect,
-                          color: dataList[_currentIndex - 1].userFavor
+                          color: dataList[_currentIndex].userFavor
                               ? Colors.red
                               : Colors.blue,
                           size: dp(40.0),
                         ),
                       ),
                       Text(
-                        dataList[_currentIndex - 1].userFavor ? "已收藏" : "收藏",
+                        dataList[_currentIndex].userFavor ? "已收藏" : "收藏",
                         style: TextStyle(
-                          color: dataList[_currentIndex - 1].userFavor
+                          color: dataList[_currentIndex].userFavor
                               ? Colors.red
                               : Colors.blue,
                           fontSize: dp(28.0),
@@ -175,8 +180,8 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                 ),
                 onPressed: () {
                   setState(() {
-                    bool userFavor = dataList[_currentIndex - 1].userFavor;
-                    dataList[_currentIndex - 1].userFavor = !userFavor;
+                    bool userFavor = dataList[_currentIndex].userFavor;
+                    dataList[_currentIndex].userFavor = !userFavor;
                   });
                 },
               ),
@@ -235,7 +240,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                 child: Text(
                   "下一题",
                   style: TextStyle(
-                    color: _currentIndex == dataList.length
+                    color: _currentIndex == dataList.length - 1
                         ? Colors.grey
                         : Colors.blue,
                   ),
@@ -243,7 +248,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onPressed: () {
-                  if (_currentIndex < dataList.length) {
+                  if (_currentIndex < dataList.length - 1) {
                     _swiperController.next();
                   }
                 },
@@ -269,7 +274,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                     style: TextStyle(color: Colors.white),
                   ),
                   Text(
-                    "$_currentIndex/${dataList.length}",
+                    "${_currentIndex + 1}/${dataList.length}",
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
@@ -282,7 +287,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                 controller: _swiperController,
                 onIndexChanged: (int index) {
                   setState(() {
-                    _currentIndex = index + 1;
+                    _currentIndex = index;
                   });
                 },
                 itemCount: dataList.length,
@@ -364,11 +369,18 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
   // 获取数据
   getDataList() async {
     try {
-      // var result = await myRequest(path: "");
+      var result = await myRequest(
+        path: "/api/exercise/getOnePractice",
+        data: {
+          "id": widget.arguments.id,
+        },
+      );
 
+      List listData = result['data'];
       // listData 获取到的考题
-      dataList = listData.map((e) {
-        List options = e['option'];
+      listData.forEach((e) {
+        bool is_str = e['option'].runtimeType == String;
+        List options = is_str ? json.decode(e['option']) : e['option'];
         List<Option> option = options.map((item) {
           return Option(
             label: item['label'],
@@ -376,19 +388,30 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
           );
         }).toList();
 
-        return IssueDataType(
+        List<String> answer = [];
+        try {
+          e['answer'].forEach((ele) {
+            answer.add("$ele");
+          });
+        } catch (err) {
+          print("报错1：$err");
+        }
+
+        IssueDataType issueDataType = IssueDataType(
           id: e['id'], //id
           stem: e['stem'], //标题
           type: e['type'], //题目类型
           option: option, //题目选项
-          answer: e['answer'], //正确答案
+          answer: answer, //正确答案
           analysis: e['analysis'], //答案解析
           disorder: e['disorder'], //当前题目分数
-          userFavor: e['userFavor'], //用户是否收藏
+          userFavor: e['userFavor'] ?? false, //用户是否收藏
           userAnswer: [], //用户选择的答案
           correct: null, //用户的选择是否正确
         );
-      }).toList();
+
+        dataList.add(issueDataType);
+      });
 
       setState(() {});
     } catch (e) {

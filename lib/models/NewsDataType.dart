@@ -1,19 +1,48 @@
 class NewsDataType {
-  int id; //新闻id
-  int pid; //导航id
-  String title; //标题
-  String desc; //简介
-  String thumbUrl; //封面
-  int type; //新闻类型 1图文  2视频
-  int materiaId; //资源id
-  String content; //文章内容
-  int tuij; //是否推荐 0不推荐 1推荐
-  int addtime; //新闻添加时间
-  int viewNum; //观看次数
-  Object materia; //视频链接
-  int newsImgText; //阅读图文有效时间：1000字60秒
-  int newsVideo; //视频有效观看时间 单位：秒
-  bool collect; //是否收藏
+  ///新闻id
+  int id;
+
+  ///导航id
+  int pid;
+
+  ///标题
+  String title;
+
+  ///简介
+  String desc;
+
+  ///封面
+  String thumbUrl;
+
+  ///新闻类型 1图文  2视频
+  int type;
+
+  ///资源id
+  int materiaId;
+
+  ///文章内容
+  String content;
+
+  ///是否推荐 0不推荐 1推荐
+  int tuij;
+
+  ///新闻添加时间
+  int addtime;
+
+  ///观看次数
+  int viewNum;
+
+  ///视频链接
+  Object materia;
+
+  ///阅读图文有效时间：1000字60秒
+  int newsImgText;
+
+  ///视频有效观看时间 单位：秒
+  int newsVideo;
+
+  ///是否收藏
+  bool collect;
 
   NewsDataType(
       {this.id,

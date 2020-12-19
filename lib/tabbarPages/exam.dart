@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/NavDataType.dart';
 
 // 考试页面
 class Exam extends StatelessWidget {
@@ -103,6 +104,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                   Column(
                     children: myExamNavList.map((e) {
                       bool b = e == myExamNavList[myExamNavList.length - 1];
+                      NavDataType item = NavDataType.fromJson(e);
                       return Container(
                         decoration: BoxDecoration(
                           border: b != true
@@ -115,12 +117,12 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                               : null,
                         ),
                         child: NavItem(
-                          item: e,
+                          item: item,
                           onClick: () {
                             Navigator.pushNamed(
                               context,
                               "/examSelect",
-                              arguments: e,
+                              arguments: item,
                             );
                           },
                         ),
@@ -187,6 +189,8 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                     children: myExerciseNavList.map((e) {
                       bool border =
                           e == myExerciseNavList[myExerciseNavList.length - 1];
+
+                      NavDataType item = NavDataType.fromJson(e);
                       return Container(
                         decoration: BoxDecoration(
                           border: border != true
@@ -199,20 +203,20 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                               : null,
                         ),
                         child: NavItem(
-                          item: e,
+                          item: item,
                           onClick: () {
-                            if (e['id'] != 0) {
+                            if (item.id != 0) {
                               Navigator.pushNamed(
                                 context,
                                 "/exerciseSelect",
-                                arguments: e,
+                                arguments: item,
                               );
                             } else {
                               // 跳转到专项练习列表选择页
                               Navigator.pushNamed(
                                 context,
                                 "/exerciseSpecialtySelect",
-                                arguments: e,
+                                arguments: item,
                               );
                             }
                           },
@@ -254,9 +258,9 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
       List exams = myExam.map((e) {
         int _random = Random().nextInt(5 - 0);
         return {
-          "id": e['id'],
+          "id": int.parse("${e['id']}"),
           "name": e['name'],
-          "icons": icons[_random],
+          "icon": icons[_random],
         };
       }).toList();
 
@@ -266,7 +270,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
         return {
           "id": e['id'],
           "name": e['name'],
-          "icons": icons[_random],
+          "icon": icons[_random],
         };
       }).toList();
 
@@ -277,7 +281,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
           myExerciseNavList.add({
             "id": 0,
             "name": "专项练习",
-            "icons": icons[Random().nextInt(5 - 0)],
+            "icon": icons[Random().nextInt(5 - 0)],
           });
         });
       }
@@ -289,7 +293,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
 
 // 导航列表
 class NavItem extends StatelessWidget with MyScreenUtil {
-  final item;
+  final NavDataType item;
   final Function() onClick;
   const NavItem({Key key, @required this.item, this.onClick}) : super(key: key);
 
@@ -307,7 +311,7 @@ class NavItem extends StatelessWidget with MyScreenUtil {
           height: dp(100.0),
           padding: EdgeInsets.all(dp(10.0)),
           child: Image.asset(
-            "${item['icons']}",
+            "${item.icon}",
           ),
         ),
         trailing: Icon(
@@ -315,7 +319,7 @@ class NavItem extends StatelessWidget with MyScreenUtil {
           size: dp(30.0),
         ),
         title: Text(
-          "${item['name']}",
+          "${item.name}",
           style: TextStyle(
             fontSize: dp(32.0),
             color: Color(int.parse("333333", radix: 16) | 0xff000000),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/models/examIssueType.dart';
+import 'package:pansan_app/models/IssueDataType.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/components/MyIcon.dart';
 
 // 答题报告（练习结束）
 class ExerciseOver extends StatelessWidget with MyScreenUtil {
   // 题目列表
-  final List<ExamIssueDataType> dataList;
+  final List<IssueDataType> dataList;
   // 练习消耗的时间
   int expend_time;
   ExerciseOver({Key key, @required this.dataList, @required this.expend_time})
