@@ -465,7 +465,10 @@ class _ExamDetailsState extends State<ExamDetails>
                           if (item.type == 3 || item.type == 1) {
                             item.userAnswer = [];
 
-                            _swiperController.next();
+                            // 判断是不是最后一题
+                            if (_currentIndex != dataList.length - 1) {
+                              _swiperController.next();
+                            }
                           }
 
                           // 判断当前选择的是否已经选择过了

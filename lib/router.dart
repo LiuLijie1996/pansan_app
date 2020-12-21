@@ -29,6 +29,7 @@ import 'package:pansan_app/pages/updatePwd.dart';
 import 'package:pansan_app/tabbarPages/startPage.dart';
 import 'package:pansan_app/pages/exerciseOver.dart';
 import 'package:pansan_app/pages/examResultAnalyse.dart';
+import 'package:pansan_app/pages/NewsDetail.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -48,74 +49,81 @@ Map<String, Function> routers = {
   "/myGrade": (context) => MyGrade(), //我的班级
   "/myAdvisory": (context) => MyAdvisory(), //我的咨询
   "/addAdvisory": (context) => AddAdvisory(), //添加咨询
+
+  //课程列表
   "/courseList": (context, {arguments}) {
-    //课程列表
     return SearchCourseList(arguments: arguments);
   },
+  //考场信息页面
   "/examSiteInfo": (context, {arguments}) {
-    //考场信息页面
     return ExamSiteInfo(arguments: arguments);
   },
+  //考试列表选择
   "/examSelect": (context, {arguments}) {
-    //考试列表选择
     return ExamSelect(arguments: arguments);
   },
+  //练习列表选择
   "/exerciseSelect": (context, {arguments}) {
-    //练习列表选择
     return ExerciseSelect(arguments: arguments);
   },
+  //专项练习列表选择
   "/exerciseSpecialtySelect": (context, {arguments}) {
-    //专项练习列表选择
     return ExerciseSpecialtySelect(arguments: arguments);
   },
+  //练习详情
   "/exerciseDetails": (context, {arguments}) {
-    //练习详情
     return ExerciseDetails(arguments: arguments);
   },
+  // 练习结束页
   "/exerciseOver": (context, {arguments}) {
-    // 练习结束页
     return ExerciseOver(
       dataList: arguments['dataList'],
       expend_time: arguments['expend_time'],
     );
   },
+  // 考试结果分析
   "/examResultAnalyse": (context, {arguments}) {
-    // 考试结果分析
     return ExamResultAnalyse(
       dataList: arguments['dataList'],
     );
   },
+  // 题目纠错
   "/questionsCorrection": (context, {arguments}) {
-    // 题目纠错
     return QuestionsCorrection(
       issueData: arguments['issueData'],
     );
   },
+  // 题目纠错
   "/exerciseSpecialtyDetails": (context, {arguments}) {
-    // 题目纠错
     return ExerciseSpecialtyDetails(
       arguments: arguments,
     );
   },
+  // 答题卡
   "/answerSheet": (context, {arguments}) {
-    // 答题卡
     return AnswerSheet(
       dataList: arguments['dataList'],
       reminder: arguments['reminder'] == null ? true : arguments['reminder'],
     );
   },
+  // 考试详情
   "/examDetails": (context, {arguments}) {
-    // 考试详情
     return ExamDetails(
       examSiteInfo: arguments['examSiteInfo'],
     );
   },
+  // 考试结束页
   "/examOver": (context, {arguments}) {
-    // 考试结束页
     return ExamOver(
       dataList: arguments['dataList'],
       examSiteInfo: arguments['examSiteInfo'],
       expend_time: arguments['expend_time'],
+    );
+  },
+  // 新闻详情页
+  "/newsDetail": (context, {arguments}) {
+    return NewsDetail(
+      arguments: arguments,
     );
   },
 };

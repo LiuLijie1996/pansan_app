@@ -35,7 +35,9 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
     // GestureDetector
     return GestureDetector(
       onTap: () {
-        onClick();
+        // onClick();
+
+        Navigator.pushNamed(context, "/newsDetail", arguments: item);
       },
       child: AspectRatio(
         aspectRatio: item.thumbUrl != '' ? 16 / 5 : 16 / 4.1,
@@ -82,39 +84,8 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: dp(32.0),
                             ),
-                          ),
-                        ),
-
-                        // 学习状态
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.bottomLeft,
-                            child: statusText != null
-                                ? Container(
-                                    padding: EdgeInsets.only(
-                                      left: dp(20.0),
-                                      right: dp(20.0),
-                                      top: dp(4.0),
-                                      bottom: dp(4.0),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: statusColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(dp(20.0)),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "$statusText",
-                                      style: TextStyle(
-                                        fontSize: dp(20.0),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : null,
                           ),
                         ),
 
@@ -134,7 +105,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                                       size: dp(24.0),
                                       color: Colors.grey,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: dp(10.0)),
                                     Text(
                                       "$_addtime", //时间
                                       style: TextStyle(
@@ -265,7 +236,7 @@ class CourseCardItem extends StatelessWidget with MyScreenUtil {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: dp(32.0),
                             ),
                           ),
                         ),
@@ -317,7 +288,7 @@ class CourseCardItem extends StatelessWidget with MyScreenUtil {
                                       size: dp(24.0),
                                       color: Colors.grey,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: dp(10.0)),
                                     Text(
                                       "$_addtime", //时间
                                       style: TextStyle(

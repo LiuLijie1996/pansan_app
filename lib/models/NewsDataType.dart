@@ -23,6 +23,9 @@ class NewsDataType {
   ///文章内容
   String content;
 
+  ///文章纯文本
+  String newsContent;
+
   ///是否推荐 0不推荐 1推荐
   int tuij;
 
@@ -59,6 +62,7 @@ class NewsDataType {
       this.materia,
       this.newsImgText,
       this.newsVideo,
+      this.newsContent,
       this.collect});
 
   NewsDataType.fromJson(Map<String, dynamic> json) {
@@ -77,6 +81,7 @@ class NewsDataType {
     newsImgText = json['newsImgText'];
     newsVideo = json['newsVideo'];
     collect = json['collect'];
+    newsContent = json['news_content'];
   }
 
   Map<String, dynamic> toJson() {
@@ -96,6 +101,7 @@ class NewsDataType {
     data['newsImgText'] = this.newsImgText;
     data['newsVideo'] = this.newsVideo;
     data['collect'] = this.collect;
+    data['news_content'] = this.newsContent;
     return data;
   }
 }

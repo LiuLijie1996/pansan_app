@@ -170,7 +170,7 @@ class _NewsState extends State<News>
     try {
       // 请求数据
       var result = await myRequest(
-        path: "/api/news/getIndexNewsList",
+        path: "/api/news/newsList",
         data: {
           "pid": this.tabs[index].id,
           "page": page,

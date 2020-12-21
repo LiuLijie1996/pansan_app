@@ -22,6 +22,8 @@ settings					设置页面
 staffServe					职工服务
 testRecords					考试记录
 updatePwd					修改密码
+newsDetail					新闻详情
+courseDetail				课程详情
 
 myAdvisory					我的咨询
 myCollect					我的收藏
@@ -276,7 +278,7 @@ answerSheet					答题卡
     "radio": 2,//单选题个数
     "multiple": 20,//多选题个数
     "trueOrFalse": 20,//判断题个数
-    "practice_num_type": 3,//1无限  2一次  3多次
+    "practice_num_type": 3,//练习次数 1无限  2一次  3多次
     "frequency": 20,//答题次数
     "q_id": "7,4",//题目id
     "addtime": 1606723039,//添加时间
@@ -480,7 +482,7 @@ http://192.168.0.8:88/index.php/v2/user/getUserServiceList			职工服务
                             }
                         ]
                     },
-                    "url": "http://192.168.0.8:88/index.php/v2/test/getNewsOne"
+                    "url": "http://192.168.0.8:88/index.php/v2/news/getNewsOne"
                 },
                 "response": [
                     

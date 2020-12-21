@@ -125,7 +125,7 @@ class AnswerSheet extends StatelessWidget with MyScreenUtil {
 
             // 选项卡
             Wrap(
-              spacing: dp(30.0),
+              spacing: dp(50.0),
               runSpacing: dp(30.0),
               children: dataList.map((e) {
                 Color _color = Colors.grey;

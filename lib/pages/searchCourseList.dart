@@ -9,6 +9,7 @@ import 'package:pansan_app/components/EmptyBox.dart';
 import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
+import 'package:pansan_app/models/CourseDataType.dart';
 
 class SearchCourseList extends StatefulWidget {
   final arguments;
@@ -75,35 +76,35 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
           child: courseListData['data'].length == 0
               ? myWidget[_currentMyWidget]
               : ListView.builder(
+                  itemCount: courseListData['data'].length + 1,
                   itemBuilder: (BuildContext context, int index) {
-                    List data = courseListData['data'];
+                    var data = courseListData['data'];
                     int total = courseListData['total'];
-                    var item = data[index];
+                    CourseDataType item;
 
-                    // 判断是否需要请求数据
-                    if (index == data.length - 1) {
-                      // 判断后台是否还是有数据
-                      if (data.length < total) {
-                        print('请求数据, ${data.length} : $total');
+                    // 判断后台是不是已经没有数据了
+                    if (index == total) {
+                      return MyProgress(status: false);
+                    }
 
-                        // 请求数据
-                        int page = ++courseListData['page'];
-                        searchCourseData(page: page);
+                    try {
+                      // 如果报错了说明需要请求数据了
+                      item = data[index];
+                    } catch (e) {
+                      // 请求数据
+                      int page = ++courseListData['page'];
+                      searchCourseData(page: page);
 
-                        return MyProgress();
-                      } else {
-                        return MyProgress(status: false);
-                      }
+                      return MyProgress();
                     }
 
                     return CourseCardItem(
+                      item: item,
                       onClick: () {
                         print(item);
                       },
-                      item: item,
                     );
                   },
-                  itemCount: courseListData['data'].length,
                 ),
         ),
       ),
@@ -114,45 +115,41 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   searchCourseData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/course/searchCourse",
+        path: "/api/course/courseList",
         data: {
-          "search_value": _arguments['searchValue'],
+          "value": _arguments['searchValue'],
           "page": page,
+          "psize": 20,
+          "user_id": 1,
         },
       );
 
       int total = result['total'];
       List data = result['data'];
-      List newData = data.map((e) {
-        //时间
-        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-          e['addtime'] * 1000,
-        );
-        // 时间转换
-        String addtime = formatDate(
-          dateTime,
-          [yyyy, '-', mm, '-', dd],
-        );
-
-        return {
-          "id": e['course']['id'], //id
+      List<CourseDataType> newData = [];
+      data.forEach((e) {
+        Map<String, dynamic> courseItem = {
+          "id": e['id'], //id
           "thumb_url": e['thum_url'], //封面图
-          "title": e['name'], //标题
-          "status": e['status'], //状态，是否学完
+          "name": e['name'], //标题
+          "study_status": e['status'], //状态，是否学完
           "view_num": e['view_num'], //学习人数
-          "addtime": addtime, //添加时间
+          "addtime": e['addtime'], //添加时间
         };
-      }).toList();
+        newData.add(CourseDataType.fromJson(courseItem));
+      });
 
       // 刷新页面
-      setState(() {
-        if (page == 1) {
-          courseListData['data'] = [];
-        }
-        courseListData['page'] = page;
-        courseListData['total'] = total;
-        courseListData['data'].addAll(newData);
-      });
+      if (this.mounted) {
+        setState(() {
+          if (page == 1) {
+            courseListData['data'] = [];
+          }
+          courseListData['page'] = page;
+          courseListData['total'] = total;
+          courseListData['data'].addAll(newData);
+        });
+      }
     } catch (e) {}
   }
 }

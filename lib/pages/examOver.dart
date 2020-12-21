@@ -5,6 +5,7 @@ import 'package:pansan_app/components/MyTags.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/models/IssueDataType.dart';
 import 'package:pansan_app/models/ExamListDataType.dart';
+import 'package:pansan_app/utils/myRequest.dart';
 
 class ExamOver extends StatelessWidget with MyScreenUtil {
   // 题目列表
@@ -64,6 +65,25 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
       new DateTime.now(),
       [yyyy, '年', mm, '月', dd, '日'],
     );
+
+    var newDataList = dataList.map((e) {
+      var option = e.option.map((ele) => ele.toJson()).toList();
+      return {
+        ...e.toJson(),
+        "option": option,
+      };
+    }).toList();
+    var query = {
+      "user_id": 1, //用户id
+      "test_id": examSiteInfo.id, //考试id
+      "fraction": total_points, //总得分
+      "type": passing_mark, //考试是否及格
+      "data": newDataList, //所有考试题目
+    };
+
+    // 提交试卷
+    myRequest(path: "/api/exam/saveUserTest", data: query)
+        .then((value) => null);
 
     return Scaffold(
       appBar: AppBar(
