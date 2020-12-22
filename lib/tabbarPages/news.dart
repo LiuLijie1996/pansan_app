@@ -195,6 +195,7 @@ class _NewsState extends State<News>
           "tuij": e['tuij'], //是否推荐 0不推荐 1推荐
           "addtime": e['addtime'], //新闻添加时间
           "view_num": e['view_num'], //观看次数
+          "upvote": e['upvote'], //点赞个数
           "materia": e['materia'], //视频链接
           "newsImgText": e['newsImgText'], //阅读图文有效时间：1000字60秒
           "newsVideo": e['newsVideo'], //视频有效观看时间 单位：秒

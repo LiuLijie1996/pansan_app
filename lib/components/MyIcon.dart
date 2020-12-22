@@ -30,6 +30,7 @@ class MyIcon {
   IconData correct = const IconData(0xe632, fontFamily: 'iconfont'); //正确
   IconData chronograph = const IconData(0xe606, fontFamily: 'iconfont'); //秒表
   IconData answer_sheet = const IconData(0xe76c, fontFamily: 'iconfont'); //答题卡
+  IconData magnify = const IconData(0xe685, fontFamily: 'iconfont'); //放大
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -60,6 +61,7 @@ class MyIcon {
       "full_collect": full_collect,
       "correct": correct,
       "chronograph": chronograph,
+      "magnify": magnify,
     };
   }
 }

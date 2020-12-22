@@ -400,6 +400,16 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         newsList = [];
       }
       newsList.addAll(data.map((e) {
+        List<String> img_list = [];
+        if (e['img_list'].length != 0) {
+          e['img_list'].forEach((value) {
+            img_list.add("$value");
+          });
+          e['img_list'] = img_list;
+        } else {
+          e['img_list'] = null;
+        }
+
         return NewsDataType.fromJson(e);
       }).toList());
 

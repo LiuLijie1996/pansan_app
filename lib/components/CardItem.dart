@@ -4,6 +4,8 @@ import 'MyIcon.dart';
 import 'package:date_format/date_format.dart';
 import 'package:pansan_app/models/NewsDataType.dart';
 import 'package:pansan_app/models/CourseDataType.dart';
+import '../utils/myRequest.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // 新闻卡片
 class NewsCardItem extends StatelessWidget with MyScreenUtil {
@@ -31,6 +33,84 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
       addtime,
       [yyyy, '-', mm, '-', dd],
     );
+
+    if (item.imgList != null && item.imgList.length > 1) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, "/newsDetail", arguments: item);
+        },
+        child: Container(
+          padding: EdgeInsets.only(
+            top: dp(20.0),
+            bottom: dp(20.0),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(
+                width: 0.5,
+                color: Colors.grey[100],
+              ),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 标题
+              Container(
+                padding: EdgeInsets.only(
+                  left: dp(20.0),
+                ),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: dp(32.0),
+                      color: Colors.black,
+                      height: 1.5,
+                    ),
+                    children: <InlineSpan>[
+                      TextSpan(text: '${item.title}'),
+                    ],
+                  ),
+                ),
+              ),
+
+              // 封面
+              Container(
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(top: dp(20.0)),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: item.imgList.map((e) {
+                      int index = item.imgList.indexOf(e);
+                      double right =
+                          item.imgList.length - 1 == index ? dp(20.0) : 0.0;
+                      return Container(
+                        width: dp(250.0),
+                        height: dp(150.0),
+                        margin: EdgeInsets.only(
+                          left: dp(20.0),
+                          right: right,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(dp(10.0)),
+                          child: Image.network(
+                            e,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     // GestureDetector
     return GestureDetector(
@@ -72,7 +152,9 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                 Expanded(
                   child: Container(
                     alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: dp(20.0)),
+                    padding: EdgeInsets.only(
+                      left: dp(item.thumbUrl == '' ? 0.0 : 20.0),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -114,21 +196,38 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                                     )
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      myIcon['view'],
-                                      size: dp(36.0),
-                                      color: Colors.grey,
-                                    ),
-                                    SizedBox(width: dp(10.0)),
-                                    Text(
-                                      "${item.viewNum}", //观看人数
-                                      style: TextStyle(
+                                InkWell(
+                                  onTap: () async {
+                                    // // 点赞
+                                    // var result1 = await saveUserUpvote();
+                                    // if (result1) {
+                                    //   Fluttertoast.showToast(
+                                    //     msg: "点赞成功",
+                                    //     toastLength: Toast.LENGTH_LONG,
+                                    //     gravity: ToastGravity.CENTER,
+                                    //     timeInSecForIosWeb: 1,
+                                    //     backgroundColor: Colors.black45,
+                                    //     textColor: Colors.white,
+                                    //     fontSize: 16.0,
+                                    //   );
+                                    // }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.favorite_outline,
+                                        size: dp(36.0),
                                         color: Colors.grey,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(width: dp(10.0)),
+                                      Text(
+                                        "${item.upvote}", //点赞人数
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -144,6 +243,22 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
         ),
       ),
     );
+  }
+
+  // 点赞
+  Future<bool> saveUserUpvote() async {
+    try {
+      await myRequest(
+        path: "/api/news/saveUserUpvote",
+        data: {
+          "id": item.id,
+        },
+      );
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }
 
@@ -189,7 +304,9 @@ class CourseCardItem extends StatelessWidget with MyScreenUtil {
     // GestureDetector
     return GestureDetector(
       onTap: () {
-        onClick();
+        // onClick();
+        // 跳转到课程详情页
+        print('跳转到课程详情页');
       },
       child: AspectRatio(
         aspectRatio: item.thumbUrl != '' ? 16 / 5 : 16 / 4.1,

@@ -1,6 +1,4 @@
 // 个人信息
-
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
@@ -50,7 +48,10 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                       onTap: _openGallery,
                       child: Text(
                         "更换头像",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: dp(26.0),
+                        ),
                       ),
                     )
                   ],

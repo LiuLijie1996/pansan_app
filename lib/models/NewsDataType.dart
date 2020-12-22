@@ -14,6 +14,9 @@ class NewsDataType {
   ///封面
   String thumbUrl;
 
+  ///多图新闻
+  List<String> imgList;
+
   ///新闻类型 1图文  2视频
   int type;
 
@@ -35,6 +38,9 @@ class NewsDataType {
   ///观看次数
   int viewNum;
 
+  ///点赞个数
+  int upvote;
+
   ///视频链接
   Object materia;
 
@@ -53,12 +59,14 @@ class NewsDataType {
       this.title,
       this.desc,
       this.thumbUrl,
+      this.imgList,
       this.type,
       this.materiaId,
       this.content,
       this.tuij,
       this.addtime,
       this.viewNum,
+      this.upvote,
       this.materia,
       this.newsImgText,
       this.newsVideo,
@@ -71,12 +79,14 @@ class NewsDataType {
     title = json['title'];
     desc = json['desc'];
     thumbUrl = json['thumb_url'];
+    imgList = json['img_list'];
     type = json['type'];
     materiaId = json['materia_id'];
     content = json['content'];
     tuij = json['tuij'];
     addtime = json['addtime'];
     viewNum = json['view_num'];
+    upvote = json['upvote'];
     materia = json['materia'];
     newsImgText = json['newsImgText'];
     newsVideo = json['newsVideo'];
@@ -91,12 +101,14 @@ class NewsDataType {
     data['title'] = this.title;
     data['desc'] = this.desc;
     data['thumb_url'] = this.thumbUrl;
+    data['img_list'] = this.imgList;
     data['type'] = this.type;
     data['materia_id'] = this.materiaId;
     data['content'] = this.content;
     data['tuij'] = this.tuij;
     data['addtime'] = this.addtime;
     data['view_num'] = this.viewNum;
+    data['upvote'] = this.upvote;
     data['materia'] = this.materia;
     data['newsImgText'] = this.newsImgText;
     data['newsVideo'] = this.newsVideo;
