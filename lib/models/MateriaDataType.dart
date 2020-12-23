@@ -3,9 +3,13 @@ class MateriaDataType {
   int id;
   String name;
   int type;
+
+  ///播放链接
   String link;
   String key;
   String fileId;
+
+  ///总时长
   num duration;
   String size;
   String thumbUrl;

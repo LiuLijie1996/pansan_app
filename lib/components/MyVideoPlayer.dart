@@ -71,6 +71,8 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
     materia = widget.materia; //视频信息
     countTime = widget.countTime; //播放进度
 
+    print(materia.toJson());
+
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_isPlaying) {
@@ -167,7 +169,7 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: Container(
                           alignment: Alignment.center,
                           child: RichText(
@@ -175,13 +177,13 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
                               style: TextStyle(
                                 fontSize: dp(26.0),
                               ),
-                              text: "${setCountTime(countTime)} / ",
-                              children: [
-                                TextSpan(
-                                  text:
-                                      "${(materia.duration / 60).toStringAsFixed(2)}",
-                                )
-                              ],
+                              text: "${setCountTime(countTime)}",
+                              // children: [
+                              //   TextSpan(
+                              //     text:
+                              //         " / ${(materia.duration / 60).toStringAsFixed(2)}",
+                              //   )
+                              // ],
                             ),
                           ),
                         ),
@@ -247,6 +249,7 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
     );
   }
 
+  // 手势事件
   void setProgressTime(event) {
     if (isSetProgress) {
       setProgressShow();
@@ -271,6 +274,7 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
     }
   }
 
+  // 设置当前进度时间
   String setCountTime(int time) {
     if (time < 60) {
       var second = time < 10 ? "0$time" : time;
@@ -430,7 +434,7 @@ class _FillScreenPlayerState extends State<FillScreenPlayer> with MyScreenUtil {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          flex: 2,
+                          flex: 1,
                           child: Container(
                             alignment: Alignment.center,
                             child: RichText(
@@ -438,13 +442,13 @@ class _FillScreenPlayerState extends State<FillScreenPlayer> with MyScreenUtil {
                                 style: TextStyle(
                                   fontSize: dp(26.0),
                                 ),
-                                text: "${setCountTime(countTime)} / ",
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${(materia.duration / 60).toStringAsFixed(2)}",
-                                  )
-                                ],
+                                text: "${setCountTime(countTime)}",
+                                // children: [
+                                //   TextSpan(
+                                //     text:
+                                //         " / ${(materia.duration / 60).toStringAsFixed(2)}",
+                                //   )
+                                // ],
                               ),
                             ),
                           ),
@@ -499,6 +503,7 @@ class _FillScreenPlayerState extends State<FillScreenPlayer> with MyScreenUtil {
     );
   }
 
+  // 设置进度时间
   String setCountTime(int time) {
     if (time < 60) {
       var second = time < 10 ? "0$time" : time;
@@ -513,7 +518,7 @@ class _FillScreenPlayerState extends State<FillScreenPlayer> with MyScreenUtil {
     }
   }
 
-  // 设置播放进度
+  // 设置进度条进度
   void setProgressTime(event) {
     if (isSetProgress) {
       setProgressShow();

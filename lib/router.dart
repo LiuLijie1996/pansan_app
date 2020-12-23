@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/pages/answerSheet.dart';
-import 'package:pansan_app/pages/examDetails.dart';
-import 'package:pansan_app/pages/examOver.dart';
-import 'package:pansan_app/pages/exerciseDetails.dart';
-import 'package:pansan_app/pages/exerciseSpecialtyDetails.dart';
-import 'package:pansan_app/pages/exerciseSpecialtySelect.dart';
-import 'package:pansan_app/pages/exerciseSelect.dart';
-import 'package:pansan_app/pages/addAdvisory.dart';
-import 'package:pansan_app/pages/examSelect.dart';
-import 'package:pansan_app/pages/examSiteInfo.dart';
-import 'package:pansan_app/pages/questionsCorrection.dart';
-import 'package:pansan_app/pages/searchCourseList.dart';
-import 'package:pansan_app/pages/dayTopic.dart';
-import 'package:pansan_app/pages/informAffiche.dart';
-import 'package:pansan_app/pages/myAdvisory.dart';
-import 'package:pansan_app/pages/myCollect.dart';
-import 'package:pansan_app/pages/myCourse.dart';
-import 'package:pansan_app/pages/myGrade.dart';
-import 'package:pansan_app/pages/myInformation.dart';
-import 'package:pansan_app/pages/myMistakes.dart';
-import 'package:pansan_app/pages/testRecords.dart';
-import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
-import 'package:pansan_app/pages/staffServe.dart';
-import 'package:pansan_app/pages/login.dart';
-import 'package:pansan_app/pages/settings.dart';
-import 'package:pansan_app/pages/integralCentre.dart';
-import 'package:pansan_app/pages/updatePwd.dart';
-import 'package:pansan_app/tabbarPages/startPage.dart';
-import 'package:pansan_app/pages/exerciseOver.dart';
-import 'package:pansan_app/pages/examResultAnalyse.dart';
-import 'package:pansan_app/pages/NewsDetail.dart';
+import './pages/answerSheet.dart';
+import './pages/examDetails.dart';
+import './pages/examOver.dart';
+import './pages/exerciseDetails.dart';
+import './pages/exerciseSpecialtyDetails.dart';
+import './pages/exerciseSpecialtySelect.dart';
+import './pages/exerciseSelect.dart';
+import './pages/addAdvisory.dart';
+import './pages/examSelect.dart';
+import './pages/examSiteInfo.dart';
+import './pages/questionsCorrection.dart';
+import './pages/searchCourseList.dart';
+import './pages/dayTopic.dart';
+import './pages/informAffiche.dart';
+import './pages/myAdvisory.dart';
+import './pages/myCollect.dart';
+import './pages/myCourse.dart';
+import './pages/myGrade.dart';
+import './pages/myInformation.dart';
+import './pages/myMistakes.dart';
+import './pages/testRecords.dart';
+import './tabbarPages/MyBottomNavigationBar.dart';
+import './pages/staffServe.dart';
+import './pages/login.dart';
+import './pages/settings.dart';
+import './pages/integralCentre.dart';
+import './pages/updatePwd.dart';
+import './tabbarPages/startPage.dart';
+import './pages/exerciseOver.dart';
+import './pages/examResultAnalyse.dart';
+import './pages/newsDetail.dart';
+import './pages/courseDetail.dart';
+import './pages/filePreview.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -123,6 +125,18 @@ Map<String, Function> routers = {
   // 新闻详情页
   "/newsDetail": (context, {arguments}) {
     return NewsDetail(
+      arguments: arguments,
+    );
+  },
+  // 课程详情页
+  "/courseDetail": (context, {arguments}) {
+    return CourseDetail(
+      arguments: arguments,
+    );
+  },
+  // 文件预览
+  "/filePreview": (context, {arguments}) {
+    return FilePreview(
       arguments: arguments,
     );
   },

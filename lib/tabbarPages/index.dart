@@ -5,19 +5,19 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
-import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/tabbarPages/MyBottomNavigationBar.dart';
+import '../components/CardItem.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
 import '../utils/myRequest.dart';
 
 // 数据类型
-import 'package:pansan_app/models/BannerDataType.dart';
-import 'package:pansan_app/models/ExamListDataType.dart';
-import 'package:pansan_app/models/NewsDataType.dart';
-import 'package:pansan_app/models/CourseDataType.dart';
+import '../models/BannerDataType.dart';
+import '../models/ExamListDataType.dart';
+import '../models/NewsDataType.dart';
+import '../models/CourseDataType.dart';
 
 // 首页页面
 class Index extends StatelessWidget with MyScreenUtil {

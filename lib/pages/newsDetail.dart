@@ -1,14 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pansan_app/models/NewsDataType.dart';
-import 'package:pansan_app/models/MateriaDataType.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'dart:async';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import "package:pansan_app/components/MyVideoPlayer.dart";
+import "../components/MyVideoPlayer.dart";
+import "../components/MyIcon.dart";
+import '../models/NewsDataType.dart';
+import '../models/MateriaDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 // 新闻详情页
 
@@ -178,7 +180,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                           ),
                           children: [
                             TextSpan(
-                              text: "${arguments.viewNum}次阅读 | ",
+                              // text: "${arguments.viewNum}次阅读 | ",
                               children: [
                                 TextSpan(
                                   text: "$_addtime发布",
@@ -199,6 +201,67 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                           lineHeight: dp(3.0),
                         ),
                       },
+                    ),
+
+                    // 点赞数量
+                    Container(
+                      padding: EdgeInsets.only(
+                        bottom: dp(20.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Text("${arguments.viewNum}阅读"),
+                              ],
+                            ),
+                          ),
+
+                          // 点赞数量
+                          Container(
+                            child: InkWell(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    aliIconfont.zan,
+                                    size: dp(32.0),
+                                  ),
+                                  SizedBox(width: dp(10.0)),
+                                  Text("点赞"),
+                                ],
+                              ),
+                              onTap: () async {
+                                var result = await saveUserUpvote();
+                                if (result == true) {
+                                  Fluttertoast.showToast(
+                                    msg: "点赞成功",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black45,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "点赞失败",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black45,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -257,6 +320,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                         ),
                       ),
                     ),
+
                     // 发布日期
                     Container(
                       width: double.infinity,
@@ -271,7 +335,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                           ),
                           children: [
                             TextSpan(
-                              text: "${arguments.viewNum}次阅读 | ",
+                              // text: "${arguments.viewNum}次阅读 | ",
                               children: [
                                 TextSpan(
                                   text: "$_addtime发布",
@@ -289,6 +353,68 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                       child: materia != null
                           ? MyVideoPlayer(materia: materia)
                           : Text(''),
+                    ),
+
+                    // 点赞数量
+                    Container(
+                      padding: EdgeInsets.only(
+                        top: dp(20.0),
+                        bottom: dp(20.0),
+                        left: dp(20.0),
+                        right: dp(20.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Text("${arguments.viewNum}阅读"),
+                              ],
+                            ),
+                          ),
+
+                          // 点赞数量
+                          Container(
+                            child: InkWell(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    aliIconfont.zan,
+                                    size: dp(32.0),
+                                  ),
+                                  SizedBox(width: dp(10.0)),
+                                  Text("点赞"),
+                                ],
+                              ),
+                              onTap: () async {
+                                var result = await saveUserUpvote();
+                                if (result == true) {
+                                  Fluttertoast.showToast(
+                                    msg: "点赞成功",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black45,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "点赞失败",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black45,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -323,6 +449,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         "tuij": data['tuij'],
         "addtime": data['addtime'],
         "view_num": data['view_num'],
+        "upvote": data['upvote'],
         "materia": data['materia'],
         "newsImgText": data['newsImgText'],
         "newsVideo": data['newsVideo'],
@@ -378,6 +505,22 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       );
     } catch (e) {
       print(e);
+    }
+  }
+
+  // 点赞
+  Future<bool> saveUserUpvote() async {
+    try {
+      await myRequest(
+        path: "/api/news/saveUserUpvote",
+        data: {
+          "id": arguments.id,
+        },
+      );
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }
