@@ -469,7 +469,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           "study_status": e['study_status'],
           "thumb_url": e['thumb_url'],
           "chapter": chapter,
-          "view_num": 212
+          "view_num": e['view_num'],
         });
       }).toList());
 

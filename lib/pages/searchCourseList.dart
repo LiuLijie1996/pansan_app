@@ -10,6 +10,7 @@ import 'package:pansan_app/components/MyProgress.dart';
 import 'package:pansan_app/mixins/withScreenUtil.dart';
 import 'package:pansan_app/utils/myRequest.dart';
 import 'package:pansan_app/models/CourseDataType.dart';
+import '../components/ErrorInfo.dart';
 
 class SearchCourseList extends StatefulWidget {
   final arguments;
@@ -61,6 +62,71 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
     super.dispose();
   }
 
+  // 搜索课程
+  searchCourseData({page = 1}) async {
+    try {
+      var result = await myRequest(
+        path: "/api/course/courseList",
+        data: {
+          "searchValue": _arguments['searchValue'],
+          "page": page,
+          "psize": 20,
+          "user_id": 1,
+        },
+      );
+
+      int total = result['total'];
+      List data = result['data'].map((e) {
+        List chapter = e['chapter'].map((item) {
+          return {
+            "id": item['id'],
+            "pid": item['pid'],
+            "d_id": item['d_id'],
+            "name": item['name'],
+            "addtime": item['addtime']
+          };
+        }).toList();
+
+        return CourseDataType.fromJson({
+          "id": e['id'],
+          "d_id": e['d_id'],
+          "pid": e['pid'],
+          "name": e['name'],
+          "desc": e['desc'],
+          "content": e['content'],
+          "status": e['status'],
+          "addtime": e['addtime'],
+          "thum_url": e['thum_url'],
+          "user": e['user'],
+          "user_type": e['user_type'],
+          "sorts": e['sorts'],
+          "is_sj": e['is_sj'],
+          "examine": e['examine'],
+          "issue": e['issue'],
+          "study_status": e['study_status'],
+          "thumb_url": e['thumb_url'],
+          "chapter": chapter,
+          "view_num": e['view_num'],
+        });
+      }).toList();
+
+      // 刷新页面
+      if (this.mounted) {
+        setState(() {
+          if (page == 1) {
+            courseListData['data'] = [];
+          }
+          courseListData['page'] = page;
+          courseListData['total'] = total;
+          courseListData['data'].addAll(data);
+        });
+      }
+    } catch (err) {
+      print(err);
+      ErrorInfo("$err");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +144,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
               : ListView.builder(
                   itemCount: courseListData['data'].length + 1,
                   itemBuilder: (BuildContext context, int index) {
-                    var data = courseListData['data'];
+                    List data = courseListData['data'];
                     int total = courseListData['total'];
                     CourseDataType item;
 
@@ -109,47 +175,5 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
         ),
       ),
     );
-  }
-
-  // 搜索课程
-  searchCourseData({page = 1}) async {
-    try {
-      var result = await myRequest(
-        path: "/api/course/courseList",
-        data: {
-          "value": _arguments['searchValue'],
-          "page": page,
-          "psize": 20,
-          "user_id": 1,
-        },
-      );
-
-      int total = result['total'];
-      List data = result['data'];
-      List<CourseDataType> newData = [];
-      data.forEach((e) {
-        Map<String, dynamic> courseItem = {
-          "id": e['id'], //id
-          "thumb_url": e['thum_url'], //封面图
-          "name": e['name'], //标题
-          "study_status": e['status'], //状态，是否学完
-          "view_num": e['view_num'], //学习人数
-          "addtime": e['addtime'], //添加时间
-        };
-        newData.add(CourseDataType.fromJson(courseItem));
-      });
-
-      // 刷新页面
-      if (this.mounted) {
-        setState(() {
-          if (page == 1) {
-            courseListData['data'] = [];
-          }
-          courseListData['page'] = page;
-          courseListData['total'] = total;
-          courseListData['data'].addAll(newData);
-        });
-      }
-    } catch (e) {}
   }
 }

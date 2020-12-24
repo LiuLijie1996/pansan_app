@@ -6,6 +6,7 @@ import '../models/CourseChapterDataType.dart';
 import '../utils/myRequest.dart';
 import '../mixins/withScreenUtil.dart';
 import '../models/CourseDataType.dart';
+import '../components/ErrorInfo.dart';
 
 class FilePreview extends StatefulWidget {
   CourseDataType courseData; //课程数据
@@ -81,6 +82,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
       );
     } catch (e) {
       print(e);
+      ErrorInfo("$e");
     }
   }
 

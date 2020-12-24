@@ -248,7 +248,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.favorite_outline,
+                                      aliIconfont.zan,
                                       size: dp(36.0),
                                       color: Colors.grey,
                                     ),

@@ -17,6 +17,7 @@ import '../utils/myRequest.dart';
 import '../mixins/withScreenUtil.dart';
 import '../components/MyIcon.dart';
 import '../components/MyAudioplayers.dart';
+import '../components/ErrorInfo.dart';
 
 class CourseDetail extends StatefulWidget {
   final CourseDataType arguments;
@@ -140,6 +141,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
       }).toList();
     } catch (e) {
       print("报错信息$e  -------  课程id：${arguments.id}");
+      ErrorInfo("$e");
     }
 
     if (this.mounted) {
@@ -196,6 +198,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         );
       } catch (e) {
         print(e);
+        ErrorInfo("$e");
       }
     }
   }
@@ -753,6 +756,7 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
       );
     } catch (e) {
       print(e);
+      ErrorInfo("$e");
     }
   }
 
