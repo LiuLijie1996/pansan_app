@@ -5,7 +5,9 @@ import '../mixins/withScreenUtil.dart';
 
 class MyAudioplayers extends StatefulWidget {
   MateriaDataType materia;
-  MyAudioplayers({Key key, @required this.materia}) : super(key: key);
+  Function(Duration) getPlayPosition;
+  MyAudioplayers({Key key, @required this.materia, this.getPlayPosition})
+      : super(key: key);
 
   @override
   MyAudioplayersState createState() => MyAudioplayersState();
@@ -29,14 +31,25 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
     audioPlayer = AudioPlayer();
     // 音频监听器
     audioPlayer.onAudioPositionChanged.listen((p) async {
+      if (widget.getPlayPosition != null) {
+        // 触发父级获取播放进度的回调
+        widget.getPlayPosition(p);
+      }
       setState(() {
+        // 获取播放进度
         countTime = p.inSeconds;
 
+        // 判断是否播放完成
         if (countTime >= materia.duration) {
           is_play = false;
         }
       });
     });
+
+    // 设置初始进度
+    print("设置音频初始进度 ${materia.studyDuration}");
+    audioPlayer.seek(Duration(seconds: materia.studyDuration));
+
     // 播放
     play();
   }
@@ -53,14 +66,6 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
     super.deactivate();
   }
 
-  // @override
-  // void dispose() async {
-  //   // 释放资源
-  //   await audioPlayer?.dispose();
-
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,9 +81,6 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
             child: InkWell(
               onTap: () {
                 is_play ? pause() : play();
-                setState(() {
-                  is_play = !is_play;
-                });
               },
               // child: Text(is_play ? "暂停" : "播放"),
               child: Icon(is_play ? Icons.pause : Icons.play_arrow),
@@ -115,8 +117,6 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
 
   // 播放
   play() async {
-    print(materia.link);
-    print(materia.duration);
     int result = await audioPlayer.play(materia.link);
     if (result == 1) {
       // success
@@ -124,6 +124,10 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
     } else {
       print('play failed');
     }
+
+    setState(() {
+      is_play = true;
+    });
   }
 
   // 暂停
@@ -135,6 +139,10 @@ class MyAudioplayersState extends State<MyAudioplayers> with MyScreenUtil {
     } else {
       print('pause failed');
     }
+
+    setState(() {
+      is_play = false;
+    });
   }
 
   // 格式化进度时间

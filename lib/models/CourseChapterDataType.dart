@@ -1,6 +1,6 @@
 import './MateriaDataType.dart';
 
-// 章节数据类型
+// 课程章节数据类型
 
 class CourseChapterDataType {
   int id;
@@ -83,7 +83,12 @@ class ChapterChildren {
   int type;
   String thumbUrl;
   String link;
+
+  ///图文html
   String content;
+
+  ///图文纯文本
+  String newsContent;
   int isSj;
   int addtime;
   String sorts;
@@ -92,13 +97,19 @@ class ChapterChildren {
   int status;
   int issue;
   MateriaDataType materia;
-  num duration;
+  int duration;
 
   ///文档有效预览时间
-  num stuDoc;
+  int stuDoc;
 
   ///图文有效预览时间
-  num stuImgText;
+  int stuImgText;
+
+  ///音频有效阅读时间
+  int stuAudio;
+
+  ///视频有效阅读时间
+  int stuVideo;
 
   ChapterChildren({
     this.id,
@@ -121,6 +132,9 @@ class ChapterChildren {
     this.duration,
     this.stuDoc,
     this.stuImgText,
+    this.newsContent,
+    this.stuAudio,
+    this.stuVideo,
   });
 
   ChapterChildren.fromJson(Map<String, dynamic> json) {
@@ -146,6 +160,9 @@ class ChapterChildren {
     duration = json['duration'];
     stuDoc = json['stuDoc'];
     stuImgText = json['stuImgText'];
+    newsContent = json['news_content'];
+    stuAudio = json['stuAudio'];
+    stuVideo = json['stuVideo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -172,6 +189,9 @@ class ChapterChildren {
     data['duration'] = this.duration;
     data['stuDoc'] = this.stuDoc;
     data['stuImgText'] = this.stuImgText;
+    data['news_content'] = this.newsContent;
+    data['stuAudio'] = this.stuAudio;
+    data['stuVideo'] = this.stuVideo;
     return data;
   }
 }

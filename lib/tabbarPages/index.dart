@@ -429,7 +429,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       var result = await myRequest(
         path: "/api/course/courseList",
         data: {
-          "user_id": 1,
+          "user_id": true,
           "page": page,
           "psize": 20,
         },
@@ -441,7 +441,36 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         courseList = [];
       }
       courseList.addAll(data.map((e) {
-        return CourseDataType.fromJson(e);
+        List chapter = e['chapter'].map((item) {
+          return {
+            "id": item['id'],
+            "pid": item['pid'],
+            "d_id": item['d_id'],
+            "name": item['name'],
+            "addtime": item['addtime']
+          };
+        }).toList();
+        return CourseDataType.fromJson({
+          "id": e['id'],
+          "d_id": e['d_id'],
+          "pid": e['pid'],
+          "name": e['name'],
+          "desc": e['desc'],
+          "content": e['content'],
+          "status": e['status'],
+          "addtime": e['addtime'],
+          "thum_url": e['thum_url'],
+          "user": e['user'],
+          "user_type": e['user_type'],
+          "sorts": e['sorts'],
+          "is_sj": e['is_sj'],
+          "examine": e['examine'],
+          "issue": e['issue'],
+          "study_status": e['study_status'],
+          "thumb_url": e['thumb_url'],
+          "chapter": chapter,
+          "view_num": 212
+        });
       }).toList());
 
       if (this.mounted) {

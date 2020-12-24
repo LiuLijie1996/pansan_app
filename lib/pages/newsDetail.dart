@@ -192,7 +192,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                         ),
                       ),
                     ),
-                    // 视频
+                    // Html
                     Html(
                       data: arguments.content,
                       style: {

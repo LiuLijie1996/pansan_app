@@ -31,7 +31,6 @@ import './pages/exerciseOver.dart';
 import './pages/examResultAnalyse.dart';
 import './pages/newsDetail.dart';
 import './pages/courseDetail.dart';
-import './pages/filePreview.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -131,12 +130,6 @@ Map<String, Function> routers = {
   // 课程详情页
   "/courseDetail": (context, {arguments}) {
     return CourseDetail(
-      arguments: arguments,
-    );
-  },
-  // 文件预览
-  "/filePreview": (context, {arguments}) {
-    return FilePreview(
       arguments: arguments,
     );
   },

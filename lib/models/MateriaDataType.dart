@@ -16,6 +16,9 @@ class MateriaDataType {
   String sorts;
   int addtime;
 
+  ///上次学习时长
+  num studyDuration;
+
   MateriaDataType(
       {this.id,
       this.name,
@@ -27,7 +30,8 @@ class MateriaDataType {
       this.size,
       this.thumbUrl,
       this.sorts,
-      this.addtime});
+      this.addtime,
+      this.studyDuration});
 
   MateriaDataType.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,6 +45,7 @@ class MateriaDataType {
     thumbUrl = json['thumb_url'];
     sorts = json['sorts'];
     addtime = json['addtime'];
+    studyDuration = json['study_duration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +61,7 @@ class MateriaDataType {
     data['thumb_url'] = this.thumbUrl;
     data['sorts'] = this.sorts;
     data['addtime'] = this.addtime;
+    data['study_duration'] = this.studyDuration;
     return data;
   }
 }

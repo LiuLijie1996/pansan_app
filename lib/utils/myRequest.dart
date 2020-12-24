@@ -14,6 +14,10 @@ Future myRequest({
   // 拼接接口
   var url = online ? href + path : test + path;
 
+  if (data != null && data['user_id'] != null) {
+    data['user_id'] = 1;
+  }
+
   Response response;
   if (method == 'post') {
     response = await dio.post(url, data: data);
