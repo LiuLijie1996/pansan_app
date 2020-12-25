@@ -5,13 +5,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/components/TestSelect.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/ExamListDataType.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../components/MyIcon.dart';
+import '../components/MyProgress.dart';
+import '../components/TestSelect.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/ExamListDataType.dart';
+import '../models/IssueDataType.dart';
+import '../utils/myRequest.dart';
 
 class ExamDetails extends StatefulWidget {
   final ExamListDataType examSiteInfo;
@@ -45,6 +46,9 @@ class _ExamDetailsState extends State<ExamDetails>
   //当前题目下标
   int _currentIndex = 0;
 
+  ///最小考试时间
+  int minDuration;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -55,6 +59,8 @@ class _ExamDetailsState extends State<ExamDetails>
 
     // 获取父类接收的数据
     examSiteInfo = widget.examSiteInfo;
+    // 最小考试时间
+    minDuration = widget.examSiteInfo.minDuration;
 
     // 请求数据
     getDataList();
@@ -62,6 +68,7 @@ class _ExamDetailsState extends State<ExamDetails>
     // 考试计时
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       expend_time++;
+      minDuration--;
 
       // 判断考试是否结束了
       if (expend_time >= examSiteInfo.duration) {
@@ -104,7 +111,7 @@ class _ExamDetailsState extends State<ExamDetails>
       }
     } else if (state == AppLifecycleState.resumed) {
       // APP进入前台
-      print('APP进入前台');
+      print('APP进入前台 ${examSiteInfo.cutScreenTime}');
       if (_appTime >= examSiteInfo.cutScreenTime) {
         // 弹出提示
         fn() async {
@@ -139,6 +146,58 @@ class _ExamDetailsState extends State<ExamDetails>
     super.dispose();
   }
 
+  // 获取数据
+  getDataList() async {
+    try {
+      var result = await myRequest(
+        path: "/api/exam/kaoTi",
+        data: {
+          "user_id": 1,
+          "id": examSiteInfo.id,
+          "type": examSiteInfo.type,
+        },
+      );
+
+      List data = result['data']['list'];
+
+      dataList = data.map((e) {
+        List options = json.decode(e['option']);
+
+        List<Option> option = options.map((item) {
+          Map<String, dynamic> newItem = {
+            "label": item['label'],
+            "value": item['value'],
+          };
+          return Option.fromJson(newItem);
+        }).toList();
+
+        List answer = e['answer'] ?? [];
+        List<String> newAnswer = answer.map((item) {
+          return item.toString();
+        }).toList();
+
+        return IssueDataType(
+          id: e['id'], //id
+          stem: e['stem'], //标题
+          type: e['type'], //题目类型
+          option: option, //题目选项
+          answer: newAnswer, //正确答案
+          analysis: e['analysis'], //答案解析
+          disorder: e['disorder'], //当前题目分数
+          userFavor: e['userFavor'], //用户是否收藏
+          userAnswer: [], //用户选择的答案
+          correct: null, //用户的选择是否正确
+        );
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (dataList.length == 0) {
@@ -170,28 +229,43 @@ class _ExamDetailsState extends State<ExamDetails>
 
     return WillPopScope(
       onWillPop: () {
-        return showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('你确定要退出吗？'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-              ),
-              FlatButton(
-                child: Text('退出'),
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                  // 跳转到考试结束页
-                  toExamOverPage();
-                },
-              ),
-            ],
-          ),
-        );
+        // 判断最少交卷时间是否到达
+        if (minDuration <= 0) {
+          return showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('你确定要退出吗？'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('取消'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: Text('退出'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                    // 跳转到考试结束页
+                    toExamOverPage();
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: "$minDuration秒后才能交卷",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black45,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+
+          return Future.delayed(Duration()).then((value) => false);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -365,19 +439,33 @@ class _ExamDetailsState extends State<ExamDetails>
                       ),
                     ),
                     onPressed: () async {
-                      print("点击交卷");
-                      // 如果没有做完 is_over 会被赋值 false
-                      int where =
-                          dataList.where((e) => e.correct == null).length;
-                      bool is_over = where == 0;
+                      // 判断最小考试时间是否完成
+                      if (minDuration <= 0) {
+                        print("点击交卷");
 
-                      // 弹窗提示
-                      var result = await showDialogFunc(is_over);
-                      print("result $result");
+                        // 如果没有做完 is_over 会被赋值 false
+                        int where =
+                            dataList.where((e) => e.correct == null).length;
+                        bool is_over = where == 0;
 
-                      if (result == true) {
-                        //跳转到考试结束页面
-                        toExamOverPage();
+                        // 弹窗提示
+                        var result = await showDialogFunc(is_over);
+                        print("result $result");
+
+                        if (result == true) {
+                          //跳转到考试结束页面
+                          toExamOverPage();
+                        }
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "$minDuration秒后才能交卷",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black45,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
                       }
                     },
                   ),
@@ -521,58 +609,6 @@ class _ExamDetailsState extends State<ExamDetails>
         ),
       ),
     );
-  }
-
-  // 获取数据
-  getDataList() async {
-    try {
-      var result = await myRequest(
-        path: "/api/exam/kaoTi",
-        data: {
-          "user_id": 1,
-          "id": examSiteInfo.id,
-          "type": examSiteInfo.type,
-        },
-      );
-
-      List data = result['data']['list'];
-
-      dataList = data.map((e) {
-        List options = json.decode(e['option']);
-
-        List<Option> option = options.map((item) {
-          Map<String, dynamic> newItem = {
-            "label": item['label'],
-            "value": item['value'],
-          };
-          return Option.fromJson(newItem);
-        }).toList();
-
-        List answer = e['answer'] ?? [];
-        List<String> newAnswer = answer.map((item) {
-          return item.toString();
-        }).toList();
-
-        return IssueDataType(
-          id: e['id'], //id
-          stem: e['stem'], //标题
-          type: e['type'], //题目类型
-          option: option, //题目选项
-          answer: newAnswer, //正确答案
-          analysis: e['analysis'], //答案解析
-          disorder: e['disorder'], //当前题目分数
-          userFavor: e['userFavor'], //用户是否收藏
-          userAnswer: [], //用户选择的答案
-          correct: null, //用户的选择是否正确
-        );
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {});
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   // 交卷弹窗

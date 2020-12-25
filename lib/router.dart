@@ -31,6 +31,7 @@ import './pages/exerciseOver.dart';
 import './pages/examResultAnalyse.dart';
 import './pages/newsDetail.dart';
 import './pages/courseDetail.dart';
+import './pages/searchPage.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -50,6 +51,7 @@ Map<String, Function> routers = {
   "/myGrade": (context) => MyGrade(), //我的班级
   "/myAdvisory": (context) => MyAdvisory(), //我的咨询
   "/addAdvisory": (context) => AddAdvisory(), //添加咨询
+  "/searchPage": (context) => SearchPage(), //搜索页
 
   //课程列表
   "/courseList": (context, {arguments}) {
@@ -80,6 +82,7 @@ Map<String, Function> routers = {
     return ExerciseOver(
       dataList: arguments['dataList'],
       expend_time: arguments['expend_time'],
+      exerciseSelectItem: arguments['exerciseSelectItem'],
     );
   },
   // 考试结果分析

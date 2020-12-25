@@ -1,17 +1,19 @@
 // 专项练习详情
+
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/components/TestSelect.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-
-// 模拟的数据
-import 'package:pansan_app/models/mockData.dart';
+import '../components/MyIcon.dart';
+import '../components/TestSelect.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
+import '../utils/myRequest.dart';
+import '../models/ExerciseDataType.dart';
 
 class ExerciseSpecialtyDetails extends StatefulWidget {
-  final arguments;
+  final ExerciseDataType arguments;
   ExerciseSpecialtyDetails({
     Key key,
     @required this.arguments,
@@ -42,9 +44,63 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
     getDataList();
   }
 
+  // 获取数据
+  getDataList() async {
+    try {
+      var result = await myRequest(
+        path: "/api/exam/getQuestionList",
+        data: {
+          "id": widget.arguments.id,
+        },
+      );
+
+      List data = result['data'];
+      dataList = data.map((e) {
+        bool optionIsStr = e['option'].runtimeType == String;
+        bool answerIsStr = e['answer'].runtimeType == String;
+
+        List options = optionIsStr ? json.decode(e['option']) : e['option'];
+        List answer = answerIsStr ? json.decode(e['answer']) : e['answer'];
+
+        var option = options.map((item) {
+          return {
+            "label": item['label'],
+            "value": item['value'],
+          };
+        }).toList();
+
+        return IssueDataType.fromJson({
+          "id": e['id'], //id
+          "stem": (e['stem']).toString(), //标题
+          "type": e['type'], //题目类型
+          "option": option, //题目选项
+          "answer": answer, //正确答案
+          "analysis": (e['analysis']).toString(), //答案解析
+          "disorder": e['disorder'], //当前题目分数
+          "userFavor": e['userFavor'] ?? false, //用户是否收藏
+          "userAnswer": [], //用户选择的答案
+          "correct": null, //用户的选择是否正确
+        });
+      }).toList();
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map arguments = widget.arguments;
+    ExerciseDataType arguments = widget.arguments;
+
+    if (dataList.length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("${arguments.name}"),
+        ),
+        body: MyProgress(),
+      );
+    }
     // 当前显示的题目
     IssueDataType _currentItem = dataList[_currentIndex];
     // 1单选 3判断 2多选 4填空
@@ -85,7 +141,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("${arguments['name']}"),
+          title: Text("${arguments.name}"),
           actions: [
             FlatButton(
               onPressed: () {
@@ -428,40 +484,5 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
         ),
       ),
     );
-  }
-
-  // 获取数据
-  getDataList() {
-    try {
-      // var result = await myRequest(path: "");
-
-      // listData 获取到的考题
-      dataList = listData.map((e) {
-        List options = e['option'];
-        List<Option> option = options.map((item) {
-          return Option(
-            label: item['label'],
-            value: item['value'],
-          );
-        }).toList();
-
-        return IssueDataType(
-          id: e['id'], //id
-          stem: e['stem'], //标题
-          type: e['type'], //题目类型
-          option: option, //题目选项
-          answer: e['answer'], //正确答案
-          analysis: e['analysis'], //答案解析
-          disorder: e['disorder'], //当前题目分数
-          userFavor: e['userFavor'], //用户是否收藏
-          userAnswer: [], //用户选择的答案
-          correct: null, //用户的选择是否正确
-        );
-      }).toList();
-
-      setState(() {});
-    } catch (e) {
-      print(e);
-    }
   }
 }

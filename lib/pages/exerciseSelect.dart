@@ -103,6 +103,53 @@ class _ExerciseSelectState extends State<ExerciseSelect>
     super.dispose();
   }
 
+  // 获取练习列表
+  getDataList({page = 1}) async {
+    try {
+      var result = await myRequest(
+        path: "/api/exercise/getPracticeList",
+        data: {
+          "id": widget.arguments.id,
+          "user_id": true,
+        },
+      );
+      int total = result['total'] ?? 0;
+      List data = result['data'];
+
+      print(widget.arguments.id);
+
+      List newData = data.map((e) {
+        return ExerciseSelectDataType.fromJson({
+          "id": e['id'],
+          "d_id": e['d_id'],
+          "pid": e['pid'],
+          "name": e['name'],
+          "radio": e['radio'],
+          "multiple": e['multiple'],
+          "trueOrFalse": e['trueOrFalse'],
+          "practice_num_type": e['practice_num_type'],
+          "frequency": e['frequency'],
+          "q_id": e['q_id'],
+          "addtime": e['addtime'],
+          "status": e['status'],
+          "progress": e['progress'],
+          "sorts": e['sorts']
+        });
+      }).toList();
+
+      if (this.mounted) {
+        if (page == 1) {
+          exerciseData['data'] = [];
+        }
+        exerciseData['page'] = page;
+        exerciseData['total'] = total;
+        exerciseData['data'].addAll(newData);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,10 +161,7 @@ class _ExerciseSelectState extends State<ExerciseSelect>
           ? myWidget[_currentMyWidget]
           : ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                var dataItem = exerciseData['data'][index];
-                ExerciseSelectDataType item = ExerciseSelectDataType.fromJson(
-                  dataItem,
-                );
+                ExerciseSelectDataType item = exerciseData['data'][index];
 
                 //添加时间
                 String _addtime;
@@ -208,50 +252,5 @@ class _ExerciseSelectState extends State<ExerciseSelect>
               itemCount: exerciseData['data'].length,
             ),
     );
-  }
-
-  // 获取练习列表
-  getDataList({page = 1}) async {
-    try {
-      var result = await myRequest(
-        path: "/api/exercise/getPracticeList",
-        data: {
-          "id": widget.arguments.id,
-          "user_id": 1,
-        },
-      );
-      int total = result['total'] ?? 0;
-      List data = result['data'];
-
-      List newData = data.map((e) {
-        return {
-          "id": e['id'],
-          "d_id": e['d_id'],
-          "pid": e['pid'],
-          "name": e['name'],
-          "radio": e['radio'],
-          "multiple": e['multiple'],
-          "trueOrFalse": e['trueOrFalse'],
-          "practice_num_type": e['practice_num_type'],
-          "frequency": e['frequency'],
-          "q_id": e['q_id'],
-          "addtime": e['addtime'],
-          "status": e['status'],
-          "progress": e['progress'],
-          "sorts": e['sorts']
-        };
-      }).toList();
-
-      if (this.mounted) {
-        if (page == 1) {
-          exerciseData['data'] = [];
-        }
-        exerciseData['page'] = page;
-        exerciseData['total'] = total;
-        exerciseData['data'].addAll(newData);
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }

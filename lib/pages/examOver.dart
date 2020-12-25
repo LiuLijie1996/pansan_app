@@ -82,8 +82,9 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
     };
 
     // 提交试卷
-    myRequest(path: "/api/exam/saveUserTest", data: query)
-        .then((value) => null);
+    myRequest(path: "/api/exam/saveUserTest", data: query).then((value) {
+      print(value);
+    });
 
     return Scaffold(
       appBar: AppBar(

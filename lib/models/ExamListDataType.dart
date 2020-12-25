@@ -54,24 +54,29 @@ class ExamListDataType {
 
   int status;
 
-  ExamListDataType(
-      {this.id,
-      this.pid,
-      this.mTestId,
-      this.classId,
-      this.paperId,
-      this.name,
-      this.address,
-      this.startTime,
-      this.endTime,
-      this.duration,
-      this.passingMark,
-      this.testNum,
-      this.cutScreenType,
-      this.cutScreenNum,
-      this.cutScreenTime,
-      this.type,
-      this.isTest});
+  ///最小考试时间
+  int minDuration;
+
+  ExamListDataType({
+    this.id,
+    this.pid,
+    this.mTestId,
+    this.classId,
+    this.paperId,
+    this.name,
+    this.address,
+    this.startTime,
+    this.endTime,
+    this.duration,
+    this.passingMark,
+    this.testNum,
+    this.cutScreenType,
+    this.cutScreenNum,
+    this.cutScreenTime,
+    this.type,
+    this.isTest,
+    this.minDuration,
+  });
 
   ExamListDataType.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -92,6 +97,7 @@ class ExamListDataType {
     type = json['type'];
     isTest = json['is_test'];
     status = json['status'];
+    minDuration = json['min_duration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -114,6 +120,7 @@ class ExamListDataType {
     data['type'] = this.type;
     data['is_test'] = this.isTest;
     data['status'] = this.status;
+    data['min_duration'] = this.minDuration;
     return data;
   }
 }

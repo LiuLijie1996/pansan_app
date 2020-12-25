@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/components/MyIcon.dart';
+import '../models/IssueDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../components/MyIcon.dart';
+import '../utils/myRequest.dart';
+import '../models/ExerciseSelectDataType.dart';
 
 // 答题报告（练习结束）
 class ExerciseOver extends StatelessWidget with MyScreenUtil {
   // 题目列表
   final List<IssueDataType> dataList;
   // 练习消耗的时间
-  int expend_time;
-  ExerciseOver({Key key, @required this.dataList, @required this.expend_time})
-      : super(key: key);
+  final int expend_time;
+
+  ///选择的练习列表
+  final ExerciseSelectDataType exerciseSelectItem;
+  ExerciseOver({
+    Key key,
+    @required this.dataList,
+    @required this.expend_time,
+    @required this.exerciseSelectItem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +36,19 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
     int minute = (expend_time / 60).floor();
     // 秒
     int second = expend_time % 60;
+
+    // 提交试卷
+    var query = {
+      "user_id": true,
+      "id": exerciseSelectItem.id, //选择的练习列表
+      "answer_num": correct_num + mistake_num, //答题数量
+      "data": dataList, //题目
+    };
+    myRequest(path: "/api/exercise/saveUserPractice", data: query).then(
+      (value) {
+        print(value);
+      },
+    );
 
     return Scaffold(
       backgroundColor: Colors.grey[100],

@@ -1,13 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/CourseDataType.dart';
-import 'package:pansan_app/models/NavDataType.dart';
+import '../components/CardItem.dart';
+import '../components/MyProgress.dart';
+import '../components/EmptyBox.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/CourseDataType.dart';
+import '../models/NavDataType.dart';
+import '../components/MyIcon.dart';
 
 // 学习页面
 class Study extends StatefulWidget {
@@ -20,8 +19,6 @@ class Study extends StatefulWidget {
 class _StudyState extends State<Study>
     with SingleTickerProviderStateMixin, MyScreenUtil {
   TabController _tabController; //需要定义一个tab的Controller
-  TextEditingController _searchInput = TextEditingController(); //搜索框的控制器
-  String searchValue; //需要搜索的内容
   List<NavDataType> tabs = [];
   int _currentIndex = 0;
   var _currentNavId; //当前导航id
@@ -29,8 +26,6 @@ class _StudyState extends State<Study>
   _StudyState() {
     // 获取头部tabBar
     this.getTopTabBar();
-
-    // 倒计时
   }
 
   @override
@@ -52,43 +47,36 @@ class _StudyState extends State<Study>
 
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          height: dp(70.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(dp(60.0)),
-          ),
-          child: TextField(
-            controller: _searchInput,
-            textInputAction: TextInputAction.search,
-            onChanged: (String value) {
-              searchValue = value;
-            },
-            onSubmitted: (String value) {
-              searchCourse();
-            },
-            decoration: InputDecoration(
-              hintText: "请输入你要搜索的内容",
-              contentPadding: EdgeInsets.only(bottom: 0.0, left: dp(20.0)),
-              labelStyle: TextStyle(
-                color: Colors.grey,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(dp(100.0))),
-                borderSide: BorderSide(
-                  width: 0.5,
-                  color: Colors.grey[100],
+        title: InkWell(
+          onTap: () {
+            // 跳转到搜索页
+            Navigator.pushNamed(context, "/searchPage");
+          },
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+              top: dp(10.0),
+              bottom: dp(10.0),
+              left: dp(10.0),
+              right: dp(10.0),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(dp(10.0)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "请输入你要搜索的内容",
+                  style: TextStyle(color: Colors.grey),
                 ),
-              ),
-              suffixIcon: InkWell(
-                child: Icon(
+                Icon(
                   Icons.search,
-                ),
-                onTap: () {
-                  // 搜索课程
-                  searchCourse();
-                },
-              ),
+                  color: Colors.black54,
+                  // size: dp(30.0),
+                )
+              ],
             ),
           ),
         ),
@@ -317,13 +305,5 @@ class _StudyState extends State<Study>
     } catch (e) {
       print(e);
     }
-  }
-
-  // 搜索课程
-  searchCourse() {
-    // 搜索课程
-    Navigator.pushNamed(context, "/courseList", arguments: {
-      "searchValue": searchValue ?? '',
-    });
   }
 }

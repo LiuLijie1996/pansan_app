@@ -4,12 +4,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/CourseDataType.dart';
+import '../components/CardItem.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/CourseDataType.dart';
 import '../components/ErrorInfo.dart';
 
 class SearchCourseList extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
 
-  Map _arguments;
+  Map arguments;
   Map courseListData = {
     "page": 1,
     "psize": 20,
@@ -38,9 +38,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
     // TODO: implement initState
     super.initState();
 
-    _arguments = {
-      "searchValue": widget.arguments['searchValue'],
-    };
+    arguments = widget.arguments;
 
     // 倒计时
     timer = Timer(Duration(seconds: 5), () {
@@ -68,7 +66,8 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
       var result = await myRequest(
         path: "/api/course/courseList",
         data: {
-          "searchValue": _arguments['searchValue'],
+          "searchValue": arguments['searchValue'],
+          "isTags": arguments['isTags'],
           "page": page,
           "psize": 20,
           "user_id": 1,

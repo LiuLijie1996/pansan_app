@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:pansan_app/tabbarPages/exam.dart';
-import 'package:pansan_app/tabbarPages/index.dart';
-import 'package:pansan_app/tabbarPages/my.dart';
-import 'package:pansan_app/tabbarPages/news.dart';
-import 'package:pansan_app/tabbarPages/study.dart';
+import '../tabbarPages/exam.dart';
+import '../tabbarPages/index.dart';
+import '../tabbarPages/my.dart';
+import '../tabbarPages/news.dart';
+import '../tabbarPages/study.dart';
 
 // 底部导航
 class MyBottomNavigationBar extends StatefulWidget {

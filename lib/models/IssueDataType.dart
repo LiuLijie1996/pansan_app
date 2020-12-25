@@ -36,7 +36,7 @@ class IssueDataType {
   List<String> userAnswer;
 
   ///用户选择的答案是否正确
-  Object correct;
+  bool correct;
 
   IssueDataType(
       {this.id,
@@ -96,8 +96,8 @@ class IssueDataType {
 }
 
 class Option {
-  String label;
-  String value;
+  var label;
+  var value;
 
   Option({this.label, this.value});
 

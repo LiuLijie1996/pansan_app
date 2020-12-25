@@ -34,10 +34,10 @@ class MultipleChoice extends StatelessWidget with MyScreenUtil {
           children: data.option.map((e) {
             // 用户选择的答案
             List<String> user_answer = data.userAnswer;
-            bool status = null;
+            bool status;
             // 判断用户是否选择了
             if (user_answer.length == 0) {
-              status = null;
+              // status = null;
             } else {
               // 判断当前按钮是否被选择
               bool is_select = user_answer.contains(e.label);

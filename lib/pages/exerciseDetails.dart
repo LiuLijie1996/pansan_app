@@ -4,13 +4,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/components/TestSelect.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/models/ExerciseSelectDataType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
+import '../components/TestSelect.dart';
+import '../components/MyIcon.dart';
+import '../models/ExerciseSelectDataType.dart';
+import '../utils/myRequest.dart';
+import '../components/MyProgress.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final ExerciseSelectDataType arguments;
@@ -56,6 +56,83 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
     // TODO: implement dispose
     super.dispose();
+  }
+
+  // 获取数据
+  getDataList() async {
+    try {
+      var result = await myRequest(
+        path: "/api/exercise/getOnePractice",
+        data: {
+          "id": widget.arguments.id,
+        },
+      );
+
+      List listData = result['data'];
+      // listData 获取到的考题
+      listData.forEach((e) {
+        bool optionIsStr = e['option'].runtimeType == String;
+        bool answerIsStr = e['answer'].runtimeType == String;
+
+        List options = optionIsStr ? json.decode(e['option']) : e['option'];
+        List answer = answerIsStr ? json.decode(e['answer']) : e['answer'];
+
+        List option = options.map((item) {
+          return {
+            "label": item['label'],
+            "value": item['value'],
+          };
+        }).toList();
+
+        IssueDataType issueDataType = IssueDataType.fromJson({
+          "id": e['id'], //id
+          "stem": e['stem'], //标题
+          "type": e['type'], //题目类型
+          "option": option, //题目选项
+          "answer": answer, //正确答案
+          "analysis": e['analysis'], //答案解析
+          "disorder": e['disorder'], //当前题目分数
+          "userFavor": e['userFavor'] ?? false, //用户是否收藏
+          "userAnswer": [], //用户选择的答案
+          "correct": null, //用户的选择是否正确
+        });
+
+        dataList.add(issueDataType);
+      });
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 弹窗
+  Future<bool> showDialogFunc(bool is_over) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("提示"),
+          content: Text(is_over ? "确认交卷吗？" : '题目还没有做完，是否确认交卷？'),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                // 关闭对话框，第二个参数是传入的数据
+                Navigator.pop(context, false);
+              },
+              child: Text("取消"),
+            ),
+            FlatButton(
+              onPressed: () {
+                // 关闭对话框，第二个参数是传入的数据
+                Navigator.pop(context, true);
+              },
+              child: Text("确定"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -220,7 +297,6 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
                   // 弹窗提示
                   var result = await showDialogFunc(is_over);
-                  print("result $result");
 
                   if (result == true) {
                     // 跳转到 答题报告（练习结束）
@@ -230,6 +306,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                       arguments: {
                         "dataList": dataList,
                         "expend_time": expend_time,
+                        "exerciseSelectItem": widget.arguments,
                       },
                     );
                   }
@@ -363,88 +440,6 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
           ],
         ),
       ),
-    );
-  }
-
-  // 获取数据
-  getDataList() async {
-    try {
-      var result = await myRequest(
-        path: "/api/exercise/getOnePractice",
-        data: {
-          "id": widget.arguments.id,
-        },
-      );
-
-      List listData = result['data'];
-      // listData 获取到的考题
-      listData.forEach((e) {
-        bool is_str = e['option'].runtimeType == String;
-        List options = is_str ? json.decode(e['option']) : e['option'];
-        List<Option> option = options.map((item) {
-          return Option(
-            label: item['label'],
-            value: item['value'],
-          );
-        }).toList();
-
-        List<String> answer = [];
-        try {
-          e['answer'].forEach((ele) {
-            answer.add("$ele");
-          });
-        } catch (err) {
-          print("报错1：$err");
-        }
-
-        IssueDataType issueDataType = IssueDataType(
-          id: e['id'], //id
-          stem: e['stem'], //标题
-          type: e['type'], //题目类型
-          option: option, //题目选项
-          answer: answer, //正确答案
-          analysis: e['analysis'], //答案解析
-          disorder: e['disorder'], //当前题目分数
-          userFavor: e['userFavor'] ?? false, //用户是否收藏
-          userAnswer: [], //用户选择的答案
-          correct: null, //用户的选择是否正确
-        );
-
-        dataList.add(issueDataType);
-      });
-
-      setState(() {});
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // 弹窗
-  Future<bool> showDialogFunc(bool is_over) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("提示"),
-          content: Text(is_over ? "确认交卷吗？" : '题目还没有做完，是否确认交卷？'),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                // 关闭对话框，第二个参数是传入的数据
-                Navigator.pop(context, false);
-              },
-              child: Text("取消"),
-            ),
-            FlatButton(
-              onPressed: () {
-                // 关闭对话框，第二个参数是传入的数据
-                Navigator.pop(context, true);
-              },
-              child: Text("确定"),
-            ),
-          ],
-        );
-      },
     );
   }
 }

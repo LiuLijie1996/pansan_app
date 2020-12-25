@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/NavDataType.dart';
+import '../components/MyIcon.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/NavDataType.dart';
+import '../models/ExerciseDataType.dart';
 
 // 考试页面
 class Exam extends StatelessWidget {
@@ -205,7 +206,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                         child: NavItem(
                           item: item,
                           onClick: () {
-                            if (item.id != 0) {
+                            if (item.id != null) {
                               Navigator.pushNamed(
                                 context,
                                 "/exerciseSelect",
@@ -216,7 +217,8 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
                               Navigator.pushNamed(
                                 context,
                                 "/exerciseSpecialtySelect",
-                                arguments: item,
+                                arguments:
+                                    ExerciseDataType.fromJson(item.toJson()),
                               );
                             }
                           },
@@ -279,7 +281,6 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
           myExamNavList = exams;
           myExerciseNavList = exercises;
           myExerciseNavList.add({
-            "id": 0,
             "name": "专项练习",
             "icon": icons[Random().nextInt(5 - 0)],
           });

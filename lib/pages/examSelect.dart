@@ -56,6 +56,37 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
     super.dispose();
   }
 
+  // 获取数据
+  getExamData({page = 1}) async {
+    try {
+      var result = await myRequest(path: "/api/exam/getTestList", data: {
+        "user_id": 1,
+        "id": widget.arguments.id,
+      });
+
+      int total = result['total'] ?? 0;
+      List data = result['data'];
+      List<ExamListDataType> newData = data.map((e) {
+        e['cut_screen_time'] = int.parse("${e['cut_screen_time']}");
+
+        return ExamListDataType.fromJson(e);
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {
+          if (page == 1) {
+            examData['data'] = [];
+          }
+          examData['page'] = page;
+          examData['total'] = total;
+          examData['data'].addAll(newData);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,36 +306,6 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
         ),
       ),
     );
-  }
-
-  // 获取数据
-  getExamData({page = 1}) async {
-    try {
-      var result = await myRequest(path: "/api/exam/getTestList", data: {
-        "user_id": 1,
-        "id": widget.arguments.id,
-      });
-
-      int total = result['total'] ?? 0;
-      List data = result['data'];
-      List<ExamListDataType> newData = data.map((e) {
-        e['cut_screen_time'] = int.parse("${e['cut_screen_time']}");
-        return ExamListDataType.fromJson(e);
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {
-          if (page == 1) {
-            examData['data'] = [];
-          }
-          examData['page'] = page;
-          examData['total'] = total;
-          examData['data'].addAll(newData);
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   // 设置弹窗

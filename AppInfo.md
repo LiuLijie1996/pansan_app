@@ -24,6 +24,7 @@ testRecords					考试记录
 updatePwd					修改密码
 newsDetail					新闻详情
 courseDetail				课程详情
+searchPage					搜索页
 
 myAdvisory					我的咨询
 myCollect					我的收藏
