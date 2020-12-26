@@ -27,6 +27,7 @@ courseDetail				课程详情
 searchPage					搜索页
 
 myAdvisory					我的咨询
+advisoryDetail				咨询信息详情
 myCollect					我的收藏
 myCourse					我的课程
 myGrade						我的班级

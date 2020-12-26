@@ -1,8 +1,9 @@
 // 添加咨询
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class AddAdvisory extends StatefulWidget {
   AddAdvisory({Key key}) : super(key: key);
@@ -93,18 +94,41 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                   // (_formKey.currentState as FormState).validate() 触发验证，返回布尔值
                   if (form.validate()) {
                     var query = {
-                      "user_id": "用户id",
+                      "user_id": true,
+                      "pid": 1,
                       "title": _titleController.text,
                       "content": _textController.text,
                     };
 
-                    // 发送数据给后台
-                    var result = await myRequest(
-                      path: "/api/login",
-                      data: query,
-                    );
+                    try {
+                      // 发送数据给后台
+                      var result = await myRequest(
+                        path: "/api/user/addUserService",
+                        data: query,
+                      );
 
-                    print(result);
+                      Fluttertoast.showToast(
+                        msg: "${result['msg']}",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black45,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    } catch (err) {
+                      Fluttertoast.showToast(
+                        msg: "添加失败：$err",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black45,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+
+                    Navigator.pop(context);
                   }
                 },
               ),

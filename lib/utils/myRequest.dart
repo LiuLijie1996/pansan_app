@@ -55,7 +55,7 @@ Future<Response> dioUpload({
     data: formdata,
     // queryParameters: map,
     onSendProgress: (int count, int total) {
-      var rate = "${(count / total * 100) ~/ 1}%";
+      var rate = "${(count / total * 100).floor()}%";
 
       print('-----------$rate-------------'); //上传进度
     },

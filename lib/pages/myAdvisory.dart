@@ -4,10 +4,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class MyAdvisory extends StatefulWidget {
   MyAdvisory({Key key}) : super(key: key);
@@ -71,47 +71,67 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
             : Container(
                 color: Colors.white,
                 child: ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider();
+                  },
+                  itemCount: myAdvData['data'].length + 1,
                   itemBuilder: (BuildContext context, int index) {
-                    var item = myAdvData['data'][index];
+                    var item;
+                    String addtime;
 
-                    // 判断是否需要请求数据
-                    if (myAdvData['data'].length - 1 == index) {
-                      // 判断后台是否还有数据
-                      if (myAdvData['data'].length < myAdvData['total']) {
-                        // 请求数据
+                    try {
+                      item = myAdvData['data'][index];
+
+                      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+                        item['addtime'] * 1000,
+                      );
+                      // 时间转换
+                      addtime = formatDate(
+                        dateTime,
+                        [yyyy, '-', mm, '-', dd],
+                      );
+                    } catch (e) {
+                      // 如果报错了说明要请求数据了
+
+                      // 判断后台有没有数据了
+                      if (index == myAdvData['total']) {
+                        // 没有数据了
+                        return MyProgress(
+                          status: false,
+                          padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
+                        );
+                      } else {
+                        // 继续请求数据
+
                         getAdvisoryData(page: ++myAdvData['page']);
 
                         return MyProgress(
                           padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
                         );
-                      } else {
-                        return MyProgress(
-                          status: false,
-                          padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
-                        );
                       }
                     }
+
                     return Container(
                       height: 30.0,
                       padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                       child: InkWell(
                         onTap: () {
-                          print(item);
+                          Navigator.pushNamed(
+                            context,
+                            '/advisoryDetail',
+                            arguments: item,
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("${item['title']}"),
-                            Text("${item['addtime']}"),
+                            Text("$addtime"),
                           ],
                         ),
                       ),
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider();
-                  },
-                  itemCount: myAdvData['data'].length,
                 ),
               ),
       ),
@@ -122,33 +142,24 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
   getAdvisoryData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/staff-serve",
+        path: "/api/user/getUserServiceList",
         data: {
-          "user_id": "用户id",
+          "user_id": true,
           "pid": 1,
           "page": page,
+          "psize": 20,
         },
       );
 
       int total = result['total'];
       List data = result['data'];
       List newData = data.map((e) {
-        //时间
-        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-          e['addtime'] * 1000,
-        );
-        // 时间转换
-        String addtime = formatDate(
-          dateTime,
-          [yyyy, '-', mm, '-', dd],
-        );
-
         return {
           "id": e['id'],
           "pid": e['pid'],
           "title": e['title'],
           "content": e['content'],
-          "addtime": addtime,
+          "addtime": e['addtime'],
         };
       }).toList();
 

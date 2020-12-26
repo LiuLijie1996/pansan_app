@@ -32,6 +32,7 @@ import './pages/examResultAnalyse.dart';
 import './pages/newsDetail.dart';
 import './pages/courseDetail.dart';
 import './pages/searchPage.dart';
+import './pages/AdvisoryDetail.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -133,6 +134,12 @@ Map<String, Function> routers = {
   // 课程详情页
   "/courseDetail": (context, {arguments}) {
     return CourseDetail(
+      arguments: arguments,
+    );
+  },
+  // 我的（职工）咨询详情页
+  "/advisoryDetail": (context, {arguments}) {
+    return AdvisoryDetail(
       arguments: arguments,
     );
   },
