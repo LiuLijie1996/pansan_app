@@ -35,7 +35,7 @@ myInformation				个人信息
 myMistakes					我的错题
 
 integralCentre				积分中心
-integralDetails				积分明细
+integralDetail				积分明细
 exchangeRecord				兑换记录
 integralRule				积分规则
 

@@ -3,11 +3,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyIcon.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class MyGrade extends StatefulWidget {
   MyGrade({Key key}) : super(key: key);
@@ -48,6 +48,35 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
     super.dispose();
   }
 
+  // 获取我的班级数据
+  getGradeData({page = 1}) async {
+    try {
+      var result = await myRequest(
+        path: "/api/user/getUserClass",
+        data: {"user_id": 1},
+      );
+
+      int total = result['total'];
+      List data = result['data'];
+      List newData = data.map((e) {
+        return {
+          "class_id": e['class_id'],
+          "name": e['name'],
+        };
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {
+          myGradeData['page'] = page;
+          myGradeData['total'] = total;
+          myGradeData['data'].addAll(newData);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,10 +86,12 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
       body: myGradeData['data'].length == 0
           ? myWidget[_currentMyWidget]
           : ListView.builder(
+              itemCount: myGradeData['data'].length,
               itemBuilder: (BuildContext context, int index) {
                 Map item = myGradeData['data'][index];
                 double bottom =
                     index == myGradeData['data'].length - 1 ? 10.0 : 0.0;
+
                 return Container(
                   margin: EdgeInsets.only(
                     top: dp(20.0),
@@ -188,32 +219,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
                   ),
                 );
               },
-              itemCount: myGradeData['data'].length,
             ),
     );
-  }
-
-  // 请求数据
-  getGradeData({page = 1}) async {
-    try {
-      var result = await myRequest(path: "/api/user/myGrade");
-
-      int total = result['total'];
-      List data = result['data'];
-      List newData = data.map((e) {
-        return {
-          "class_id": e['class_id'],
-          "name": e['name'],
-        };
-      }).toList();
-
-      // 清除定时器
-      // timer?.cancel();
-      setState(() {
-        myGradeData['page'] = page;
-        myGradeData['total'] = total;
-        myGradeData['data'].addAll(newData);
-      });
-    } catch (e) {}
   }
 }

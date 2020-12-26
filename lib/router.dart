@@ -33,6 +33,7 @@ import './pages/newsDetail.dart';
 import './pages/courseDetail.dart';
 import './pages/searchPage.dart';
 import './pages/AdvisoryDetail.dart';
+import './pages/integralDetail.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -142,6 +143,10 @@ Map<String, Function> routers = {
     return AdvisoryDetail(
       arguments: arguments,
     );
+  },
+  // 积分明细
+  "/integralDetail": (context, {arguments}) {
+    return IntegralDetail();
   },
 };
 
