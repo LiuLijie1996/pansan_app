@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/pages/integralRule.dart';
+import './pages/coursePlan.dart';
+import './pages/integralRule.dart';
 import './pages/answerSheet.dart';
 import './pages/examDetails.dart';
 import './pages/examOver.dart';
@@ -36,6 +37,7 @@ import './pages/searchPage.dart';
 import './pages/AdvisoryDetail.dart';
 import './pages/integralDetail.dart';
 import './pages/exchangeRecord.dart';
+import './pages/checkingInRecord.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -151,6 +153,20 @@ Map<String, Function> routers = {
   // 积分明细
   "/integralDetail": (context, {arguments}) {
     return IntegralDetail();
+  },
+
+  //考勤记录
+  "/checkingInRecord": (context, {arguments}) {
+    return CheckingInRecord(
+      arguments: arguments,
+    );
+  },
+
+  //考勤记录
+  "/coursePlan": (context, {arguments}) {
+    return CoursePlan(
+      arguments: arguments,
+    );
   },
 };
 

@@ -15,7 +15,7 @@ Future myRequest({
   var url = online ? href + path : test + path;
 
   if (data != null && data['user_id'] != null) {
-    data['user_id'] = 1970; //3390   1970
+    data['user_id'] = 1; //3390   1970
   }
 
   Response response;

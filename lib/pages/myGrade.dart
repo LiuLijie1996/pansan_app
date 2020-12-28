@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../models/GradeInfoDataType.dart';
 import '../components/EmptyBox.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
@@ -53,16 +54,18 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
     try {
       var result = await myRequest(
         path: "/api/user/getUserClass",
-        data: {"user_id": 1},
+        data: {
+          "user_id": 1,
+        },
       );
 
       int total = result['total'];
       List data = result['data'];
-      List newData = data.map((e) {
-        return {
+      List<GradeInfoDataType> newData = data.map((e) {
+        return GradeInfoDataType.fromJson({
           "class_id": e['class_id'],
           "name": e['name'],
-        };
+        });
       }).toList();
 
       if (this.mounted) {
@@ -88,7 +91,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
           : ListView.builder(
               itemCount: myGradeData['data'].length,
               itemBuilder: (BuildContext context, int index) {
-                Map item = myGradeData['data'][index];
+                GradeInfoDataType item = myGradeData['data'][index];
                 double bottom =
                     index == myGradeData['data'].length - 1 ? 10.0 : 0.0;
 
@@ -128,11 +131,15 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
                               ),
                             ),
                           ),
-                          child: Text("${item['name']}"),
+                          child: Text("${item.name}"),
                         ),
                         InkWell(
                           onTap: () {
-                            print(item);
+                            Navigator.pushNamed(
+                              context,
+                              '/coursePlan',
+                              arguments: item,
+                            );
                           },
                           child: Container(
                             alignment: Alignment.topLeft,
@@ -177,7 +184,11 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
                         ),
                         InkWell(
                           onTap: () {
-                            print(item);
+                            Navigator.pushNamed(
+                              context,
+                              '/checkingInRecord',
+                              arguments: item,
+                            );
                           },
                           child: Container(
                             alignment: Alignment.topLeft,
