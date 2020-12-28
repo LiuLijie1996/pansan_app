@@ -202,7 +202,11 @@ class FunctionList extends StatelessWidget with MyScreenUtil {
         "title": "我的班级",
         "router": "/myGrade",
       },
-      {"icon": "assets/images/05.png", "title": "考试排行", "router": ""},
+      {
+        "icon": "assets/images/05.png",
+        "title": "考试排行",
+        "router": "/examRanking",
+      },
       {
         "icon": "assets/images/jifen.png",
         "title": "积分中心",
@@ -213,7 +217,11 @@ class FunctionList extends StatelessWidget with MyScreenUtil {
         "title": "我的咨询",
         "router": "/myAdvisory",
       },
-      {"icon": "assets/images/set.png", "title": "设置", "router": "/settings"},
+      {
+        "icon": "assets/images/set.png",
+        "title": "设置",
+        "router": "/settings",
+      },
     ];
 
     return ListView.separated(

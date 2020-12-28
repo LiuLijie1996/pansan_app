@@ -38,6 +38,7 @@ import './pages/AdvisoryDetail.dart';
 import './pages/integralDetail.dart';
 import './pages/exchangeRecord.dart';
 import './pages/checkingInRecord.dart';
+import './pages/ExamRanking.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -60,6 +61,7 @@ Map<String, Function> routers = {
   "/searchPage": (context) => SearchPage(), //搜索页
   "/exchangeRecord": (context) => ExchangeRecord(), //兑换记录
   "/integralRule": (context) => IntegralRule(), //积分规则
+  "/examRanking": (context) => ExamRanking(), //积分规则
 
   //课程列表
   "/courseList": (context, {arguments}) {
