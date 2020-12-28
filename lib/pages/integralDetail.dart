@@ -1,6 +1,8 @@
 // 积分明细
 
 import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart';
+import 'package:pansan_app/components/EmptyBox.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 
@@ -9,6 +11,8 @@ class IntegralDataType {
   int id;
   int pid;
   int user_id;
+
+  /// 1登录  2考试  3看新闻  5课程  6一日一题
   int type;
   int addtime;
   int branch;
@@ -33,8 +37,14 @@ class IntegralDetail extends StatefulWidget {
 }
 
 class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
+  ///积分列表
   List<IntegralDataType> integralList = [];
-  int dayScore = 0; //日积分
+
+  ///日积分
+  int dayScore = 0;
+
+  ///选择的时间
+  int selectTime = DateTime.now().millisecondsSinceEpoch;
 
   @override
   void initState() {
@@ -45,16 +55,16 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
     this.getUserScoreList();
   }
 
-  // 积分明细
+  // 获取积分明细
   getUserScoreList() async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserScoreList",
+        path: "/api/score/getUserScoreList",
         data: {
           "user_id": 1,
           "page": 1,
           "psize": 20,
-          "integral_date": 1604246400000,
+          "integral_date": selectTime,
         },
       );
 
@@ -78,6 +88,25 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
     } catch (e) {}
   }
 
+  // 日历
+  Future<DateTime> _showDatePicker(BuildContext context) {
+    // 初始时间
+    DateTime date = new DateTime.fromMillisecondsSinceEpoch(selectTime);
+
+    // 最小时间
+    DateTime firstDate = new DateTime.now().add(Duration(days: -365));
+
+    // 最大时间
+    DateTime lastDate = new DateTime.now();
+
+    return showDatePicker(
+      context: context,
+      initialDate: date, //初始时间
+      firstDate: firstDate, //最小时间
+      lastDate: lastDate, //最大时间
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +128,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
               "100",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: dp(50.0),
+                fontSize: dp(100.0),
               ),
             ),
           ),
@@ -108,7 +137,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
           Container(
             padding: EdgeInsets.all(dp(20.0)),
             margin: EdgeInsets.only(
-              top: dp(100.0),
+              top: dp(150.0),
               bottom: dp(20.0),
               left: dp(20.0),
               right: dp(20.0),
@@ -127,6 +156,14 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
               itemCount: integralList.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
+                  DateTime time = DateTime.fromMillisecondsSinceEpoch(
+                    selectTime,
+                  );
+                  var _selectTime = formatDate(
+                    time,
+                    [yyyy, '-', mm, '-', dd],
+                  );
+
                   return Container(
                     padding: EdgeInsets.all(dp(20.0)),
                     decoration: BoxDecoration(
@@ -140,12 +177,60 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("日积累 $dayScore 分"),
-                        Text("2020-12-26"),
+                        Text(
+                          "日积累 $dayScore 分",
+                          style: TextStyle(
+                            fontSize: dp(32.0),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            DateTime result = await _showDatePicker(context);
+                            if (result != null) {
+                              selectTime = result.millisecondsSinceEpoch;
+                              setState(() {});
+
+                              // 请求数据
+                              getUserScoreList();
+                            }
+                          },
+                          child: Text(
+                            "$_selectTime",
+                            style: TextStyle(
+                              fontSize: dp(32.0),
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   );
                 }
+
+                int i = index - 1;
+                IntegralDataType item = integralList[i];
+                String type = '';
+
+                if (item.type == 1) {
+                  type = '登录';
+                } else if (item.type == 2) {
+                  type = '考试';
+                } else if (item.type == 3) {
+                  type = '看新闻';
+                } else if (item.type == 5) {
+                  type = '课程';
+                } else if (item.type == 6) {
+                  type = '一日一题';
+                }
+
+                DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+                  item.addtime * 1000,
+                );
+                String _addtime = formatDate(
+                  addtime,
+                  [yyyy, '-', mm, '-', dd, " ", HH, ":", mm],
+                );
+
                 return Container(
                   padding: EdgeInsets.all(dp(20.0)),
                   decoration: BoxDecoration(
@@ -159,14 +244,16 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("$index"),
-                      Text("2020-12-26"),
+                      Text("$type"),
+                      Text("$_addtime"),
                     ],
                   ),
                 );
               },
             ),
           ),
+
+          integralList.length == 0 ? EmptyBox() : Container(),
         ],
       ),
     );

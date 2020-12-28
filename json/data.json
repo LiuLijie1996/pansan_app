@@ -1,0 +1,20 @@
+{
+    "id": 5,
+    "d_id": 145,
+    "user_id": "3390",
+    "goods_id": "6",
+    "score": "600.0",
+    "addtime": "1606753733",
+    "status": 2,
+    "update_time": "",
+    "goods": {
+        "id": 6,
+        "name": "金龙鱼精炼一级大豆油1.8L/瓶",
+        "thumb_url": "http://pansan-1303112288.cos.ap-nanjing.myqcloud.com/image/20201017/1602902976476.png",
+        "score": 600,
+        "num": 99,
+        "addtime": 1603260622,
+        "status": 1,
+        "exchange": 0
+    }
+}

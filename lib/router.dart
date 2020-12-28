@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pansan_app/pages/integralRule.dart';
 import './pages/answerSheet.dart';
 import './pages/examDetails.dart';
 import './pages/examOver.dart';
@@ -34,6 +35,7 @@ import './pages/courseDetail.dart';
 import './pages/searchPage.dart';
 import './pages/AdvisoryDetail.dart';
 import './pages/integralDetail.dart';
+import './pages/exchangeRecord.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -54,6 +56,8 @@ Map<String, Function> routers = {
   "/myAdvisory": (context) => MyAdvisory(), //我的咨询
   "/addAdvisory": (context) => AddAdvisory(), //添加咨询
   "/searchPage": (context) => SearchPage(), //搜索页
+  "/exchangeRecord": (context) => ExchangeRecord(), //兑换记录
+  "/integralRule": (context) => IntegralRule(), //积分规则
 
   //课程列表
   "/courseList": (context, {arguments}) {

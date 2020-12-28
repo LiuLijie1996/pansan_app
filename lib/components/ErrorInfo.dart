@@ -5,7 +5,7 @@ import '../utils/myRequest.dart';
 class ErrorInfo {
   String errInfo;
   ErrorInfo(errInfo) {
-    this.errInfo = errInfo;
+    this.errInfo = "$errInfo";
     // 弹窗提示
     this.showToast(errInfo);
 

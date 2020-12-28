@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   dio: ^3.0.10
   flutter_swiper: ^1.1.6
   date_format: ^1.0.9

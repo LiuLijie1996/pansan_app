@@ -1,8 +1,8 @@
 // 考场信息
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/ExamListDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/ExamListDataType.dart';
 
 class ExamSiteInfo extends StatefulWidget {
   final ExamListDataType arguments;

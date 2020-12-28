@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import './router.dart';
 
 void main(List<String> args) {
@@ -24,6 +25,23 @@ class MyApp extends StatelessWidget {
           child: child,
         );
       },
+      localeListResolutionCallback:
+          (List<Locale> locales, Iterable<Locale> supportedLocales) {
+        return Locale('zh');
+      },
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
+        return Locale('zh');
+      },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('zh', 'CH'),
+        const Locale('en', 'US'),
+      ],
     );
   }
 }

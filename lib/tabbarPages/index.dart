@@ -5,6 +5,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
+// 组件
 import '../components/CardItem.dart';
 import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
@@ -147,9 +148,9 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           ),
 
           // 最新考试
-          // SliverToBoxAdapter(
-          //   child: NewsExam(dataList: examList),
-          // ),
+          SliverToBoxAdapter(
+            child: NewsExam(dataList: examList),
+          ),
 
           // 控制显示新闻还是课程
           SliverToBoxAdapter(
@@ -369,30 +370,33 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       });
       List data = result['data'];
 
-      examList = data.map((e) {
-        print(e['start_time']);
-        return ExamListDataType.fromJson({
-          "id": e['id'],
-          "pid": e['pid'],
-          "m_test_id": e['m_test_id'],
-          "class_id": e['class_id'],
-          "paper_id": e['paper_id'],
-          "name": e['name'],
-          "type": e['type'],
-          "address": e['address'],
-          "test_num": e['test_num'],
-          "duration": e['duration'],
-          "min_duration": e['min_duration'],
-          "passing_mark": e['passing_mark'],
-          "cut_screen_type": e['cut_screen_type'],
-          "cut_screen_num": e['cut_screen_num'],
-          "cut_screen_time": e['cut_screen_time'],
-          "status": e['status'],
-          "is_test": e['is_test'],
-          "start_time": e['start_time'],
-          "end_time": e['end_time']
-        });
-      }).toList();
+      data.forEach((e) {
+        if (e['is_test'] == true) {
+          ExamListDataType item = ExamListDataType.fromJson({
+            "id": e['id'],
+            "pid": e['pid'],
+            "m_test_id": e['m_test_id'],
+            "class_id": e['class_id'],
+            "paper_id": e['paper_id'],
+            "name": e['name'],
+            "type": e['type'],
+            "address": e['address'],
+            "test_num": e['test_num'],
+            "duration": e['duration'],
+            "min_duration": e['min_duration'],
+            "passing_mark": e['passing_mark'],
+            "cut_screen_type": e['cut_screen_type'],
+            "cut_screen_num": e['cut_screen_num'],
+            "cut_screen_time": e['cut_screen_time'],
+            "status": e['status'],
+            "is_test": e['is_test'],
+            "start_time": e['start_time'],
+            "end_time": e['end_time']
+          });
+
+          examList.add(item);
+        }
+      });
 
       if (this.mounted) {
         setState(() {});

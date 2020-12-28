@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pansan_app/components/ErrorInfo.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../components/TestSelect.dart';
@@ -157,6 +158,7 @@ class _ExamDetailsState extends State<ExamDetails>
           "type": examSiteInfo.type,
         },
       );
+      print("获取数据：${result['data']}");
 
       List data = result['data']['list'];
 
@@ -195,6 +197,7 @@ class _ExamDetailsState extends State<ExamDetails>
       }
     } catch (e) {
       print(e);
+      ErrorInfo(e);
     }
   }
 
