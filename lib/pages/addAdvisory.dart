@@ -37,19 +37,11 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
               // 标题输入框
               Container(
                 padding: EdgeInsets.only(left: dp(10.0)),
-                // decoration: BoxDecoration(
-                //   border: Border(
-                //     bottom: BorderSide(
-                //       color: Colors.grey,
-                //       width: 0.5,
-                //     ),
-                //   ),
-                // ),
                 child: TextFormField(
                   controller: _titleController,
                   decoration: InputDecoration(
                     icon: Container(
-                      width: dp(120.0),
+                      width: dp(150.0),
                       alignment: Alignment.centerRight,
                       child: Text("标题"),
                     ),
@@ -70,7 +62,7 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                   controller: _textController,
                   decoration: InputDecoration(
                     icon: Container(
-                      width: dp(120.0),
+                      width: dp(150.0),
                       alignment: Alignment.centerRight,
                       child: Text("咨询内容"),
                     ),

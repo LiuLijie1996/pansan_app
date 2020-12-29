@@ -69,6 +69,7 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
         child: myAdvData['data'].length == 0
             ? myWidget[_currentMyWidget]
             : Container(
+                padding: EdgeInsets.only(top: dp(10.0)),
                 color: Colors.white,
                 child: ListView.separated(
                   separatorBuilder: (BuildContext context, int index) {
@@ -112,8 +113,12 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
                     }
 
                     return Container(
-                      height: 30.0,
-                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
+                      padding: EdgeInsets.only(
+                        left: dp(20.0),
+                        right: dp(20.0),
+                        top: dp(30.0),
+                        bottom: dp(30.0),
+                      ),
                       child: InkWell(
                         onTap: () {
                           // 跳转到咨询详情

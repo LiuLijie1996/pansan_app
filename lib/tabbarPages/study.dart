@@ -180,7 +180,7 @@ class _StudyState extends State<Study>
               children: [
                 Text(
                   "请输入你要搜索的内容",
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.grey, fontSize: dp(32.0)),
                 ),
                 Icon(
                   Icons.search,
