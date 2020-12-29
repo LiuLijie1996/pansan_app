@@ -1,4 +1,4 @@
-// 我的错题
+// 试题收藏页面
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -11,21 +11,21 @@ import '../components/MyIcon.dart';
 import '../utils/myRequest.dart';
 import '../components/MyProgress.dart';
 
-class MyMistakes extends StatefulWidget {
-  MyMistakes({Key key}) : super(key: key);
+class QuestionsCollect extends StatefulWidget {
+  QuestionsCollect({Key key}) : super(key: key);
 
   @override
-  _MyMistakesState createState() => _MyMistakesState();
+  _QuestionsCollectState createState() => _QuestionsCollectState();
 }
 
-class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
-  // 轮播图控制器
+class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
+// 轮播图控制器
   SwiperController _swiperController = SwiperController();
   //当前题目下标
   int _currentIndex = 0;
 
-  // 我的错题列表
-  List<IssueDataType> myMistakesList = [];
+  // 收藏的试题列表
+  List<IssueDataType> questionsCollectList = [];
 
   bool initialize = false; //初始化是否完成
 
@@ -40,22 +40,22 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
 
   // 初始化
   myInitialize() {
-    // 获取我的错题
-    getMyMistakesData();
+    // 获取收藏的试题
+    getQuestionCollect();
   }
 
-  // 获取我的错题
-  getMyMistakesData() async {
+  // 获取收藏的试题
+  getQuestionCollect() async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserErrQuestion",
+        path: "/api/user/getQuestionCollect",
         data: {
           "user_id": 1,
         },
       );
 
       List data = result['data']['list'];
-      myMistakesList = data.map((e) {
+      questionsCollectList = data.map((e) {
         // 判断这些数组是不是被改成String类型了
         bool optionIsStr = e['option'].runtimeType == String;
         bool answerIsStr = e['answer'].runtimeType == String;
@@ -89,25 +89,23 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
-    // 判断初始化是否完成
     if (!initialize) {
       return Scaffold(
         body: MyProgress(),
       );
     }
 
-    // 初始化完成后，判断是否有数据
-    if (myMistakesList.length == 0) {
+    if (questionsCollectList.length == 0) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("我的错题"),
+          title: Text("我的收藏"),
         ),
         body: EmptyBox(),
       );
     }
 
     // 当前显示的题目
-    IssueDataType _currentItem = myMistakesList[_currentIndex];
+    IssueDataType _currentItem = questionsCollectList[_currentIndex];
     // 1单选 3判断 2多选 4填空
     String textType = '';
     if (_currentItem.type == 1) {
@@ -122,7 +120,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("我的错题"),
+        title: Text("我的收藏"),
         actions: [
           FlatButton(
             onPressed: () {
@@ -130,7 +128,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                 context,
                 "/questionsCorrection",
                 arguments: {
-                  "issueData": myMistakesList[_currentIndex],
+                  "issueData": questionsCollectList[_currentIndex],
                 },
               );
             },
@@ -174,19 +172,21 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                     Container(
                       margin: EdgeInsets.only(bottom: dp(6.0)),
                       child: Icon(
-                        myMistakesList[_currentIndex].userFavor
+                        questionsCollectList[_currentIndex].userFavor
                             ? aliIconfont.full_collect
                             : aliIconfont.collect,
-                        color: myMistakesList[_currentIndex].userFavor
+                        color: questionsCollectList[_currentIndex].userFavor
                             ? Colors.red
                             : Colors.blue,
                         size: dp(40.0),
                       ),
                     ),
                     Text(
-                      myMistakesList[_currentIndex].userFavor ? "已收藏" : "收藏",
+                      questionsCollectList[_currentIndex].userFavor
+                          ? "已收藏"
+                          : "收藏",
                       style: TextStyle(
-                        color: myMistakesList[_currentIndex].userFavor
+                        color: questionsCollectList[_currentIndex].userFavor
                             ? Colors.red
                             : Colors.blue,
                         fontSize: dp(28.0),
@@ -198,8 +198,9 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
               ),
               onPressed: () {
                 setState(() {
-                  bool userFavor = myMistakesList[_currentIndex].userFavor;
-                  myMistakesList[_currentIndex].userFavor = !userFavor;
+                  bool userFavor =
+                      questionsCollectList[_currentIndex].userFavor;
+                  questionsCollectList[_currentIndex].userFavor = !userFavor;
                 });
               },
             ),
@@ -236,7 +237,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                   context,
                   '/answerSheet',
                   arguments: {
-                    "dataList": myMistakesList,
+                    "dataList": questionsCollectList,
                     "reminder": true,
                   },
                 );
@@ -252,7 +253,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
               child: Text(
                 "下一题",
                 style: TextStyle(
-                  color: _currentIndex == myMistakesList.length - 1
+                  color: _currentIndex == questionsCollectList.length - 1
                       ? Colors.grey
                       : Colors.blue,
                 ),
@@ -260,7 +261,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
-                if (_currentIndex < myMistakesList.length - 1) {
+                if (_currentIndex < questionsCollectList.length - 1) {
                   _swiperController.next();
                 }
               },
@@ -268,7 +269,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
           ],
         ),
       ),
-      body: myMistakesList.length == 0
+      body: questionsCollectList.length == 0
           ? EmptyBox()
           : Column(
               children: [
@@ -288,7 +289,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
-                        "${_currentIndex + 1}/${myMistakesList.length}",
+                        "${_currentIndex + 1}/${questionsCollectList.length}",
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -306,9 +307,9 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                         _currentIndex = index;
                       });
                     },
-                    itemCount: myMistakesList.length,
+                    itemCount: questionsCollectList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      IssueDataType item = myMistakesList[index];
+                      IssueDataType item = questionsCollectList[index];
 
                       // 正确答案
                       List<String> answer = item.answer;
@@ -360,7 +361,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                                     item.userAnswer = [];
 
                                     if (_currentIndex <
-                                        myMistakesList.length - 1) {
+                                        questionsCollectList.length - 1) {
                                       _swiperController.next();
                                     }
                                   }

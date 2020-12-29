@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/NewsDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../components/CardItem.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../models/NewsDataType.dart';
 
 class MyCollect extends StatefulWidget {
   MyCollect({Key key}) : super(key: key);
@@ -18,58 +18,82 @@ class MyCollect extends StatefulWidget {
 
 class _MyCollectState extends State<MyCollect>
     with SingleTickerProviderStateMixin, MyScreenUtil {
-  TabController _controller;
+  TabController _tabController;
 
   int _currentIndex = 0;
 
-  List tabView = [
-    {
-      "title": "试题收藏",
-      "page": 1,
-      "total": 0,
-      "data": [],
-    },
-    {
-      "title": "新闻收藏",
-      "page": 1,
-      "total": 0,
-      "data": [],
-    },
-  ];
+  List tabs = ["新闻收藏", "试题收藏"];
+  int total = 0;
+  int page = 1;
+  int psize = 20;
+  List data = [];
 
-  _MyCollectState() {
-    _controller = TabController(length: tabView.length, vsync: this);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
-    _controller.addListener(() {
-      setState(() {
-        _currentIndex = _controller.index;
-      });
-      // 请求数据
-      if (tabView[_currentIndex]['data'].length == 0) {
-        // 请求数据
-        if (_currentIndex == 0) {
-          // 获取收藏的试题
-          getTestData();
-        } else {
-          // 获取收藏的新闻
-          getNewsData();
-        }
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController.addListener(() {});
+
+    // 获取数据
+    getNewsCollect();
+  }
+
+  // 获取收藏的新闻数据
+  getNewsCollect() async {
+    try {
+      var result = await myRequest(
+        path: "/api/news/getNewsCollect",
+        data: {
+          "user_id": 1,
+        },
+      );
+
+      total = result['total'];
+      List resultData = result['data'];
+      data = resultData.map((e) {
+        return NewsDataType.fromJson({
+          "id": e['id'],
+          "pid": e['pid'],
+          "title": e['title'],
+          "desc": e['desc'],
+          "thumb_url": e['thumb_url'],
+          "type": e['type'],
+          "materia_id": e['materia_id'],
+          "content": e['content'],
+          "tuij": e['tuij'],
+          "isshow": e['isshow'],
+          "istop": e['istop'],
+          "is_integral": e['is_integral'],
+          "addtime": e['addtime'],
+          "integral": e['integral'],
+          "iintegral_type": e['iintegral_type'],
+          "score": e['score'],
+          "status": e['status'],
+          "sorts": e['sorts'],
+          "view_num": e['view_num'],
+          "upvote": e['upvote'],
+        });
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {});
       }
-    });
-
-    // 请求数据
-    if (_currentIndex == 0) {
-      // 获取收藏的试题
-      getTestData();
-    } else {
-      // 获取收藏的新闻
-      getNewsData();
+    } catch (e) {
+      print(e);
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _tabController.dispose();
 
     // TODO: implement dispose
     super.dispose();
@@ -82,134 +106,45 @@ class _MyCollectState extends State<MyCollect>
         title: Text("我的收藏"),
         centerTitle: true,
         bottom: TabBar(
-          controller: _controller,
-          tabs: [
-            Tab(
-              text: "试题收藏",
-            ),
-            Tab(
-              text: "新闻收藏",
-            ),
-          ],
+          controller: _tabController,
+          tabs: tabs.map((e) => Tab(text: e)).toList(),
         ),
       ),
       body: TabBarView(
-          controller: _controller,
-          children: tabView.map((e) {
-            List data = e['data'];
+        controller: _tabController,
+        children: tabs.map((e) {
+          int index = tabs.indexOf(e);
+          if (index == 0) {
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                NewsDataType item = data[index];
 
-            if (_currentIndex == 0) {
-              return EmptyBox();
-            } else {
-              if (data.length == 0) {
-                return MyProgress();
-              }
+                return NewsCardItem(
+                  onClick: () {},
+                  item: item,
+                );
+              },
+            );
+          }
 
-              return ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  NewsDataType item = data[index];
-
-                  if (data.length - 1 == index) {
-                    // 判断后台是否还有数据
-                    if (data.length < tabView[_currentIndex]['total']) {
-                      // 请求数据
-                      getNewsData(page: ++tabView[_currentIndex]['page']);
-
-                      return MyProgress();
-                    } else {
-                      return MyProgress(status: false);
-                    }
-                  }
-
-                  return NewsCardItem(
-                    onClick: () {
-                      print(item);
-                    },
-                    item: item,
-                  );
-                },
-                itemCount: data.length,
-              );
-            }
-          }).toList()),
+          return Center(
+            child: RaisedButton(
+              onPressed: () {
+                // 跳转到试题收藏页面
+                Navigator.pushNamed(context, "/questionsCollect");
+              },
+              color: Colors.blue,
+              child: Text(
+                "查看更多",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
-  }
-
-  // 获取收藏的试题
-  getTestData({page = 1}) async {
-    try {
-      var result = await myRequest(
-        path: "/api/user/myCollect/test",
-        data: {
-          "user_id": "用户id",
-          "page": page,
-        },
-      );
-
-      int total = result['total'];
-      List data = result['data'];
-      List newData = data.map((e) {
-        return {};
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {
-          tabView[_currentIndex]['data'].addAll(newData);
-          tabView[_currentIndex]['total'] = total;
-          tabView[_currentIndex]['page'] = page;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // 获取收藏的新闻
-  getNewsData({page = 1}) async {
-    try {
-      var result = await myRequest(
-        path: "/api/news/getIndexNewsList",
-        data: {
-          "user_id": "用户id",
-          "page": page,
-          "psize": 20,
-        },
-      );
-
-      int total = result['total'];
-      List data = result['data'];
-      List<NewsDataType> newData = data.map((e) {
-        // //时间
-        // DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-        //   e['addtime'] * 1000,
-        // );
-        // // 时间转换
-        // String addtime = formatDate(
-        //   dateTime,
-        //   [yyyy, '-', mm, '-', dd],
-        // );
-
-        // return {
-        //   "id": e['id'], //id
-        //   "thumb_url": e['thumb_url'], //封面图
-        //   "type": e['type'], //类型：1图文，2视频
-        //   "title": e['title'], //标题
-        //   "addtime": addtime, //发布时间
-        //   "view_num": e['view_num'], //观看人数
-        // };
-
-        return NewsDataType.fromJson(e);
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {
-          tabView[_currentIndex]['data'].addAll(newData);
-          tabView[_currentIndex]['total'] = total;
-          tabView[_currentIndex]['page'] = page;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }
