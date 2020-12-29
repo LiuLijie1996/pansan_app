@@ -43,6 +43,62 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
     super.initState();
   }
 
+  // 获取导航
+  getExamNav() async {
+    try {
+      var result1 = await myRequest(path: "/api/exam/getTestItemList");
+      var result2 = await myRequest(path: "/api/exam/getPracticeItemList");
+
+      // 获取我要考试列表
+      List myExam = result1["data"];
+      // 获取我要练习列表
+      List myExercise = result2["data"];
+
+      // 图标
+      List icons = [
+        "assets/images/test_common.png",
+        "assets/images/exam_official.png",
+        "assets/images/test_level.png",
+        "assets/images/exam_official.png",
+        "assets/images/test_spe.png",
+        "assets/images/exam_official.png",
+      ];
+
+      // 遍历我要考试列表
+      List exams = myExam.map((e) {
+        int _random = Random().nextInt(5 - 0);
+        return {
+          "id": int.parse("${e['id']}"),
+          "name": e['name'],
+          "icon": icons[_random],
+        };
+      }).toList();
+
+      // 遍历我要答题列表
+      List exercises = myExercise.map((e) {
+        int _random = Random().nextInt(5 - 0);
+        return {
+          "id": e['id'],
+          "name": e['name'],
+          "icon": icons[_random],
+        };
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {
+          myExamNavList = exams;
+          myExerciseNavList = exercises;
+          myExerciseNavList.add({
+            "name": "专项练习",
+            "icon": icons[Random().nextInt(5 - 0)],
+          });
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -233,62 +289,6 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
         ),
       ),
     );
-  }
-
-  // 获取导航
-  getExamNav() async {
-    try {
-      var result1 = await myRequest(path: "/api/exam/getTestItemList");
-      var result2 = await myRequest(path: "/api/exam/getPracticeItemList");
-
-      // 获取我要考试列表
-      List myExam = result1["data"];
-      // 获取我要练习列表
-      List myExercise = result2["data"];
-
-      // 图标
-      List icons = [
-        "assets/images/test_common.png",
-        "assets/images/exam_official.png",
-        "assets/images/test_level.png",
-        "assets/images/exam_official.png",
-        "assets/images/test_spe.png",
-        "assets/images/exam_official.png",
-      ];
-
-      // 遍历我要考试列表
-      List exams = myExam.map((e) {
-        int _random = Random().nextInt(5 - 0);
-        return {
-          "id": int.parse("${e['id']}"),
-          "name": e['name'],
-          "icon": icons[_random],
-        };
-      }).toList();
-
-      // 遍历我要答题列表
-      List exercises = myExercise.map((e) {
-        int _random = Random().nextInt(5 - 0);
-        return {
-          "id": e['id'],
-          "name": e['name'],
-          "icon": icons[_random],
-        };
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {
-          myExamNavList = exams;
-          myExerciseNavList = exercises;
-          myExerciseNavList.add({
-            "name": "专项练习",
-            "icon": icons[Random().nextInt(5 - 0)],
-          });
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }
 

@@ -14,6 +14,27 @@ class MyInformation extends StatefulWidget {
 class _MyInformationState extends State<MyInformation> with MyScreenUtil {
   PickedFile _image;
 
+  /*打开相册*/
+  _openGallery() async {
+    PickedFile image = await ImagePicker().getImage(
+      source: ImageSource.gallery, // 打开相册
+    );
+    setState(() {
+      _image = image ?? _image;
+    });
+
+    try {
+      // 上传文件
+      var result = await dioUpload(
+        path: "/api/upload",
+        filePath: image.path,
+      );
+      print(result);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -351,26 +372,5 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
         ),
       ),
     );
-  }
-
-  /*打开相册*/
-  _openGallery() async {
-    PickedFile image = await ImagePicker().getImage(
-      source: ImageSource.gallery, // 打开相册
-    );
-    setState(() {
-      _image = image ?? _image;
-    });
-
-    try {
-      // 上传文件
-      var result = await dioUpload(
-        path: "/api/upload",
-        filePath: image.path,
-      );
-      print(result);
-    } catch (e) {
-      print(e);
-    }
   }
 }

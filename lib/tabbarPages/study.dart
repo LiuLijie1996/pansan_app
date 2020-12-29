@@ -34,6 +34,117 @@ class _StudyState extends State<Study>
     super.dispose();
   }
 
+  // 获取头部tabbar
+  getTopTabBar() async {
+    try {
+      var result = await myRequest(path: "/api/course/getCourseItemList");
+      List courseNavList = result['data'];
+      // 遍历课程导航
+      tabs = courseNavList.map((item) {
+        List children = item['children'] ?? [];
+        return NavDataType(
+          id: item['id'],
+          name: item['name'],
+          pid: item['pid'],
+          children: children.map((e) {
+            return Children.fromJson(e);
+          }).toList(),
+          data: null, //用来装课程的
+          page: 1, //第几页课程
+          total: null, //课程总条数
+        );
+      }).toList();
+
+      // 获取课程
+      this.getCourseList(
+        id: tabs[0].id,
+        page: tabs[0].page,
+      );
+
+      // 创建Controller
+      _tabController = TabController(length: tabs.length, vsync: this);
+      _tabController.addListener(() {
+        setState(() {});
+
+        int index = _tabController.index;
+        var data = this.tabs[index].data;
+
+        // 记录当前显示的 TabBarView
+        this._currentIndex = index;
+        // 记录当前tab对应的id
+        this._currentNavId = this.tabs[index].id;
+
+        // 获取课程
+        if (data == null) {
+          this.getCourseList(
+            id: tabs[index].id,
+            page: 1,
+          );
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 获取课程
+  getCourseList({
+    @required id, //获取课程时需要的导航id
+    @required int page, //分页
+    psize = 20, //每页多少数据
+  }) async {
+    try {
+      var result = await myRequest(path: "/api/course/courseList", data: {
+        "user_id": 1,
+        "pid": id,
+        "page": page,
+        "psize": psize,
+      });
+      List data = result['data']; //获取到的列表数据
+      int total = result['total']; //列表总个数
+
+      // 遍历获取到的课程
+      List newData = data.map((e) {
+        return {
+          "id": e['id'], //课程id
+          "pid": e['pid'], //导航id
+          "name": e['name'], //标题
+          "desc": e['desc'], //简介
+          "content": e['content'], //课程介绍
+          "addtime": e['addtime'], //添加时间
+          "thumb_url": e['thumb_url'], //封面
+          "study_status": e['study_status'], //学习状态 1已学完 2未学习 3学习中
+          "chapter": e['chapter'].map((ele) {
+            return {
+              "id": ele['id'], //章节id
+              "d_id": ele['d_id'], //部门id
+              "pid": ele['pid'], //分类id
+              "name": ele['name'], //章节名称
+              "addtime": ele['addtime'], //添加时间
+            };
+          }).toList(),
+          "view_num": e['view_num'] //在学人数
+        };
+      }).toList();
+
+      if (this.mounted) {
+        // 刷新页面
+        setState(() {
+          // 如果分页从1开始，先清空数组
+          if (page == 1) {
+            this.tabs[this._currentIndex].data = [];
+          }
+          this._currentNavId = id; //记录当前数据对应的导航id
+          this.tabs[this._currentIndex].page = page; //记录当前导航对应的分页
+          this.tabs[this._currentIndex].total = total; //记录当前导航对应的总个数
+          this.tabs[this._currentIndex].data.addAll(newData); //记录当前导航对应的数据
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -194,116 +305,5 @@ class _StudyState extends State<Study>
         }).toList(),
       ),
     );
-  }
-
-  // 获取头部tabbar
-  getTopTabBar() async {
-    try {
-      var result = await myRequest(path: "/api/course/getCourseItemList");
-      List courseNavList = result['data'];
-      // 遍历课程导航
-      tabs = courseNavList.map((item) {
-        List children = item['children'] ?? [];
-        return NavDataType(
-          id: item['id'],
-          name: item['name'],
-          pid: item['pid'],
-          children: children.map((e) {
-            return Children.fromJson(e);
-          }).toList(),
-          data: null, //用来装课程的
-          page: 1, //第几页课程
-          total: null, //课程总条数
-        );
-      }).toList();
-
-      // 获取课程
-      this.getCourseList(
-        id: tabs[0].id,
-        page: tabs[0].page,
-      );
-
-      // 创建Controller
-      _tabController = TabController(length: tabs.length, vsync: this);
-      _tabController.addListener(() {
-        setState(() {});
-
-        int index = _tabController.index;
-        var data = this.tabs[index].data;
-
-        // 记录当前显示的 TabBarView
-        this._currentIndex = index;
-        // 记录当前tab对应的id
-        this._currentNavId = this.tabs[index].id;
-
-        // 获取课程
-        if (data == null) {
-          this.getCourseList(
-            id: tabs[index].id,
-            page: 1,
-          );
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // 获取课程
-  getCourseList({
-    @required id, //获取课程时需要的导航id
-    @required int page, //分页
-    psize = 20, //每页多少数据
-  }) async {
-    try {
-      var result = await myRequest(path: "/api/course/courseList", data: {
-        "user_id": 1,
-        "pid": id,
-        "page": page,
-        "psize": psize,
-      });
-      List data = result['data']; //获取到的列表数据
-      int total = result['total']; //列表总个数
-
-      // 遍历获取到的课程
-      List newData = data.map((e) {
-        return {
-          "id": e['id'], //课程id
-          "pid": e['pid'], //导航id
-          "name": e['name'], //标题
-          "desc": e['desc'], //简介
-          "content": e['content'], //课程介绍
-          "addtime": e['addtime'], //添加时间
-          "thumb_url": e['thumb_url'], //封面
-          "study_status": e['study_status'], //学习状态 1已学完 2未学习 3学习中
-          "chapter": e['chapter'].map((ele) {
-            return {
-              "id": ele['id'], //章节id
-              "d_id": ele['d_id'], //部门id
-              "pid": ele['pid'], //分类id
-              "name": ele['name'], //章节名称
-              "addtime": ele['addtime'], //添加时间
-            };
-          }).toList(),
-          "view_num": e['view_num'] //在学人数
-        };
-      }).toList();
-
-      if (this.mounted) {
-        // 刷新页面
-        setState(() {
-          // 如果分页从1开始，先清空数组
-          if (page == 1) {
-            this.tabs[this._currentIndex].data = [];
-          }
-          this._currentNavId = id; //记录当前数据对应的导航id
-          this.tabs[this._currentIndex].page = page; //记录当前导航对应的分页
-          this.tabs[this._currentIndex].total = total; //记录当前导航对应的总个数
-          this.tabs[this._currentIndex].data.addAll(newData); //记录当前导航对应的数据
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }

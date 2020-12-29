@@ -1,9 +1,26 @@
 {
-    "id": 2,
-    "class_id": 14,
-    "name": "123",
-    "link": "",
-    "key": "",
-    "status": 1,
-    "addtime": 1609144360
+    "id": 8171,
+    "test_id": 174,
+    "user_id": 1,
+    "department_id": 2,
+    "m_test_id": 0,
+    "type": 3,
+    "fraction": 0,
+    "test_time": 1608889787,
+    "addtime": 1608888908,
+    "sorts": 0,
+    "update_time": 1608889787,
+    "test_type": 1,
+    "option": "",
+    "q_group": "14477,14491,14489,14486,14488,14490,14495,14485,14494,14484,14481,14487,14496,14478,14493,14479,14480,14483,14482,14492",
+    "test_num": 5,
+    "user": {
+        "id": 1,
+        "name": "陈士虎",
+        "department": {
+            "id": 2,
+            "name": "矿本部",
+            "pid": 1
+        }
+    }
 }

@@ -116,6 +116,7 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
                       padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
                       child: InkWell(
                         onTap: () {
+                          // 跳转到咨询详情
                           Navigator.pushNamed(
                             context,
                             '/advisoryDetail',

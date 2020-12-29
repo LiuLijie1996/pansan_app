@@ -1,154 +1,199 @@
+// 职工服务页面
+
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/CertificateDataType.dart'; //证书类型
-import 'package:pansan_app/models/IllegalManageDataType.dart'; //三违情况类型
-import 'package:pansan_app/models/AdvisoryDataType.dart'; //咨询类型
-
-class TabBarItemDataType {
-  int id;
-  String title;
-  int page;
-  int psize;
-  int total;
-  List data;
-
-  TabBarItemDataType(Map json) {
-    id = json['id'];
-    title = json['title'];
-    page = json['page'];
-    psize = json['psize'];
-    total = json['total'];
-    data = json['data'];
-  }
-}
-
-//职工服务
+import '../components/MyProgress.dart';
+import '../components/EmptyBox.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/CertificateDataType.dart'; //证书类型
+import '../models/IllegalManageDataType.dart'; //三违情况类型
+import '../models/AdvisoryDataType.dart'; //咨询类型
 
 class StaffServe extends StatefulWidget {
+  StaffServe({Key key}) : super(key: key);
+
   @override
   _StaffServeState createState() => _StaffServeState();
 }
 
 class _StaffServeState extends State<StaffServe>
-    with SingleTickerProviderStateMixin, MyScreenUtil {
-  TextEditingController _searchInput = TextEditingController(); //搜索框的控制器
-  String searchValue; //需要搜索的内容
-  TabController _tabController;
-  int _tabViewIndex = 0;
-  List<TabBarItemDataType> tabBarList = [
-    TabBarItemDataType({
+    with MyScreenUtil, SingleTickerProviderStateMixin {
+  TabController _tabController; //导航控制器
+  TextEditingController _inputController = TextEditingController(); //输入框控制器
+  String inputValue = '';
+
+  List tabs = [
+    {
       "id": 2,
       "title": "持证情况",
-      "page": 1,
-      "psize": 20,
-      "total": 0,
-      "data": [],
-    }),
-    TabBarItemDataType({
+    },
+    {
       "id": 3,
       "title": "三违情况",
-      "page": 1,
-      "psize": 20,
-      "total": 0,
-      "data": [],
-    }),
-    TabBarItemDataType({
+    },
+    {
       "id": 1,
       "title": "咨询",
-      "page": 1,
-      "psize": 20,
-      "total": 0,
-      "data": [],
-    }),
+    },
   ];
+
+  List data = [];
+  int page = 1;
+  int psize = 20;
+  int total = 0;
+  bool isInital = false; //初始化是否完成
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: 3);
+    // TODO: implement initState
+    super.initState();
 
-    // 监听tab栏的变化
+    // 初始化
+    myInitial();
+  }
+
+  // 初始化
+  myInitial() {
+    _tabController = TabController(vsync: this, length: tabs.length);
     _tabController.addListener(() {
-      setState(() {
-        _tabViewIndex = _tabController.index;
-      });
-
-      var data = tabBarList[_tabViewIndex].data;
-      if (data.length == 0) {
-        //获取数据
-        getTabViewData();
+      if (_tabController.indexIsChanging == false) {
+        data = [];
+        page = 1;
+        psize = 20;
+        // 请求数据
+        getDataList(id: tabs[_tabController.index]['id']);
       }
     });
 
-    //获取数据
-    getTabViewData();
-
-    super.initState();
+    // 请求数据
+    getDataList(id: tabs[0]['id']);
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _searchInput.dispose();
-    super.dispose();
+  // 请求数据
+  getDataList({
+    @required id,
+  }) async {
+    try {
+      var result = await myRequest(
+        path: '/api/user/getUserServiceList',
+        data: {
+          "pid": id,
+          "page": page,
+          "psize": psize,
+          "title": inputValue,
+        },
+      );
+      total = result['total'];
+      List resultData = result['data'];
+      List newData = resultData.map((e) {
+        if (_tabController.index == 0) {
+          // 证书
+          return CertificateDataType.fromJson({
+            "id": int.parse("${e['id']}"),
+            "idCard": e['idCard'],
+            "name": e['name'],
+            "dep": e['dep'],
+            "addtime": int.parse("${e['addtime']}"),
+          });
+        } else if (_tabController.index == 1) {
+          // 三违情况
+          return IllegalManageDataType.fromJson({
+            "id": int.parse("${e['id']}"),
+            "pid": int.parse("${e['pid']}"),
+            "title": e['title'],
+            "link": e['link'],
+            "addtime": int.parse("${e['addtime']}"),
+          });
+        } else {
+          // 咨询
+          return AdvisoryDataType.fromJson({
+            "id": int.parse("${e['id']}"),
+            "pid": int.parse("${e['pid']}"),
+            "title": e['title'],
+            "content": e['content'],
+            "addtime": int.parse("${e['addtime']}"),
+          });
+        }
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {
+          inputValue = '';
+          data.addAll(newData);
+          isInital = true;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!isInital) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          height: 35.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-          ),
+          height: dp(80.0),
           child: TextField(
-            controller: _searchInput,
-            textInputAction: TextInputAction.search,
-            //输入框内容变化时触发
+            controller: _inputController,
             onChanged: (value) {
-              searchValue = value;
-              // setState(() {});
-            },
-            //点击键盘上的搜索时触发
-            onSubmitted: (value) {
-              print(value);
+              inputValue = value;
             },
             decoration: InputDecoration(
-              hintText: "请输入你要搜索的内容",
-              contentPadding: EdgeInsets.only(bottom: 0.0, left: 10.0),
-              labelStyle: TextStyle(
-                color: Colors.grey,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                borderSide: BorderSide(
-                  width: 0.5,
-                  color: Colors.grey[100],
-                ),
-              ),
+              hintText: '请输入你要搜索的内容',
+              fillColor: Colors.white,
+              filled: true,
               suffixIcon: InkWell(
-                child: Icon(
-                  Icons.search,
-                ),
                 onTap: () {
-                  print(searchValue);
+                  data = [];
+                  page = 1;
+                  psize = 20;
+                  // 请求数据
+                  getDataList(id: tabs[_tabController.index]['id']);
+
+                  // 清空输入框
+                  _inputController.text = '';
                 },
+                child: Icon(Icons.search),
+              ),
+              contentPadding: EdgeInsets.only(
+                top: dp(20.0),
+                left: dp(20.0),
+                bottom: dp(20.0),
+                right: dp(20.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0x00FF0000)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(dp(10.0)),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0x00000000)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(dp(10.0)),
+                ),
               ),
             ),
           ),
         ),
         bottom: TabBar(
           controller: _tabController,
-          tabs: tabBarList.map((e) {
-            return Tab(text: "${e.title}");
+          labelColor: Colors.white,
+          tabs: tabs.map((e) {
+            return Tab(
+              child: Text("${e['title']}"),
+            );
           }).toList(),
         ),
       ),
-      floatingActionButton: _tabViewIndex == 2
+      floatingActionButton: _tabController.index == 2
           ? FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
@@ -156,200 +201,174 @@ class _StaffServeState extends State<StaffServe>
               },
             )
           : null,
-      body: TabBarView(
-        controller: _tabController,
-        children: tabBarList.map((e) {
-          var data = e.data;
+      body: data.length != 0
+          ? TabBarView(
+              controller: _tabController,
+              children: tabs.map((e) {
+                if (_tabController.index == 0) {
+                  // 持证情况
+                  return ListView.separated(
+                    itemBuilder: (context, index) {
+                      CertificateDataType item;
+                      try {
+                        item = data[index];
+                      } catch (e) {
+                        // 如果报错判断是否请求数据
+                        if (total == data.length) {
+                          return MyProgress(status: false);
+                        }
 
-          if (data.length == 0) {
-            return MyProgress();
-          }
+                        ++page;
+                        getDataList(id: tabs[_tabController.index]['id']);
+                        return MyProgress();
+                      }
 
-          return RefreshIndicator(
-            // 下拉刷新的回调
-            onRefresh: () {
-              setState(() {
-                tabBarList[_tabViewIndex].data = []; //清空数据
-              });
-              return getTabViewData(page: 1); //获取数据;
-            },
-            child: Container(
-              color: Colors.white,
-              child: ListView.separated(
-                itemCount: data.length + 1,
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider();
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  var dataItem;
-
-                  // 判断后台是否已经没有数据了
-                  if (index == e.total) {
-                    return MyProgress(status: false);
-                  }
-
-                  try {
-                    dataItem = data[index];
-                  } catch (err) {
-                    //获取数据
-                    getTabViewData(page: ++e.page);
-                    return MyProgress();
-                  }
-
-                  if (_tabViewIndex == 0) {
-                    CertificateDataType item =
-                        CertificateDataType.fromJson(dataItem);
-
-                    return Container(
-                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${item.name}"),
-                          Text("${item.dep}"),
-                          RaisedButton(
-                            color: Theme.of(context).accentColor,
-                            onPressed: () {
-                              print(item);
-                            },
-                            child: Text(
-                              "查看",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  } else if (_tabViewIndex == 1) {
-                    IllegalManageDataType item =
-                        IllegalManageDataType.fromJson(dataItem);
-                    //时间
-                    DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
-                      item.addtime * 1000,
-                    );
-                    // 时间转换
-                    var _addtime = formatDate(
-                      addtime,
-                      [yyyy, '-', mm, '-', dd],
-                    );
-
-                    return Container(
-                      height: dp(60.0),
-                      padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
-                      child: InkWell(
-                        onTap: () {
-                          print(item);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("${item.title}"),
-                            Text("$_addtime"),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  AdvisoryDataType item = AdvisoryDataType.fromJson(dataItem);
-
-                  return Container(
-                    height: 30.0,
-                    padding: EdgeInsets.only(left: dp(20.0), right: dp(20.0)),
-                    child: InkWell(
-                      onTap: () {
-                        print(item);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${item.title}"),
-                          Text("${item.addtime}"),
-                        ],
-                      ),
-                    ),
+                      return CertificateWidget(item: item);
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                    itemCount: data.length + 1,
                   );
-                },
-              ),
-            ),
-          );
-        }).toList(),
-      ),
+                } else if (_tabController.index == 1) {
+                  // 三违情况
+                  return ListView.separated(
+                    itemBuilder: (context, index) {
+                      IllegalManageDataType item;
+                      try {
+                        item = data[index];
+                      } catch (e) {
+                        // 如果报错判断是否请求数据
+                        if (total == data.length) {
+                          return MyProgress(status: false);
+                        }
+
+                        ++page;
+                        getDataList(id: tabs[_tabController.index]['id']);
+                        return MyProgress();
+                      }
+                      return IllegalManageWidget(item: item);
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                    itemCount: data.length + 1,
+                  );
+                }
+
+                // 咨询
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    AdvisoryDataType item;
+                    try {
+                      item = data[index];
+                    } catch (e) {
+                      // 如果报错判断是否请求数据
+                      if (total == data.length) {
+                        return MyProgress(status: false);
+                      }
+
+                      ++page;
+                      getDataList(id: tabs[_tabController.index]['id']);
+                      return MyProgress();
+                    }
+                    return AdvisoryWidget(item: item);
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                  itemCount: data.length + 1,
+                );
+              }).toList(),
+            )
+          : EmptyBox(),
     );
-  }
-
-  //获取数据
-  getTabViewData({page = 1}) async {
-    try {
-      var navId = tabBarList[_tabViewIndex].id;
-      var psize = tabBarList[_tabViewIndex].psize;
-
-      var result = await myRequest(
-        path: '/api/user/getUserServiceList',
-        data: {
-          "pid": navId,
-          "page": page,
-          "psize": psize,
-        },
-      );
-
-      int total = result['total'];
-      List data = result['data'];
-      List newData = data.map((e) {
-        if (_tabViewIndex == 0) {
-          // 证书
-          return {
-            "id": int.parse("${e['id']}"),
-            "idCard": e['idCard'],
-            "name": e['name'],
-            "dep": e['dep'],
-            "addtime": int.parse("${e['addtime']}"),
-          };
-        } else if (_tabViewIndex == 1) {
-          // 三违情况
-          return {
-            "id": int.parse("${e['id']}"),
-            "pid": int.parse("${e['pid']}"),
-            "title": e['title'],
-            "link": e['link'],
-            "addtime": int.parse("${e['addtime']}"),
-          };
-        } else {
-          // 咨询
-          return {
-            "id": int.parse("${e['id']}"),
-            "pid": int.parse("${e['pid']}"),
-            "title": e['title'],
-            "content": e['content'],
-            "addtime": int.parse("${e['addtime']}"),
-          };
-        }
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {
-          if (page == 1) {
-            tabBarList[_tabViewIndex].data = [];
-          }
-          tabBarList[_tabViewIndex].data.addAll(newData);
-          //修改分页
-          tabBarList[_tabViewIndex].page = page;
-          //数据总条数
-          tabBarList[_tabViewIndex].total = total;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }
 
-// //时间
-// DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-//   e['addtime'] * 1000,
-// );
-// // 时间转换
-// String addtime = formatDate(
-//   dateTime,
-//   [yyyy, '-', mm, '-', dd],
-// );
+// 证书情况组件
+class CertificateWidget extends StatelessWidget with MyScreenUtil {
+  CertificateDataType item;
+  CertificateWidget({Key key, @required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Text("${item.name}"),
+      title: Container(
+        height: dp(100.0),
+        alignment: Alignment.center,
+        child: Text("${item.dep}"),
+      ),
+      trailing: RaisedButton(
+        color: Colors.blue,
+        child: Text(
+          '查看',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+}
+
+// 三违情况组件
+class IllegalManageWidget extends StatelessWidget with MyScreenUtil {
+  IllegalManageDataType item;
+  IllegalManageWidget({Key key, @required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //时间
+    DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+      item.addtime * 1000,
+    );
+    // 时间转换
+    var _addtime = formatDate(
+      addtime,
+      [yyyy, '-', mm, '-', dd],
+    );
+
+    return ListTile(
+      onTap: () {
+        print(item.toJson());
+      },
+      leading: Text("${item.title}"),
+      trailing: Text("$_addtime"),
+    );
+  }
+}
+
+// 咨询组件
+class AdvisoryWidget extends StatelessWidget {
+  AdvisoryDataType item;
+  AdvisoryWidget({Key key, @required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //时间
+    DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+      item.addtime * 1000,
+    );
+    // 时间转换
+    var _addtime = formatDate(
+      addtime,
+      [yyyy, '-', mm, '-', dd],
+    );
+
+    return ListTile(
+      onTap: () {
+        // 跳转到咨询详情
+        Navigator.pushNamed(
+          context,
+          '/advisoryDetail',
+          arguments: item.toJson(),
+        );
+      },
+      leading: Text("${item.title}"),
+      trailing: Text("$_addtime"),
+    );
+  }
+}
