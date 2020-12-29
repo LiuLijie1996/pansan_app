@@ -7,36 +7,83 @@ import '../tabbarPages/index.dart';
 import '../tabbarPages/my.dart';
 import '../tabbarPages/news.dart';
 import '../tabbarPages/study.dart';
+import '../mixins/withScreenUtil.dart';
 
 // 底部导航
 class MyBottomNavigationBar extends StatefulWidget {
-  final currentIndex;
+  final int currentIndex;
   MyBottomNavigationBar({Key key, this.currentIndex = 0}) : super(key: key);
 
   @override
   _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
 }
 
-class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-  // 选中的底部导航
-  int _currentIndex = 0;
-  List _pageList = [
-    Index(),
-    News(),
-    Study(),
-    Exam(),
-    My(),
+class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
+    with SingleTickerProviderStateMixin, MyScreenUtil {
+  TabController _tabController; //需要定义一个Controller
+  int tabIndex = 0;
+  List tabs = [
+    {
+      "title": "首页",
+      "activeIcon": "assets/bottom_nav/blue/home.png",
+      "inactiveIcon": "assets/bottom_nav/grey/home.png",
+      "page": Index(),
+    },
+    {
+      "title": "新闻",
+      "activeIcon": "assets/bottom_nav/blue/news.png",
+      "inactiveIcon": "assets/bottom_nav/grey/news.png",
+      "page": News(),
+    },
+    {
+      "title": "学习",
+      "activeIcon": "assets/bottom_nav/blue/study.png",
+      "inactiveIcon": "assets/bottom_nav/grey/study.png",
+      "page": Study(),
+    },
+    {
+      "title": "考试",
+      "activeIcon": "assets/bottom_nav/blue/exam.png",
+      "inactiveIcon": "assets/bottom_nav/grey/exam.png",
+      "page": Exam(),
+    },
+    {
+      "title": "我的",
+      "activeIcon": "assets/bottom_nav/blue/my.png",
+      "inactiveIcon": "assets/bottom_nav/grey/my.png",
+      "page": My(),
+    },
   ];
-  DateTime _preTime; //上次点击时间
+
+  // 上次点击返回的时间
+  DateTime _preTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    setState(() {
-      _currentIndex = widget.currentIndex;
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    _tabController = TabController(vsync: this, length: tabs.length);
+    _tabController.addListener(() {
+      setState(() {
+        tabIndex = _tabController.index;
+      });
     });
+
+    _tabController.animateTo(widget.currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -64,84 +111,70 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         }
       },
       child: Scaffold(
-        body: _pageList[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          currentIndex: _currentIndex,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/bottom_nav/grey/home.png",
-                width: 20.0,
-                height: 20.0,
+        bottomNavigationBar: TabBar(
+          controller: _tabController,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.grey,
+          indicator: BoxDecoration(),
+          tabs: tabs.map((e) {
+            int index = tabs.indexOf(e);
+            String asset = "${e['inactiveIcon']}";
+
+            // 判断是不是激活状态
+            if (tabIndex == index) {
+              asset = "${e['activeIcon']}";
+            }
+
+            return Tab(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: dp(10.0)),
+                    child: Image.asset(
+                      "$asset",
+                      width: 20.0,
+                      height: 20.0,
+                    ),
+                  ),
+                  Text(
+                    "${e['title']}",
+                    style: TextStyle(
+                      fontSize: dp(26.0),
+                    ),
+                  ),
+                ],
               ),
-              activeIcon: Image.asset(
-                "assets/bottom_nav/blue/home.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: "首页",
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/bottom_nav/grey/news.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              activeIcon: Image.asset(
-                "assets/bottom_nav/blue/news.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: "新闻",
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/bottom_nav/grey/study.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              activeIcon: Image.asset(
-                "assets/bottom_nav/blue/study.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: "学习",
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/bottom_nav/grey/exam.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              activeIcon: Image.asset(
-                "assets/bottom_nav/blue/exam.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: "考试",
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/bottom_nav/grey/my.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              activeIcon: Image.asset(
-                "assets/bottom_nav/blue/my.png",
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: "我的",
-            ),
-          ],
+            );
+          }).toList(),
+        ),
+        body: TabBarView(
+          controller: _tabController,
+          children: tabs.map((e) {
+            Widget page = e['page'];
+            return MyAppPage(page: page);
+          }).toList(),
         ),
       ),
     );
   }
+}
+
+class MyAppPage extends StatefulWidget {
+  Widget page;
+  MyAppPage({Key key, @required this.page}) : super(key: key);
+
+  @override
+  _MyAppPageState createState() => _MyAppPageState();
+}
+
+class _MyAppPageState extends State<MyAppPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    return widget.page;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
