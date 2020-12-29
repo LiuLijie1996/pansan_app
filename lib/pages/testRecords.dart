@@ -1,10 +1,15 @@
 // 考试记录
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/MyIcon.dart';
+import '../components/MyProgress.dart';
+import '../components/EmptyBox.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/TestRecordsDataType.dart';
+import '../models/IssueDataType.dart';
 
 class TestRecords extends StatefulWidget {
   TestRecords({Key key}) : super(key: key);
@@ -14,19 +19,166 @@ class TestRecords extends StatefulWidget {
 }
 
 class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
-  Map testRecordsData = {
-    "total": 0,
-    "page": 1,
-    "data": [],
-  };
+  List<TestRecordsDataType> testRecordsData = [];
+  bool initialize = false; //初始化是否完成
 
   _TestRecordsState() {
-    // 获取考试记录
-    getTestData();
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() async {
+    // 获取记录列表
+    getTestRecordsData();
+  }
+
+  // 获取记录列表
+  getTestRecordsData() async {
+    try {
+      var result = await myRequest(
+        path: "/api/user/getUserTestRecordList",
+        data: {
+          "user_id": 1,
+        },
+      );
+      List data = result['data'];
+
+      testRecordsData = data.map((e) {
+        return TestRecordsDataType.fromJson({
+          "id": e['id'],
+          "test_id": e['test_id'],
+          "user_id": e['user_id'],
+          "department_id": e['department_id'],
+          "m_test_id": e['m_test_id'],
+          "type": e['type'],
+          "fraction": e['fraction'],
+          "test_time": e['test_time'],
+          "addtime": e['addtime'],
+          "sorts": e['sorts'],
+          "update_time": e['update_time'],
+          "test_type": e['test_type'],
+          "option": e['option'],
+          "q_group": e['q_group'],
+          "test_num": e['test_num'],
+          "test": {
+            "id": e['test']['id'],
+            "d_id": e['test']['d_id'],
+            "mid": e['test']['mid'],
+            "pid": e['test']['pid'],
+            "m_test_id": e['test']['m_test_id'],
+            "class_id": e['test']['class_id'],
+            "paper_id": e['test']['paper_id'],
+            "name": e['test']['name'],
+            "address": e['test']['address'],
+            "min_duration": e['test']['min_duration'],
+            "duration": e['test']['duration'],
+            "passing_mark": e['test']['passing_mark'],
+            "test_num_type": e['test']['test_num_type'],
+            "test_num": e['test']['test_num'],
+            "cut_screen_type": e['test']['cut_screen_type'],
+            "cut_screen_num": e['test']['cut_screen_num'],
+            "cut_screen_time": e['test']['cut_screen_time'],
+            "user_type": e['test']['user_type'],
+            "type": e['test']['type'],
+            "is_integral": e['test']['is_integral'],
+            "integral": e['test']['integral'],
+            "integral_type": e['test']['integral_type'],
+            "score_rule": e['test']['score_rule'],
+            "sorts": e['test']['sorts'],
+            "status": e['test']['status'],
+            "addtime": e['test']['addtime']
+          }
+        });
+      }).toList();
+
+      if (this.mounted) {
+        setState(() {
+          initialize = true;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 获取考试记录对应的考题
+  Future<List<IssueDataType>> getUserTestAnswerList({
+    ///考试id
+    @required test_id,
+
+    ///考试类型
+    @required test_type,
+  }) async {
+    try {
+      var result = await myRequest(
+        path: "/api/user/getUserTestAnswerList",
+        data: {
+          "user_id": 1,
+          "test_id": test_id,
+          "test_type": test_type,
+        },
+      );
+
+      List data = result['data']['list'];
+
+      List<IssueDataType> newData = data.map((e) {
+        // 判断这些数组是不是被改成String类型了
+        bool optionIsStr = e['option'].runtimeType == String;
+        bool answerIsStr = e['answer'].runtimeType == String;
+
+        // 将String类型的数组改回数组类型
+        List options = optionIsStr ? json.decode(e['option']) : e['option'];
+        List answer = answerIsStr ? json.decode(e['answer']) : e['answer'];
+
+        bool correct;
+        if (e['q_type'] == 1) {
+          correct = null;
+        } else if (e['q_type'] == 2) {
+          correct = false;
+        } else if (e['q_type'] == 3) {
+          correct = true;
+        }
+
+        return IssueDataType.fromJson({
+          "id": e['id'], //id
+          "stem": e['stem'], //标题
+          "type": e['type'], //题目类型
+          "option": options, //题目选项
+          "answer": answer, //正确答案
+          "analysis": e['analysis'], //答案解析
+          "disorder": e['disorder'], //当前题目分数
+          "userFavor": e['userFavor'] ?? false, //用户是否收藏
+          "userAnswer": e['userAnswer'], //用户选择的答案
+          "correct": correct, //用户的选择是否正确
+        });
+      }).toList();
+
+      return newData;
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 判断初始化是否完成
+    if (!initialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
+
+    if (testRecordsData.length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("考试记录"),
+          centerTitle: true,
+        ),
+        body: EmptyBox(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("考试记录"),
@@ -36,29 +188,56 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
         color: Colors.white,
         child: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
-            var item = testRecordsData['data'][index];
+            TestRecordsDataType item = testRecordsData[index];
+
+            // 格式化时间
+            DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+              item.addtime * 1000,
+            );
+            String _addtime = formatDate(
+              addtime,
+              [yyyy, '-', mm, '-', dd, " ", HH, ":", mm],
+            );
+
             return InkWell(
-              onTap: () {
-                print(item);
+              onTap: () async {
+                print("获取考题");
+
+                // 获取考题
+                List<IssueDataType> result = await getUserTestAnswerList(
+                  test_id: item.testId,
+                  test_type: item.testType,
+                );
+
+                if (result != null) {
+                  // 跳转到试题解析页面
+                  Navigator.pushNamed(
+                    context,
+                    "/examResultAnalyse",
+                    arguments: {
+                      "dataList": result,
+                    },
+                  );
+                }
               },
               child: ListTile(
                 title: Text(
-                  "${item['test']['name']}",
+                  "${item.test.name}",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                subtitle: Text("${item['update_time']}"),
+                subtitle: Text("$_addtime"),
                 trailing: Container(
                   width: dp(180.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${item['fraction']} 分",
+                        "${item.fraction} 分",
                         style: TextStyle(fontSize: dp(32.0)),
                       ),
                       Icon(
-                        myIcon['arrows_right'],
+                        aliIconfont.arrows_right,
                         size: dp(30.0),
                       ),
                     ],
@@ -70,50 +249,9 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
           separatorBuilder: (BuildContext context, int index) {
             return Divider();
           },
-          itemCount: testRecordsData['data'].length,
+          itemCount: testRecordsData.length,
         ),
       ),
     );
-  }
-
-  // 获取考试记录
-  getTestData({page = 1}) async {
-    try {
-      var result = await myRequest(path: "/api/user/testRecords");
-
-      int total = result['total'];
-      List data = result['data'];
-      List newData = data.map((e) {
-        //时间
-        DateTime update_time = DateTime.fromMillisecondsSinceEpoch(
-          e['update_time'] * 1000,
-        );
-
-        // 时间转换
-        String _update_time = formatDate(
-          update_time,
-          [yyyy, '-', mm, '-', dd, " ", HH, ":", mm],
-        );
-
-        double fraction = double.parse("${e["fraction"]}");
-
-        return {
-          "test": {
-            "id": e['test']['id'], //考试的id
-            "name": e['test']['name'], //考试的名称
-          },
-          "update_time": _update_time, //完成考试的时间
-          "fraction": fraction, //考试得分
-        };
-      }).toList();
-
-      setState(() {
-        testRecordsData['data'].addAll(newData);
-        testRecordsData['page'] = page;
-        testRecordsData['total'] = total;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 }

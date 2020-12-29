@@ -54,24 +54,28 @@ class IssueDataType {
       this.correct});
 
   IssueDataType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    pid = json['pid'];
-    name = json['name'];
-    type = json['type'];
-    stem = json['stem'];
-    if (json['option'] != null) {
-      option = new List<Option>();
-      json['option'].forEach((v) {
-        option.add(new Option.fromJson(v));
-      });
+    try {
+      id = json['id'];
+      pid = json['pid'];
+      name = json['name'];
+      type = json['type'];
+      stem = json['stem'];
+      if (json['option'] != null) {
+        option = new List<Option>();
+        json['option'].forEach((v) {
+          option.add(new Option.fromJson(v));
+        });
+      }
+      answer = json['answer'].cast<String>();
+      analysis = json['analysis'];
+      addtime = json['addtime'];
+      disorder = json['disorder'];
+      userFavor = json['userFavor'];
+      userAnswer = json['userAnswer'].cast<String>();
+      correct = json['correct'];
+    } catch (e) {
+      print("IssueDataType  $e");
     }
-    answer = json['answer'].cast<String>();
-    analysis = json['analysis'];
-    addtime = json['addtime'];
-    disorder = json['disorder'];
-    userFavor = json['userFavor'];
-    userAnswer = json['userAnswer'].cast<String>();
-    correct = json['correct'];
   }
 
   Map<String, dynamic> toJson() {

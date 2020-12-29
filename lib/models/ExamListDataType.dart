@@ -79,25 +79,29 @@ class ExamListDataType {
   });
 
   ExamListDataType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    pid = json['pid'];
-    mTestId = json['m_test_id'];
-    classId = json['class_id'];
-    paperId = json['paper_id'];
-    name = json['name'];
-    address = json['address'];
-    startTime = json['start_time'];
-    endTime = json['end_time'];
-    duration = json['duration'];
-    passingMark = json['passing_mark'];
-    testNum = json['test_num'];
-    cutScreenType = json['cut_screen_type'];
-    cutScreenNum = json['cut_screen_num'];
-    cutScreenTime = json['cut_screen_time'];
-    type = json['type'];
-    isTest = json['is_test'];
-    status = json['status'];
-    minDuration = json['min_duration'];
+    try {
+      id = json['id'];
+      pid = json['pid'];
+      mTestId = json['m_test_id'];
+      classId = json['class_id'];
+      paperId = json['paper_id'];
+      name = json['name'];
+      address = json['address'];
+      startTime = json['start_time'];
+      endTime = json['end_time'];
+      duration = json['duration'];
+      passingMark = json['passing_mark'];
+      testNum = json['test_num'];
+      cutScreenType = json['cut_screen_type'];
+      cutScreenNum = json['cut_screen_num'];
+      cutScreenTime = json['cut_screen_time'];
+      type = json['type'];
+      isTest = json['is_test'];
+      status = json['status'];
+      minDuration = json['min_duration'];
+    } catch (e) {
+      print("ExamListDataType  $e");
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/components/TestSelect.dart';
+import '../models/IssueDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../components/TestSelect.dart';
 
 class ExamResultAnalyse extends StatefulWidget {
   // 题目列表

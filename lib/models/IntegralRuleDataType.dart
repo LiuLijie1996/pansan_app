@@ -11,16 +11,17 @@ class IntegralRuleDataType {
   int sorts;
   List<IntegralRuleChild> child;
 
-  IntegralRuleDataType(
-      {this.id,
-      this.name,
-      this.type,
-      this.upperLimit,
-      this.addtime,
-      this.updateTime,
-      this.status,
-      this.sorts,
-      this.child});
+  IntegralRuleDataType({
+    this.id,
+    this.name,
+    this.type,
+    this.upperLimit,
+    this.addtime,
+    this.updateTime,
+    this.status,
+    this.sorts,
+    this.child,
+  });
 
   IntegralRuleDataType.fromJson(Map<String, dynamic> json) {
     id = json['id'];
