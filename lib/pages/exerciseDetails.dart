@@ -181,7 +181,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("技术人员测试"),
+          title: Text("${widget.arguments.name}"),
           actions: [
             FlatButton(
               onPressed: () {
@@ -388,7 +388,9 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                           if (item.type == 3 || item.type == 1) {
                             item.userAnswer = [];
 
-                            _swiperController.next();
+                            if (_currentIndex < dataList.length - 1) {
+                              _swiperController.next();
+                            }
                           }
 
                           // 判断当前选择的是否已经选择过了

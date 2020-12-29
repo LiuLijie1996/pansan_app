@@ -1,8 +1,8 @@
 // 答题卡
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
 
 class AnswerSheet extends StatelessWidget with MyScreenUtil {
   // 题目列表
