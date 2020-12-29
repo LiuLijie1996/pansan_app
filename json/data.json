@@ -1,26 +1,34 @@
 {
-    "id": 8171,
-    "test_id": 174,
-    "user_id": 1,
-    "department_id": 2,
-    "m_test_id": 0,
-    "type": 3,
-    "fraction": 0,
-    "test_time": 1608889787,
-    "addtime": 1608888908,
-    "sorts": 0,
-    "update_time": 1608889787,
-    "test_type": 1,
-    "option": "",
-    "q_group": "14477,14491,14489,14486,14488,14490,14495,14485,14494,14484,14481,14487,14496,14478,14493,14479,14480,14483,14482,14492",
-    "test_num": 5,
-    "user": {
-        "id": 1,
-        "name": "陈士虎",
-        "department": {
-            "id": 2,
-            "name": "矿本部",
-            "pid": 1
-        }
-    }
+    "time": 1606752000,
+    "child": [{
+        "id": 174,
+        "d_id": 0,
+        "mid": 0,
+        "pid": 2,
+        "m_test_id": 0,
+        "class_id": 0,
+        "paper_id": 70,
+        "name": "模拟考试",
+        "address": "搜索",
+        "start_time": "",
+        "end_time": "",
+        "min_duration": "5.00",
+        "duration": "20.00",
+        "passing_mark": "50.00",
+        "test_num_type": 2,
+        "test_num": 1,
+        "cut_screen_type": 0,
+        "cut_screen_num": 1,
+        "cut_screen_time": 10,
+        "user": "",
+        "user_type": 1,
+        "type": 1,
+        "is_integral": 0,
+        "integral": 2,
+        "integral_type": 1,
+        "score_rule": null,
+        "sorts": "",
+        "status": 1,
+        "addtime": 1608887810
+    }]
 }
