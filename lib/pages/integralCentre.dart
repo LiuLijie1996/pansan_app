@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pansan_app/components/MyProgress.dart';
+import '../components/MyProgress.dart';
 import '../utils/myRequest.dart';
 import '../mixins/withScreenUtil.dart';
 import '../models/GoodsDataType.dart';
@@ -52,7 +52,7 @@ class _IntegralCentreState extends State<IntegralCentre>
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/score/goodsList",
+        path: MyApi.goodsList,
         data: {
           "page": page,
           "psize": 20,
@@ -186,10 +186,12 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
   GoodsDataType goodsItem; //商品
   GoodsItemWidget({Key key, @required this.goodsItem}) : super(key: key);
 
+  // 点击兑换时弹窗提示
   showToast() async {
     try {
+      // 请求后台进行兑换
       var result = await myRequest(
-        path: "/api/score/userExchangeScore",
+        path: MyApi.userExchangeScore,
         data: {
           "user_id": 1,
           "goods_id": goodsItem.id,

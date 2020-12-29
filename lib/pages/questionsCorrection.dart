@@ -1,8 +1,8 @@
 // 试题纠错
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
 
 class QuestionsCorrection extends StatefulWidget {
   final IssueDataType issueData;
@@ -131,7 +131,6 @@ class _QuestionsCorrectionState extends State<QuestionsCorrection>
                       "err_type": _currentErrIndex,
                       "content": _inputValue,
                     };
-                    print(data);
 
                     Navigator.pop(context, data);
                   },

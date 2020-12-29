@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
 
 //考试选项的按钮
 class MyChoiceButton extends StatelessWidget with MyScreenUtil {

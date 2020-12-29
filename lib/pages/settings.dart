@@ -1,8 +1,8 @@
 // 设置页面
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/pages/login.dart';
+import '../components/MyIcon.dart';
+import '../mixins/withScreenUtil.dart';
+import '../pages/login.dart';
 
 class Settings extends StatelessWidget with MyScreenUtil {
   const Settings({Key key}) : super(key: key);

@@ -4,13 +4,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
-import 'package:pansan_app/components/GradientCircularProgressIndicator.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/NavDataType.dart';
-import 'package:pansan_app/models/ExerciseSelectDataType.dart';
+import '../components/GradientCircularProgressIndicator.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/NavDataType.dart';
+import '../models/ExerciseSelectDataType.dart';
 
 class ExerciseSelect extends StatefulWidget {
   final NavDataType arguments;
@@ -107,7 +107,7 @@ class _ExerciseSelectState extends State<ExerciseSelect>
   getDataList({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/exercise/getPracticeList",
+        path: MyApi.getPracticeList,
         data: {
           "id": widget.arguments.id,
           "user_id": true,

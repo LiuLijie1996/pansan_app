@@ -36,7 +36,7 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
   getCheckingInRecord() async {
     try {
       var result = await myRequest(
-        path: '/api/user/getAttendDetail',
+        path: MyApi.getAttendDetail,
         data: {
           "user_id": 1,
           "class_id": arguments.classId,

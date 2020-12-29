@@ -69,7 +69,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
   readAccomplish() async {
     try {
       var result = await myRequest(
-        path: "/api/news/newsUserScore",
+        path: MyApi.newsUserScore,
         data: {
           "course_id": courseData.id, //课程id
           "chapter_id": widget.chapterId, //章节id

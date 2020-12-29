@@ -347,7 +347,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 获取轮播图
   getBannerList() async {
     try {
-      var result = await myRequest(path: "/api/index/banner");
+      var result = await myRequest(path: MyApi.indexBanner);
       List data = result['data'];
 
       bannerList = data.map((e) {
@@ -365,9 +365,12 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 获取最新考试
   getExamList() async {
     try {
-      var result = await myRequest(path: "/api/exam/newKaoshi", data: {
-        "user_id": 1,
-      });
+      var result = await myRequest(
+        path: MyApi.newKaoshi,
+        data: {
+          "user_id": 1,
+        },
+      );
       List data = result['data'];
 
       data.forEach((e) {
@@ -412,7 +415,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/news/getIndexNewsList",
+        path: MyApi.getIndexNewsList,
         data: {
           "page": page,
           "psize": 20,
@@ -452,7 +455,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/course/courseList",
+        path: MyApi.courseList,
         data: {
           "user_id": 1,
           "page": page,

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/MyIcon.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 // 登录页面
 class Login extends StatefulWidget {
@@ -209,7 +209,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
                           if (account != '') {
                             if (pwd != '') {
                               var result = await myRequest(
-                                path: "/api/login",
+                                path: MyApi.login,
                                 data: {"account": account, "pwd": pwd},
                               );
                               print(result);
@@ -416,7 +416,7 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                           if (phone != '') {
                             if (verifyCode != '') {
                               var result = await myRequest(
-                                path: "/api/login",
+                                path: MyApi.login,
                                 data: {
                                   "phone": phone,
                                   "verifyCode": verifyCode
@@ -579,7 +579,7 @@ class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
                           if (userName != '') {
                             if (idCard != '') {
                               var result = await myRequest(
-                                path: "/api/login",
+                                path: MyApi.login,
                                 data: {"userName": userName, "idCard": idCard},
                               );
                               print(result);

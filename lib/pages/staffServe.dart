@@ -76,7 +76,7 @@ class _StaffServeState extends State<StaffServe>
   }) async {
     try {
       var result = await myRequest(
-        path: '/api/user/getUserServiceList',
+        path: MyApi.getUserServiceList,
         data: {
           "pid": id,
           "page": page,

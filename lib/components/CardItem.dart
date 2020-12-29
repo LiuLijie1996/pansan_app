@@ -281,7 +281,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
   Future<bool> saveUserUpvote() async {
     try {
       await myRequest(
-        path: "/api/news/saveUserUpvote",
+        path: MyApi.saveUserUpvote,
         data: {
           "id": item.id,
         },

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
+import '../components/EmptyBox.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 
@@ -59,7 +59,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
   getUserScoreList() async {
     try {
       var result = await myRequest(
-        path: "/api/score/getUserScoreList",
+        path: MyApi.getUserScoreList,
         data: {
           "user_id": 1,
           "page": 1,

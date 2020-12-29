@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/MateriaDataType.dart';
 import 'package:video_player/video_player.dart';
 import 'package:orientation/orientation.dart';
-
 import 'package:event_bus/event_bus.dart';
+import './MyIcon.dart';
+import './MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/MateriaDataType.dart';
 
 // 立即新建一个公共的eventBus
 EventBus eventBus = EventBus();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
+import '../mixins/withScreenUtil.dart';
 
 class EmptyBox extends StatelessWidget with MyScreenUtil {
   const EmptyBox({Key key}) : super(key: key);

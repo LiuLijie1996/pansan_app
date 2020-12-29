@@ -1,11 +1,11 @@
 // 考试结束页面
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyTags.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
-import 'package:pansan_app/models/ExamListDataType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/MyTags.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
+import '../models/ExamListDataType.dart';
+import '../utils/myRequest.dart';
 
 class ExamOver extends StatelessWidget with MyScreenUtil {
   // 题目列表
@@ -82,7 +82,7 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
     };
 
     // 提交试卷
-    myRequest(path: "/api/exam/saveUserTest", data: query).then((value) {
+    myRequest(path: MyApi.saveUserTest, data: query).then((value) {
       print(value);
     });
 

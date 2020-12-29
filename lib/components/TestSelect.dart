@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyChoiceButton.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/IssueDataType.dart';
+import './MyChoiceButton.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/IssueDataType.dart';
 
 // 题目选择
 class MultipleChoice extends StatelessWidget with MyScreenUtil {

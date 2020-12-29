@@ -64,7 +64,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   searchCourseData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/course/courseList",
+        path: MyApi.courseList,
         data: {
           "searchValue": arguments['searchValue'],
           "isTags": arguments['isTags'],

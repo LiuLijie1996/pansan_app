@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/MyIcon.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class UpdatePwd extends StatefulWidget {
   UpdatePwd({Key key}) : super(key: key);
@@ -198,7 +198,7 @@ class _UpdatePwdState extends State<UpdatePwd> with MyScreenUtil {
                           if (pwd1 != '') {
                             if (pwd1 == pwd2) {
                               var result = await myRequest(
-                                path: "/api/login",
+                                path: MyApi.login,
                                 data: {"pwd1": pwd1, "pwd2": pwd2},
                               );
                               print(result);

@@ -151,7 +151,7 @@ class _ExamDetailsState extends State<ExamDetails>
   getDataList() async {
     try {
       var result = await myRequest(
-        path: "/api/exam/kaoTi",
+        path: MyApi.kaoTi,
         data: {
           "user_id": 1,
           "id": examSiteInfo.id,

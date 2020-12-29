@@ -46,8 +46,8 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
   // 获取导航
   getExamNav() async {
     try {
-      var result1 = await myRequest(path: "/api/exam/getTestItemList");
-      var result2 = await myRequest(path: "/api/exam/getPracticeItemList");
+      var result1 = await myRequest(path: MyApi.getTestItemList);
+      var result2 = await myRequest(path: MyApi.getPracticeItemList);
 
       // 获取我要考试列表
       List myExam = result1["data"];

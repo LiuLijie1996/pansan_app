@@ -33,7 +33,7 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
   getCoursePlan() async {
     try {
       var result = await myRequest(
-        path: "/api/user/getTimeTableList",
+        path: MyApi.getTimeTableList,
         data: {
           "class_id": arguments.classId,
         },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
+import '../mixins/withScreenUtil.dart';
 
 class MyTags extends StatelessWidget with MyScreenUtil {
   final double width;

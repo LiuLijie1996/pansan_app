@@ -148,7 +148,7 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
   getAdvisoryData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserServiceList",
+        path: MyApi.getUserServiceList,
         data: {
           "user_id": true,
           "pid": 1,

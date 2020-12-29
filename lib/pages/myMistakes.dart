@@ -48,7 +48,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
   getMyMistakesData() async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserErrQuestion",
+        path: MyApi.getUserErrQuestion,
         data: {
           "user_id": 1,
         },

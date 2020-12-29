@@ -55,7 +55,7 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserCourseList",
+        path: MyApi.getUserCourseList,
         data: {
           "user_id": 1,
           "page": page,

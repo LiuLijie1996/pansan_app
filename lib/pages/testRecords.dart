@@ -37,7 +37,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
   getTestRecordsData() async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserTestRecordList",
+        path: MyApi.getUserTestRecordList,
         data: {
           "user_id": 1,
         },
@@ -112,7 +112,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserTestAnswerList",
+        path: MyApi.getUserTestAnswerList,
         data: {
           "user_id": 1,
           "test_id": test_id,

@@ -48,7 +48,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
   getDataList() async {
     try {
       var result = await myRequest(
-        path: "/api/exam/getQuestionList",
+        path: MyApi.getQuestionList,
         data: {
           "id": widget.arguments.id,
         },

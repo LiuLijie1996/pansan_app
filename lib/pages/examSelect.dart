@@ -4,12 +4,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/models/ExamListDataType.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/NavDataType.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../models/ExamListDataType.dart';
+import '../utils/myRequest.dart';
+import '../models/NavDataType.dart';
 
 class ExamSelect extends StatefulWidget {
   final NavDataType arguments;
@@ -59,7 +59,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
   // 获取数据
   getExamData({page = 1}) async {
     try {
-      var result = await myRequest(path: "/api/exam/getTestList", data: {
+      var result = await myRequest(path: MyApi.getTestList, data: {
         "user_id": 1,
         "id": widget.arguments.id,
       });

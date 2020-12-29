@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../components/MyIcon.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class InformAffiche extends StatefulWidget {
   @override
@@ -72,7 +72,7 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
   /*请求数据*/
   void getDataList() async {
     try {
-      var result = await myRequest(path: "/api/system/systemInfo");
+      var result = await myRequest(path: MyApi.systemInfo);
       List data = result['data'];
       List newData = data.map((e) {
         DateTime time =

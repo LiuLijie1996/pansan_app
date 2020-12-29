@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/DayTopicDataType.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/DayTopicDataType.dart';
+import '../mixins/withScreenUtil.dart';
 
 class DayTopic extends StatefulWidget {
   @override
@@ -71,9 +71,12 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
 
   getDayTopic() async {
     try {
-      var result = await myRequest(path: "/api/user/getTodayUserStudy", data: {
-        "id": 4374,
-      });
+      var result = await myRequest(
+        path: MyApi.getTodayUserStudy,
+        data: {
+          "id": 4374,
+        },
+      );
       List data = result['data'];
 
       // 遍历数据

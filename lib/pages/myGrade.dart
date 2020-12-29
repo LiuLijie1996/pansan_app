@@ -53,7 +53,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
   getGradeData({page = 1}) async {
     try {
       var result = await myRequest(
-        path: "/api/user/getUserClass",
+        path: MyApi.getUserClass,
         data: {
           "user_id": 1,
         },

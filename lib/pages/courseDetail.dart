@@ -68,7 +68,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
   getCourseDetail() async {
     try {
       var result = await myRequest(
-        path: "/api/course/courseDetail",
+        path: MyApi.courseDetail,
         data: {
           "id": arguments.id,
           "user_id": 1,
@@ -193,7 +193,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
 
       try {
         var result = await myRequest(
-          path: "/api/course/courseProgress",
+          path: MyApi.courseProgress,
           data: data,
         );
       } catch (e) {
@@ -743,7 +743,7 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
   readAccomplish() async {
     try {
       var result = await myRequest(
-        path: "/api/course/courseProgress",
+        path: MyApi.courseProgress,
         data: {
           "course_id": widget.courseData.id, //课程id
           "article_id": arguments.id, //图文id

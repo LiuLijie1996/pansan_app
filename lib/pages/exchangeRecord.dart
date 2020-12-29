@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
-import 'package:pansan_app/components/MyProgress.dart';
+import '../components/EmptyBox.dart';
+import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/GoodsExchangeDataType.dart';
@@ -34,7 +34,7 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        path: "/api/score/getUserScoreExchange",
+        path: MyApi.getUserScoreExchange,
         data: {
           "user_id": 1,
           "page": page,

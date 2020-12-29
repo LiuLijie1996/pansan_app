@@ -1,8 +1,8 @@
 // 个人信息
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
 
 class MyInformation extends StatefulWidget {
   MyInformation({Key key}) : super(key: key);
@@ -26,7 +26,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
     try {
       // 上传文件
       var result = await dioUpload(
-        path: "/api/upload",
+        path: MyApi.upload,
         filePath: image.path,
       );
       print(result);
