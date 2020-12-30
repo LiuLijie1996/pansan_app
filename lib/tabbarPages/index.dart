@@ -118,6 +118,9 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 当前显示的是新闻列表还是课程列表
   int _currentIndex = 0;
 
+  // 未读的通知公告
+  int unreadNum = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -144,7 +147,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
 
           // 快捷导航
           SliverToBoxAdapter(
-            child: FastNavList(),
+            child: FastNavList(unreadNum: unreadNum),
           ),
 
           // 最新考试
@@ -317,6 +320,8 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     getNewsList();
     // 获取课程
     getCourseList();
+    // 获取未读的通知公告数量
+    getUnreadNum();
   }
 
   // 同步请求数据
@@ -329,6 +334,8 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     await getNewsList();
     // 获取课程
     await getCourseList();
+    // 获取未读的通知公告数量
+    await getUnreadNum();
   }
 
   // 清空数据
@@ -342,6 +349,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     coursePage = 1; //课程分页
     courseTotal = null; //课程总个数
     _currentIndex = 0; // 当前显示的是新闻列表还是课程列表
+    unreadNum = 0; //未读的通知公告数量
   }
 
   // 获取轮播图
@@ -357,6 +365,31 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       if (this.mounted) {
         setState(() {});
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 获取未读的通知公告数量
+  getUnreadNum() async {
+    try {
+      unreadNum = 0;
+      var result = await myRequest(
+        path: MyApi.getUserMessage,
+        data: {
+          "user_id": true,
+        },
+      );
+
+      List data = result['data'];
+      data.forEach((e) {
+        var status = e['status'];
+        if (status == 2) {
+          unreadNum++;
+        }
+      });
+
+      setState(() {});
     } catch (e) {
       print(e);
     }
@@ -557,7 +590,9 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
 
 // 快捷导航
 class FastNavList extends StatelessWidget with MyScreenUtil {
-  const FastNavList({Key key}) : super(key: key);
+  ///未读的通知公告数量
+  final int unreadNum;
+  const FastNavList({Key key, @required this.unreadNum}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -591,7 +626,7 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
           children: _navList.map((item) {
             // GestureDetector
             return GestureDetector(
-              onTap: () {
+              onTap: () async {
                 print("点击了快捷导航：$item");
                 if (item['title'] == '课程学习') {
                   Navigator.pushAndRemoveUntil(
@@ -624,10 +659,41 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
                     borderRadius: BorderRadius.circular(dp(10.0))),
                 child: Column(
                   children: [
-                    Image.asset(
-                      item['icon'],
-                      width: dp(100.0),
-                      height: dp(100.0),
+                    Stack(
+                      children: [
+                        Image.asset(
+                          item['icon'],
+                          width: dp(100.0),
+                          height: dp(100.0),
+                        ),
+
+                        // 角标
+                        item['title'] != '通知公告'
+                            ? Container()
+                            : unreadNum == 0
+                                ? Container()
+                                : Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      width: dp(38.0),
+                                      height: dp(38.0),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100.0),
+                                        color: Colors.red,
+                                      ),
+                                      child: Text(
+                                        "$unreadNum",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: dp(26.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                      ],
                     ),
                     SizedBox(height: 10),
                     Text(
