@@ -31,7 +31,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   bool isPlay = false;
   int fontSize = 120;
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
-  List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '超大字体', "超大大字体"];
+  List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '大号字体', "超大号字体"];
   MateriaDataType materia;
   bool isInitialize = false; //初始化是否完成
 

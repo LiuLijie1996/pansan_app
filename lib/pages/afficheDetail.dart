@@ -20,7 +20,7 @@ class AfficheDetail extends StatefulWidget {
 class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
   int fontSize = 120;
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
-  List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '超大字体', "超大大字体"];
+  List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '大号字体', "超大号字体"];
 
   @override
   void initState() {
