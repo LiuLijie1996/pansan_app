@@ -6,6 +6,7 @@ import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../models/UserMessageDataType.dart';
 
 class InformAffiche extends StatefulWidget {
   @override
@@ -13,11 +14,54 @@ class InformAffiche extends StatefulWidget {
 }
 
 class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
-  List dataList = [];
+  List<UserMessageDataType> dataList = [];
 
-  _InformAfficheState() {
-    /*请求数据*/
-    this.getDataList();
+  @override
+  void initState() {
+    super.initState();
+
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    // 请求数据
+    this.getUserMessage();
+  }
+
+  // 请求数据
+  getUserMessage() async {
+    try {
+      var result = await myRequest(
+        path: MyApi.getUserMessage,
+        data: {
+          "user_id": true,
+        },
+      );
+      List data = result['data'];
+      dataList = data.map((e) {
+        return UserMessageDataType.fromJson({
+          "id": e['id'],
+          "name": e['name'],
+          "content": e['content'],
+          "user_type": e['user_type'],
+          "addtime": e['addtime'],
+          "user": e['user'],
+          "d_id": e['d_id'],
+          "status": e['status'],
+          "type": e['type'],
+          "link_id": e['link_id'],
+          "annex": e['annex'],
+          "annex_name": e['annex_name'],
+          "link": e['link'],
+        });
+      }).toList();
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -31,26 +75,68 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
           ? MyProgress()
           : ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                Map item = dataList[index];
+                UserMessageDataType item = dataList[index];
+
+                // 格式化时间
+                DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+                  item.addtime * 1000,
+                );
+                String _addtime = formatDate(
+                  addtime,
+                  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn],
+                );
 
                 return InkWell(
                   onTap: () {
-                    print(item);
+                    if (item.type == 1) {
+                      // 跳转到通知公告的详情页
+                      Navigator.pushNamed(
+                        context,
+                        "/afficheDetail",
+                        arguments: item,
+                      );
+                    } else if (item.type == 2) {
+                      // 跳转到咨询详情页
+                      Navigator.pushNamed(
+                        context,
+                        "/advisoryDetail",
+                        arguments: {
+                          "id": item.id,
+                          "pid": null,
+                          "addtime": item.addtime,
+                          "title": item.name,
+                          "content": item.content,
+                        },
+                      );
+                    }
+
+                    //发送已读通知公告
+                    myRequest(
+                      path: MyApi.saveUserMessage,
+                      data: {
+                        "user_id": true,
+                        "id": item.id,
+                      },
+                    );
+
+                    setState(() {
+                      item.status = 1;
+                    });
                   },
                   child: ListTile(
                     leading: Icon(myIcon['bell']),
                     title: Text(
-                      "${item['name']}",
+                      "${item.name}",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      "${item['addtime']}",
+                      "$_addtime",
                       style: TextStyle(
                         color: Colors.grey,
                       ),
                     ),
-                    trailing: item['status'] == 1
+                    trailing: item.status == 1
                         ? Text("已读")
                         : Text(
                             "未读",
@@ -67,38 +153,5 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
               itemCount: dataList.length,
             ),
     );
-  }
-
-  /*请求数据*/
-  void getDataList() async {
-    try {
-      var result = await myRequest(path: MyApi.systemInfo);
-      List data = result['data'];
-      List newData = data.map((e) {
-        DateTime time =
-            DateTime.fromMillisecondsSinceEpoch(e['addtime'] * 1000); //开始时间
-
-        String addtime =
-            formatDate(time, [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]);
-
-        return {
-          "id": e['id'], //id
-          "name": e['name'], //标题
-          "addtime": addtime, //时间
-          "status": e['status'], //状态, 1已读 2未读
-          "content": e['content'], //通知的内容
-          "type": e['type'], //type==2 跳转到咨询详情
-          "link_id": e['link_id'], //咨询详情id
-          "annex": e['annex'], //文件地址
-          "link": e['link'], //外部链接
-        };
-      }).toList();
-
-      setState(() {
-        dataList = newData;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 }

@@ -115,7 +115,7 @@ class MyApi {
   static const testRankList = "/api/user/testRankList";
 
   /// 通知公告
-  static const systemInfo = "/api/system/systemInfo";
+  static const getUserMessage = "/api/user/getUserMessage";
 
   /// 登录
   static const login = "/api/login";
@@ -149,6 +149,12 @@ class MyApi {
 
   /// 获取证书详情
   static const getUserCert = "/api/user/getUserCert";
+
+  /// 发送已读通知公告
+  static const saveUserMessage = "/api/user/saveUserMessage";
+
+  /// 公告详情
+  static const getOneMessage = "/api/user/getOneMessage";
 }
 
 String test = "http://192.168.0.5:80/pansanApp"; //测试接口

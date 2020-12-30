@@ -1,25 +1,23 @@
-// 一日一题
+// 公告详情
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import '../components/MyProgress.dart';
+import '../models/UserMessageDataType.dart';
 import '../mixins/withScreenUtil.dart';
-import '../models/DayTopicDetailDataType.dart';
-import '../models/DayTopicDataType.dart';
+import '../utils/fileMethod.dart';
 import '../utils/myRequest.dart';
 
-class DayTopicDetail extends StatefulWidget {
-  final TimeChildren arguments;
-  DayTopicDetail({Key key, @required this.arguments}) : super(key: key);
+class AfficheDetail extends StatefulWidget {
+  final UserMessageDataType arguments;
+  AfficheDetail({Key key, @required this.arguments}) : super(key: key);
 
   @override
-  _DayTopicDetailState createState() => _DayTopicDetailState();
+  _AfficheDetailState createState() => _AfficheDetailState();
 }
 
-class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
-  DayTopicDetailDataType dayTopicDetail;
+class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
   int fontSize = 120;
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
   List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '超大字体', "超大大字体"];
@@ -29,82 +27,26 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
     super.initState();
 
     // 初始化
-    myInitialize();
+    myInitialeze();
   }
 
   // 初始化
-  myInitialize() {
-    // 获取一日一题详情
-    getDetail();
-
-    // 阅读完成请求
-    saveTodayStudy();
-  }
-
-  // 获取一日一题详情
-  getDetail() async {
-    try {
-      var result = await myRequest(
-        path: MyApi.getOneTodayStudy,
-        data: {
-          "id": widget.arguments.id,
-        },
-      );
-
-      dayTopicDetail = DayTopicDetailDataType.fromJson({
-        "id": result['data']['id'],
-        "d_id": result['data']['d_id'],
-        "name": result['data']['name'],
-        "study_time": result['data']['study_time'],
-        "addtime": result['data']['addtime'],
-        "content": result['data']['content'],
-        "analysis": result['data']['analysis'],
-        "status": result['data']['status']
-      });
-
-      if (this.mounted) {
-        setState(() {});
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // 发送阅读完成请求
-  saveTodayStudy() async {
-    try {
-      await myRequest(
-        path: MyApi.saveTodayStudy,
-        data: {
-          "user_id": true,
-          "id": widget.arguments.id,
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
+  myInitialeze() {}
 
   @override
   Widget build(BuildContext context) {
-    if (dayTopicDetail == null) {
-      return Scaffold(
-        body: MyProgress(),
-      );
-    }
-    DateTime studyTime = DateTime.fromMillisecondsSinceEpoch(
-      widget.arguments.studyTime * 1000,
+    print(widget.arguments.id);
+
+    DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+      widget.arguments.addtime * 1000,
     );
-    String _studyTime = formatDate(
-      studyTime,
+    String _addtime = formatDate(
+      addtime,
       [yyyy, '年', mm, '月', dd, "日"],
     );
-
-    print(fontSize);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("一日一题详情"),
+        title: Text("公告详情"),
       ),
       endDrawer: Container(
         width: MediaQuery.of(context).size.width / 2,
@@ -161,12 +103,12 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
           // 时间
           Container(
             padding: EdgeInsets.only(left: dp(20.0)),
-            child: Text("$_studyTime"),
+            child: Text("$_addtime"),
           ),
 
           // 详情内容
           Html(
-            data: "<div>${dayTopicDetail.content}</div>",
+            data: "<div>${widget.arguments.content}</div>",
             style: {
               "div": Style(
                 fontSize: FontSize.percent(fontSize),
@@ -175,16 +117,31 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
             },
           ),
 
-          // 解析
-          Html(
-            data: "<div>解析：${dayTopicDetail.analysis}</div>",
-            style: {
-              "div": Style(
-                fontSize: FontSize.percent(fontSize),
-                lineHeight: dp(3.0),
-              ),
-            },
-          ),
+          // 附件
+          widget.arguments.annexName == null
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.only(
+                    left: dp(20.0),
+                    right: dp(20.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      // 打开文件
+                      FilePreview(
+                        context: context,
+                        link: widget.arguments.link,
+                        title: widget.arguments.name,
+                      );
+                    },
+                    child: Text(
+                      "附件：${widget.arguments.annexName}",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
