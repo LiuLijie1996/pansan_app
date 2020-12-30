@@ -146,6 +146,9 @@ class MyApi {
 
   /// 一日一题阅读完成
   static const saveTodayStudy = "/api/user/saveTodayStudy";
+
+  /// 获取证书详情
+  static const getUserCert = "/api/user/getUserCert";
 }
 
 String test = "http://192.168.0.5:80/pansanApp"; //测试接口

@@ -41,6 +41,7 @@ import './pages/checkingInRecord.dart';
 import './pages/ExamRanking.dart';
 import './pages/QuestionsCollect.dart';
 import './pages/DayTopicDetail.dart';
+import './pages/CertificateDetail.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -177,6 +178,13 @@ Map<String, Function> routers = {
   //一日一题详情
   "/dayTopicDetail": (context, {arguments}) {
     return DayTopicDetail(
+      arguments: arguments,
+    );
+  },
+
+  //证书详情
+  "/certificateDetail": (context, {arguments}) {
+    return CertificateDetail(
       arguments: arguments,
     );
   },

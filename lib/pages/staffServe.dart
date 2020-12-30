@@ -308,7 +308,14 @@ class CertificateWidget extends StatelessWidget with MyScreenUtil {
             color: Colors.white,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          // 跳转到证书详情页面
+          Navigator.pushNamed(
+            context,
+            "/certificateDetail",
+            arguments: item,
+          );
+        },
       ),
     );
   }

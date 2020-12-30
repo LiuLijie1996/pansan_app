@@ -21,6 +21,7 @@ login						登录、注册、忘记密码
 searchCourseList			课程列表
 settings					设置页面
 staffServe					职工服务
+certificateDetail			证书详情
 testRecords					考试记录
 updatePwd					修改密码
 newsDetail					新闻详情
