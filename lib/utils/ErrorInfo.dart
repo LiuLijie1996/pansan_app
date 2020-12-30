@@ -1,21 +1,25 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
-import '../utils/myRequest.dart';
+import './myRequest.dart';
 
 class ErrorInfo {
-  String errInfo;
-  ErrorInfo(errInfo) {
-    this.errInfo = "$errInfo";
+  ErrorInfo({
+    ///弹出的提示语
+    @required msg,
+
+    ///报错的信息
+    @required errInfo,
+  }) {
     // 弹窗提示
-    this.showToast(errInfo);
+    this.showToast(msg);
 
     // 发送错误信息给后台
-    this.sendError();
+    this.sendError(errInfo);
   }
 
-  showToast(errInfo) {
+  showToast(msg) {
     Fluttertoast.showToast(
-      msg: "$errInfo",
+      msg: "$msg",
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
@@ -26,11 +30,11 @@ class ErrorInfo {
   }
 
   // 将错误信息发给后台
-  sendError() async {
+  sendError(errInfo) async {
     await myRequest(
       path: "/api/error",
       data: {
-        "msg": "$errInfo",
+        "errInfo": "$errInfo",
         "user_id": true,
       },
     );

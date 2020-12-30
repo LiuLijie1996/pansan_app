@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../components/MyIcon.dart';
+import '../utils/ErrorInfo.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../models/UserInfoDataType.dart';
+import '../db/UserDB.dart';
 
 // 登录页面
 class Login extends StatefulWidget {
@@ -205,17 +209,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
                                 ? Colors.grey
                                 : Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () async {
-                          if (account != '') {
-                            if (pwd != '') {
-                              var result = await myRequest(
-                                path: MyApi.login,
-                                data: {"account": account, "pwd": pwd},
-                              );
-                              print(result);
-                            }
-                          }
-                        },
+                        onPressed: isLogin,
                       ),
                     ),
                   ],
@@ -225,6 +219,89 @@ class _LoginState extends State<Login> with MyScreenUtil {
           ),
         ),
       ),
+    );
+  }
+
+  // 登录
+  isLogin() async {
+    try {
+      if (account == '') {
+        myShowToast(msg: "账号不能为空");
+        return;
+      }
+      if (pwd == '') {
+        myShowToast(msg: "密码不能为空");
+        return;
+      }
+
+      // 请求登录
+      var result = await myRequest(
+        path: MyApi.login,
+        data: {
+          "username": account,
+          "password": pwd,
+        },
+      );
+
+      Map data = result['data'];
+      UserInfoDataType userInfo = UserInfoDataType.fromJson({
+        "id": data['id'],
+        "pid": data['pid'],
+        "name": data['name'],
+        "password": data['password'],
+        "headUrl": data['headUrl'],
+        "sex": data['sex'],
+        "birthday": data['birthday'],
+        "idCard": data['idCard'],
+        "No": data['No'],
+        "phone": data['phone'],
+        "department": data['department'],
+        "education": data['education'],
+        "title": data['title'],
+        "job": data['job'],
+        "type_work": data['type_work'],
+        "politics_status": data['politics_status'],
+        "party_time": data['party_time'],
+        "native": data['native'],
+        "addtime": data['addtime'],
+        "status": data['status'],
+        "token": data['token'],
+        "expire_time": data['expire_time'],
+        "cid": data['cid'],
+        "jobtime": data['jobtime'],
+        "job_work": data['job_work'],
+        "skill_level": data['skill_level'],
+        "bindPhone": data['bindPhone'],
+      });
+
+      // 删除数据库
+      await UserDB.delete();
+
+      // 存储用户信息
+      int id = await UserDB.addData(userInfo);
+      print("用户id：$id");
+
+      // 关闭数据库
+      UserDB.dispose();
+
+      myShowToast(msg: '登录成功');
+
+      // 跳转到首页
+      Navigator.pushNamed(context, "/home");
+    } catch (e) {
+      ErrorInfo(msg: "登录失败", errInfo: e);
+    }
+  }
+
+  myShowToast({@required msg}) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }
@@ -241,9 +318,11 @@ class _RegisterState extends State<Register> with MyScreenUtil {
   GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _controller1 = TextEditingController(); //输入框使用到的控制器
   TextEditingController _controller2 = TextEditingController(); //输入框使用到的控制器
+  TextEditingController _controller3 = TextEditingController(); //输入框使用到的控制器
 
   String phone = ''; //输入的手机号
   String verifyCode = ''; //输入的验证码
+  String idCard; //输入的身份证号
   int _count = 60; //倒计时
   bool _verifyBtn = false; //获取验证码按钮是否被点击了
   Timer _countdownTimer; //定时器
@@ -263,10 +342,19 @@ class _RegisterState extends State<Register> with MyScreenUtil {
         verifyCode = _controller2.text;
       });
     });
+    _controller3.addListener(() {
+      setState(() {
+        idCard = _controller3.text;
+      });
+    });
   }
 
   @override
   void dispose() {
+    _controller1.dispose();
+    _controller2.dispose();
+    _controller3.dispose();
+
     // 清除定时器
     _countdownTimer?.cancel();
 
@@ -319,7 +407,35 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                           decoration: InputDecoration(
                             hintText: "请输入手机号码",
                             border: InputBorder.none,
-                            prefixIcon: Icon(myIcon['phone']),
+                            prefixIcon: Icon(aliIconfont.phone),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: dp(20.0), //阴影范围
+                              spreadRadius: 0.1, //阴影浓度
+                              color: Colors.blue[100], //阴影颜色
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(dp(6.0)),
+                        ),
+                        child: TextFormField(
+                          scrollPadding: EdgeInsets.all(0.0),
+                          controller: _controller3,
+                          decoration: InputDecoration(
+                            hintText: "请输入身份证号",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(aliIconfont.phone),
                           ),
                         ),
                       ),
@@ -414,16 +530,25 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                         textColor: Colors.white,
                         onPressed: () async {
                           if (phone != '') {
-                            if (verifyCode != '') {
-                              var result = await myRequest(
-                                path: MyApi.login,
-                                data: {
-                                  "phone": phone,
-                                  "verifyCode": verifyCode
-                                },
-                              );
-                              print(result);
+                            if (idCard != '') {
+                              if (verifyCode != '') {
+                                var result = await myRequest(
+                                  path: MyApi.login,
+                                  data: {
+                                    "phone": phone,
+                                    "verifyCode": verifyCode,
+                                    "idCard": idCard,
+                                  },
+                                );
+                                print(result);
+                              } else {
+                                myShowToast(msg: "请输入验证码");
+                              }
+                            } else {
+                              myShowToast(msg: "请输入身份证号码");
                             }
+                          } else {
+                            myShowToast(msg: "请输入手机号码");
                           }
                         },
                       ),
@@ -435,6 +560,18 @@ class _RegisterState extends State<Register> with MyScreenUtil {
           ),
         ),
       ),
+    );
+  }
+
+  myShowToast({@required msg}) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }

@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../components/ErrorInfo.dart';
+import '../utils/ErrorInfo.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../components/TestSelect.dart';
@@ -197,7 +197,7 @@ class _ExamDetailsState extends State<ExamDetails>
       }
     } catch (e) {
       print(e);
-      ErrorInfo(e);
+      ErrorInfo(msg: "$e", errInfo: e);
     }
   }
 

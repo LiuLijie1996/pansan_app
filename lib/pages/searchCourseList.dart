@@ -10,7 +10,7 @@ import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
-import '../components/ErrorInfo.dart';
+import '../utils/ErrorInfo.dart';
 
 class SearchCourseList extends StatefulWidget {
   final arguments;
@@ -122,7 +122,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
       }
     } catch (err) {
       print(err);
-      ErrorInfo("$err");
+      ErrorInfo(msg: "$err", errInfo: err);
     }
   }
 

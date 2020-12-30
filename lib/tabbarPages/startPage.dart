@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../db/UserDB.dart';
+import '../models/UserInfoDataType.dart';
 
 class StartPage extends StatefulWidget {
   StartPage({Key key}) : super(key: key);
@@ -13,11 +16,29 @@ class _StartPageState extends State<StartPage>
   AnimationController _controller;
   Animation _animation;
 
+  // 是否登录了
+  bool isLogin = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    // 设置启动页
+    setStartPage();
+
+    // 判断是否登录
+    judgeLogin();
+  }
+
+  // 设置启动页
+  setStartPage() {
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
@@ -28,18 +49,38 @@ class _StartPageState extends State<StartPage>
     _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 3)).then((value) {
-          print("到时间了");
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/home',
-            (route) => route == null,
-          );
+          // 判断有没有登录
+          if (isLogin) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+              (route) => route == null,
+            );
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => route == null,
+            );
+          }
         });
       }
     });
 
     // 开启动画
     _controller.forward();
+  }
+
+  // 判断是否登录
+  judgeLogin() async {
+    // 获取用户信息
+    List<UserInfoDataType> list = await UserDB.findAll();
+    if (list.length != 0) {
+      UserInfoDataType userInfo = list[0];
+      int expireTime = userInfo.expireTime * 1000;
+      int currenTime = new DateTime.now().millisecondsSinceEpoch;
+      isLogin = expireTime > currenTime;
+    }
   }
 
   @override

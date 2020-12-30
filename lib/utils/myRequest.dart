@@ -118,7 +118,7 @@ class MyApi {
   static const getUserMessage = "/api/user/getUserMessage";
 
   /// 登录
-  static const login = "/api/login";
+  static const login = "/api/login/login";
 
   /// 收藏的新闻
   static const getNewsCollect = "/api/news/getNewsCollect";
