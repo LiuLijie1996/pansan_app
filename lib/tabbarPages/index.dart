@@ -13,6 +13,7 @@ import '../tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 // 数据类型
 import '../models/BannerDataType.dart';
@@ -42,7 +43,7 @@ class Index extends StatelessWidget with MyScreenUtil {
               ),
               child: IconButton(
                 onPressed: () {
-                  scan();
+                  scan(context);
                 },
                 icon: Icon(myIcon['sao']),
               ),
@@ -74,7 +75,7 @@ class Index extends StatelessWidget with MyScreenUtil {
     );
   }
 
-  Future scan() async {
+  Future scan(context) async {
     try {
       // 此处为扫码结果，barcode为二维码的内容
       String barcode = await BarcodeScanner.scan();
@@ -93,6 +94,12 @@ class Index extends StatelessWidget with MyScreenUtil {
     } catch (e) {
       // 扫码错误
       print('扫码错误: $e');
+
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 }
@@ -366,7 +373,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -392,7 +403,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
 
       setState(() {});
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -440,7 +455,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -481,7 +500,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -542,7 +565,11 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 }

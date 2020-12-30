@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../utils/myRequest.dart';
 import '../models/IntegralRuleDataType.dart';
 import '../mixins/withScreenUtil.dart';
+import '../utils/ErrorInfo.dart';
 
 class IntegralRule extends StatefulWidget {
   IntegralRule({Key key}) : super(key: key);
@@ -64,7 +65,11 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

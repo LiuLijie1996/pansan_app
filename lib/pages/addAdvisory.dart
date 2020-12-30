@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class AddAdvisory extends StatefulWidget {
   AddAdvisory({Key key}) : super(key: key);
@@ -110,17 +111,14 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                         fontSize: 16.0,
                       );
                     } catch (err) {
-                      Fluttertoast.showToast(
+                      ErrorInfo(
+                        context: context,
+                        errInfo: err,
                         msg: "添加失败：$err",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black45,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
                       );
                     }
 
+                    // 返回
                     Navigator.pop(context);
                   }
                 },

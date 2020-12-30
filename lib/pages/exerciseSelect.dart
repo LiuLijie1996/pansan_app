@@ -11,6 +11,7 @@ import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/NavDataType.dart';
 import '../models/ExerciseSelectDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExerciseSelect extends StatefulWidget {
   final NavDataType arguments;
@@ -147,7 +148,11 @@ class _ExerciseSelectState extends State<ExerciseSelect>
         exerciseData['data'].addAll(newData);
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

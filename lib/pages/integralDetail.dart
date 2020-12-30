@@ -5,6 +5,7 @@ import 'package:date_format/date_format.dart';
 import '../components/EmptyBox.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 // 积分明细数据类型
 class IntegralDataType {
@@ -86,7 +87,13 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
       if (this.mounted) {
         setState(() {});
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
+    }
   }
 
   // 日历

@@ -10,6 +10,7 @@ import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/TestRecordsDataType.dart';
 import '../models/IssueDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class TestRecords extends StatefulWidget {
   TestRecords({Key key}) : super(key: key);
@@ -99,7 +100,11 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -158,7 +163,11 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
 
       return newData;
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

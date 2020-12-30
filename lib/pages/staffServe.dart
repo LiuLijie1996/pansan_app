@@ -10,6 +10,7 @@ import '../utils/fileMethod.dart';
 import '../models/CertificateDataType.dart'; //证书类型
 import '../models/IllegalManageDataType.dart'; //三违情况类型
 import '../models/AdvisoryDataType.dart'; //咨询类型
+import '../utils/ErrorInfo.dart';
 
 class StaffServe extends StatefulWidget {
   StaffServe({Key key}) : super(key: key);
@@ -127,7 +128,11 @@ class _StaffServeState extends State<StaffServe>
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

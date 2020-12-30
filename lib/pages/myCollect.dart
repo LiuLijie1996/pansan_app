@@ -8,6 +8,7 @@ import '../components/CardItem.dart';
 import '../components/EmptyBox.dart';
 import '../components/MyProgress.dart';
 import '../models/NewsDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyCollect extends StatefulWidget {
   MyCollect({Key key}) : super(key: key);
@@ -90,7 +91,11 @@ class _MyCollectState extends State<MyCollect>
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

@@ -8,6 +8,7 @@ import '../components/EmptyBox.dart';
 import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyAdvisory extends StatefulWidget {
   MyAdvisory({Key key}) : super(key: key);
@@ -179,7 +180,11 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
         myAdvData['data'].addAll(newData);
       });
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 }

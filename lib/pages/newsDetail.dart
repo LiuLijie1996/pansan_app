@@ -12,6 +12,7 @@ import '../models/NewsDataType.dart';
 import '../models/MateriaDataType.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 // 新闻详情页
 
@@ -141,7 +142,11 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -520,7 +525,11 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         },
       );
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -536,7 +545,11 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       );
       return true;
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
       return false;
     }
   }

@@ -7,6 +7,7 @@ import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
 import '../models/NavDataType.dart';
 import '../components/MyIcon.dart';
+import '../utils/ErrorInfo.dart';
 
 // 学习页面
 class Study extends StatefulWidget {
@@ -84,7 +85,11 @@ class _StudyState extends State<Study>
         }
       });
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -146,7 +151,11 @@ class _StudyState extends State<Study>
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

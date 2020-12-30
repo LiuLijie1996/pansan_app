@@ -10,6 +10,7 @@ import '../components/EmptyBox.dart';
 import '../components/MyIcon.dart';
 import '../utils/myRequest.dart';
 import '../components/MyProgress.dart';
+import '../utils/ErrorInfo.dart';
 
 class QuestionsCollect extends StatefulWidget {
   QuestionsCollect({Key key}) : super(key: key);
@@ -84,7 +85,11 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

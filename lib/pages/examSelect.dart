@@ -10,6 +10,7 @@ import '../mixins/withScreenUtil.dart';
 import '../models/ExamListDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/NavDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExamSelect extends StatefulWidget {
   final NavDataType arguments;
@@ -84,7 +85,11 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

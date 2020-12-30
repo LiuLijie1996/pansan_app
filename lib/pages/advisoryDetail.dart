@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class Arguments {
   int id;
@@ -86,7 +87,13 @@ class _AdvisoryDetailState extends State<AdvisoryDetail> with MyScreenUtil {
       if (this.mounted) {
         setState(() {});
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: "获取咨询详情失败",
+      );
+    }
   }
 
   @override

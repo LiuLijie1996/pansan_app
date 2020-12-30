@@ -7,6 +7,7 @@ import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/ExerciseDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExerciseSpecialtySelect extends StatefulWidget {
   final ExerciseDataType arguments;
@@ -58,8 +59,6 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
   // 获取专项练习列表
   getDataList({page = 1}) async {
     try {
-      print(widget.arguments.id);
-
       // 判断有没有id
       bool is_id = widget.arguments.id != null;
       Map<String, dynamic> query = {};
@@ -76,23 +75,19 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
       List data = result['data'];
 
       List newData = data.map((e) {
-        try {
-          return ExerciseDataType.fromJson({
-            "id": e['id'],
-            "d_id": e['d_id'],
-            "pid": e['pid'],
-            "name": e['name'],
-            "addtime": e['addtime'],
-            "sorts": e['sorts'],
-            "status": e['status'],
-            "isview": e['isview'],
-            "type": e['type'],
-            "isOk": e['isOk'],
-            "isChildren": e['isChildren']
-          });
-        } catch (err) {
-          print(err);
-        }
+        return ExerciseDataType.fromJson({
+          "id": e['id'],
+          "d_id": e['d_id'],
+          "pid": e['pid'],
+          "name": e['name'],
+          "addtime": e['addtime'],
+          "sorts": e['sorts'],
+          "status": e['status'],
+          "isview": e['isview'],
+          "type": e['type'],
+          "isOk": e['isOk'],
+          "isChildren": e['isChildren']
+        });
       }).toList();
 
       if (this.mounted) {
@@ -106,7 +101,11 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

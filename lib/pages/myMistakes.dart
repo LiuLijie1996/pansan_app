@@ -10,6 +10,7 @@ import '../components/EmptyBox.dart';
 import '../components/MyIcon.dart';
 import '../utils/myRequest.dart';
 import '../components/MyProgress.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyMistakes extends StatefulWidget {
   MyMistakes({Key key}) : super(key: key);
@@ -51,7 +52,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
         context: context,
         path: MyApi.getUserErrQuestion,
         data: {
-          "user_id": 1,
+          "user_id": true,
         },
       );
 
@@ -84,7 +85,11 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

@@ -7,6 +7,7 @@ import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/GoodsExchangeDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExchangeRecord extends StatefulWidget {
   ExchangeRecord({Key key}) : super(key: key);
@@ -77,7 +78,11 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

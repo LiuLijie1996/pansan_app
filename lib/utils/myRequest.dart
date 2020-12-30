@@ -7,16 +7,44 @@ import '../pages/login.dart';
 
 /// 接口
 class MyApi {
-  static Future<String> get userToken async {
+  // 用户信息
+  static Future<UserInfoDataType> get userInfo async {
+    // 获取用户信息
     List<UserInfoDataType> userInfoList = await UserDB.findAll();
-    String token;
+    // 关闭数据库
+    UserDB.dispose();
+
+    UserInfoDataType info;
 
     if (userInfoList.length != 0) {
-      UserInfoDataType userInfo = userInfoList[0];
-      token = userInfo.token;
+      info = userInfoList[0];
+    }
+
+    return info;
+  }
+
+  // 用户token
+  static Future<String> get userToken async {
+    UserInfoDataType info = await userInfo;
+    String token;
+
+    if (info != null) {
+      token = info.token;
     }
 
     return token;
+  }
+
+  // 用户id
+  static Future<int> get userId async {
+    UserInfoDataType info = await userInfo;
+    int id;
+
+    if (info != null) {
+      id = info.id;
+    }
+
+    return id;
   }
 
   /// 最新课程、联想词
@@ -187,7 +215,7 @@ Future myRequest({
   var url = test + path;
 
   if (data != null && data['user_id'] != null) {
-    data['user_id'] = 1; //3390   1970
+    data['user_id'] = await MyApi.userId;
   }
 
   Response response;
@@ -216,12 +244,14 @@ Future myRequest({
 
   // 判断是否登录
   if (response.data['code'] != 200) {
+    // 跳转到登录页
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/login',
       (route) => route == null,
     );
   } else {
+    // 返回请求到的数据
     return response.data;
   }
 }

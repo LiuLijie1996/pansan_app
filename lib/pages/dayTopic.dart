@@ -9,6 +9,7 @@ import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/DayTopicDataType.dart';
 import '../mixins/withScreenUtil.dart';
+import '../utils/ErrorInfo.dart';
 
 class DayTopic extends StatefulWidget {
   @override
@@ -69,7 +70,11 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print("getDayTopic   $e");
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

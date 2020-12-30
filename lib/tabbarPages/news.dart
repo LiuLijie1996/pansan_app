@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/CardItem.dart';
-import 'package:pansan_app/components/MyProgress.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
-import 'package:pansan_app/utils/myRequest.dart';
-import 'package:pansan_app/models/NewsDataType.dart';
-import 'package:pansan_app/models/NavDataType.dart';
-import 'package:pansan_app/components/EmptyBox.dart';
+import '../components/CardItem.dart';
+import '../components/MyProgress.dart';
+import '../mixins/withScreenUtil.dart';
+import '../utils/myRequest.dart';
+import '../models/NewsDataType.dart';
+import '../models/NavDataType.dart';
+import '../components/EmptyBox.dart';
+import '../utils/ErrorInfo.dart';
 
 // 新闻页面
 class News extends StatefulWidget {
@@ -158,7 +159,11 @@ class _NewsState extends State<News>
         }
       });
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -217,7 +222,11 @@ class _NewsState extends State<News>
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

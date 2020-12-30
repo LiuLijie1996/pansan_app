@@ -7,6 +7,7 @@ import '../models/CoursePlanDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/GradeInfoDataType.dart';
 import '../mixins/withScreenUtil.dart';
+import '../utils/ErrorInfo.dart';
 
 class CoursePlan extends StatefulWidget {
   GradeInfoDataType arguments;
@@ -57,7 +58,11 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

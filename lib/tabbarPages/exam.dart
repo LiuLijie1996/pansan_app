@@ -6,6 +6,7 @@ import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/NavDataType.dart';
 import '../models/ExerciseDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 // 考试页面
 class Exam extends StatelessWidget {
@@ -97,7 +98,11 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

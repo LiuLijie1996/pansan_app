@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyInformation extends StatefulWidget {
   MyInformation({Key key}) : super(key: key);
@@ -31,7 +32,11 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
       );
       print(result);
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

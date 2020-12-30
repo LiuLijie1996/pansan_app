@@ -10,6 +10,7 @@ import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyCourse extends StatefulWidget {
   MyCourse({Key key}) : super(key: key);
@@ -84,7 +85,11 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

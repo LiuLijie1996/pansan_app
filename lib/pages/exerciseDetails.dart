@@ -11,6 +11,7 @@ import '../components/MyIcon.dart';
 import '../models/ExerciseSelectDataType.dart';
 import '../utils/myRequest.dart';
 import '../components/MyProgress.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final ExerciseSelectDataType arguments;
@@ -103,7 +104,11 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
 
       setState(() {});
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

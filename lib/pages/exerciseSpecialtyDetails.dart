@@ -11,6 +11,7 @@ import '../mixins/withScreenUtil.dart';
 import '../models/IssueDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/ExerciseDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExerciseSpecialtyDetails extends StatefulWidget {
   final ExerciseDataType arguments;
@@ -86,7 +87,11 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
 
       setState(() {});
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

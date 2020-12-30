@@ -7,6 +7,7 @@ import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/UserMessageDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class InformAffiche extends StatefulWidget {
   @override
@@ -61,7 +62,11 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
 
       setState(() {});
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

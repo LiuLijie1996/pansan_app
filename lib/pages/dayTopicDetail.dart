@@ -9,6 +9,7 @@ import '../mixins/withScreenUtil.dart';
 import '../models/DayTopicDetailDataType.dart';
 import '../models/DayTopicDataType.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class DayTopicDetail extends StatefulWidget {
   final TimeChildren arguments;
@@ -67,7 +68,11 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -83,7 +88,11 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
         },
       );
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

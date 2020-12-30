@@ -6,6 +6,7 @@ import '../models/CheckingInRecordDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/GradeInfoDataType.dart';
 import '../mixins/withScreenUtil.dart';
+import '../utils/ErrorInfo.dart';
 
 class CheckingInRecord extends StatefulWidget {
   GradeInfoDataType arguments;
@@ -61,7 +62,13 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
       if (this.mounted) {
         setState(() {});
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
+    }
   }
 
   @override

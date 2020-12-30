@@ -5,6 +5,7 @@ import '../models/CertificateDataType.dart';
 import '../models/CertificateDetailDataType.dart';
 import '../utils/myRequest.dart';
 import '../mixins/withScreenUtil.dart';
+import '../utils/ErrorInfo.dart';
 
 class CertificateDetail extends StatefulWidget {
   final CertificateDataType arguments;
@@ -74,7 +75,11 @@ class _CertificateDetailState extends State<CertificateDetail>
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: "获取证书详情数据失败",
+      );
     }
   }
 

@@ -9,6 +9,7 @@ import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/ErrorInfo.dart';
 
 class MyGrade extends StatefulWidget {
   MyGrade({Key key}) : super(key: key);
@@ -77,7 +78,11 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 

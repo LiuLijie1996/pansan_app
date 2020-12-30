@@ -671,7 +671,11 @@ class _ExamDetailsState extends State<ExamDetails>
         },
       );
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 }

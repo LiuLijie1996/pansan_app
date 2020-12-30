@@ -10,6 +10,7 @@ import '../models/ExamRankingDataType.dart';
 import '../components/MyProgress.dart';
 import '../models/ExamTimeLineDataType.dart';
 import '../components/EmptyBox.dart';
+import '../utils/ErrorInfo.dart';
 
 class ExamRanking extends StatefulWidget {
   ExamRanking({Key key}) : super(key: key);
@@ -74,7 +75,11 @@ class _ExamRankingState extends State<ExamRanking>
 
       tabs.addAll(newData);
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -144,7 +149,13 @@ class _ExamRankingState extends State<ExamRanking>
       if (this.mounted) {
         setState(() {});
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
+    }
   }
 
   @override
@@ -473,7 +484,13 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
       if (this.mounted) {
         setState(() {});
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
+    }
   }
 
   @override

@@ -4,6 +4,7 @@ import '../components/MyProgress.dart';
 import '../utils/myRequest.dart';
 import '../mixins/withScreenUtil.dart';
 import '../models/GoodsDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 // 积分中心页面
 class IntegralCentre extends StatefulWidget {
@@ -84,7 +85,11 @@ class _IntegralCentreState extends State<IntegralCentre>
         });
       }
     } catch (e) {
-      print(e);
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
     }
   }
 
@@ -210,7 +215,13 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-    } catch (e) {}
+    } catch (e) {
+      ErrorInfo(
+        context: context,
+        errInfo: e,
+        msg: e,
+      );
+    }
   }
 
   @override

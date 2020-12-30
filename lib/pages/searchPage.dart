@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
+import '../utils/ErrorInfo.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -54,7 +55,11 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (err) {
-      print(err);
+      ErrorInfo(
+        context: context,
+        errInfo: err,
+        msg: err,
+      );
     }
   }
 
@@ -99,7 +104,11 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
         setState(() {});
       }
     } catch (err) {
-      print(err);
+      ErrorInfo(
+        context: context,
+        errInfo: err,
+        msg: err,
+      );
     }
   }
 
