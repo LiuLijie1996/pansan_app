@@ -94,8 +94,8 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
                         child: RaisedButton(
                           color: Colors.blue,
                           onPressed: () {
-                            // 查看文件
-                            showFile(
+                            // 文件预览
+                            FilePreview(
                               context: context,
                               link: item.link,
                               title: "课程计划预览",

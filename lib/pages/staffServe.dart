@@ -6,6 +6,7 @@ import '../components/MyProgress.dart';
 import '../components/EmptyBox.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
+import '../utils/fileMethod.dart';
 import '../models/CertificateDataType.dart'; //证书类型
 import '../models/IllegalManageDataType.dart'; //三违情况类型
 import '../models/AdvisoryDataType.dart'; //咨询类型
@@ -340,7 +341,12 @@ class IllegalManageWidget extends StatelessWidget with MyScreenUtil {
 
     return ListTile(
       onTap: () {
-        print(item.toJson());
+        // 预览文件
+        FilePreview(
+          context: context,
+          link: item.link,
+          title: item.title,
+        );
       },
       leading: Text("${item.title}"),
       trailing: Text("$_addtime"),
