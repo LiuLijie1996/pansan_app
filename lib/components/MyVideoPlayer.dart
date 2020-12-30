@@ -132,7 +132,7 @@ class MyVideoPlayerState extends State<MyVideoPlayer> with MyScreenUtil {
         print("上次学习时长：${materia.studyDuration}");
 
         // 指定播放位置
-        _controller.seekTo(Duration(seconds: materia.studyDuration));
+        _controller.seekTo(Duration(seconds: materia.studyDuration ?? 0));
 
         // 设置是否显示进度器
         setProgressShow();

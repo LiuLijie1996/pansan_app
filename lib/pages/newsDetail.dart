@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:pansan_app/components/MyProgress.dart';
 import "../components/MyVideoPlayer.dart";
 import "../components/MyIcon.dart";
 import '../models/NewsDataType.dart';
@@ -32,6 +33,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
   List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '超大字体', "超大大字体"];
   MateriaDataType materia;
+  bool isInitialize = false; //初始化是否完成
 
   @override
   void initState() {
@@ -39,6 +41,19 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     super.initState();
     arguments = widget.arguments;
 
+    // 初始化
+    myInitialize();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); //清除定时器
+
+    super.dispose();
+  }
+
+  // 初始化
+  myInitialize() {
     // 获取新闻详情
     getNewsDetail();
 
@@ -60,15 +75,83 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     });
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel(); //清除定时器
+  // 获取新闻详情
+  getNewsDetail() async {
+    try {
+      var result = await myRequest(
+        path: MyApi.getNewsOne,
+        data: {
+          "id": arguments.id,
+        },
+      );
+      print(arguments.id);
+      var data = result['data'];
+      var newData = {
+        "id": data['id'],
+        "pid": data['pid'],
+        "title": data['title'],
+        "desc": data['desc'],
+        "thumb_url": data['thumb_url'],
+        "type": data['type'],
+        "materia_id": data['materia_id'],
+        "content": data['content'],
+        "tuij": data['tuij'],
+        "addtime": data['addtime'],
+        "view_num": data['view_num'],
+        "upvote": data['upvote'],
+        "materia": data['materia'],
+        "newsImgText": data['newsImgText'],
+        "newsVideo": data['newsVideo'],
+        "collect": data['collect'],
+        "news_content": data['news_content'],
+      };
 
-    super.dispose();
+      if (this.mounted) {
+        setState(() {
+          arguments = NewsDataType.fromJson(newData);
+
+          // 判断是图文还是视频
+          if (arguments.type == 1) {
+            // 图文播放时间
+            validTime =
+                (arguments.newsContent.length / arguments.newsImgText * 60)
+                    .floor();
+          } else {
+            // 视频播放时间
+            validTime = arguments.newsVideo;
+            var jsonMateria = {
+              "id": data['materia']['id'],
+              "name": data['materia']['name'],
+              "type": data['materia']['type'],
+              "link": data['materia']['link'],
+              "key": data['materia']['key'],
+              "fileId": data['materia']['fileId'],
+              "duration": data['materia']['duration'],
+              "size": data['materia']['size'],
+              "thumb_url": data['materia']['thumb_url'],
+              "sorts": data['materia']['sorts'],
+              "addtime": data['materia']['addtime']
+            };
+            materia = MateriaDataType.fromJson(jsonMateria);
+            print(materia.link);
+          }
+
+          isInitialize = true;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
+
     // 添加时间
     DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
       arguments.addtime * 1000,
@@ -350,9 +433,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                     // 视频
                     Container(
                       margin: EdgeInsets.only(top: dp(20.0)),
-                      child: materia != null
-                          ? MyVideoPlayer(materia: materia)
-                          : Text(''),
+                      child: MyVideoPlayer(materia: materia),
                     ),
 
                     // 点赞数量
@@ -423,73 +504,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
           ],
         ),
       );
-    }
-  }
-
-  // 获取新闻详情
-  getNewsDetail() async {
-    try {
-      var result = await myRequest(
-        path: MyApi.getNewsOne,
-        data: {
-          "id": arguments.id,
-        },
-      );
-      print(arguments.id);
-      var data = result['data'];
-      var newData = {
-        "id": data['id'],
-        "pid": data['pid'],
-        "title": data['title'],
-        "desc": data['desc'],
-        "thumb_url": data['thumb_url'],
-        "type": data['type'],
-        "materia_id": data['materia_id'],
-        "content": data['content'],
-        "tuij": data['tuij'],
-        "addtime": data['addtime'],
-        "view_num": data['view_num'],
-        "upvote": data['upvote'],
-        "materia": data['materia'],
-        "newsImgText": data['newsImgText'],
-        "newsVideo": data['newsVideo'],
-        "collect": data['collect'],
-        "news_content": data['news_content'],
-      };
-
-      if (this.mounted) {
-        setState(() {
-          arguments = NewsDataType.fromJson(newData);
-
-          // 判断是图文还是视频
-          if (arguments.type == 1) {
-            // 图文播放时间
-            validTime =
-                (arguments.newsContent.length / arguments.newsImgText * 60)
-                    .floor();
-          } else {
-            // 视频播放时间
-            validTime = arguments.newsVideo;
-            var jsonMateria = {
-              "id": data['materia']['id'],
-              "name": data['materia']['name'],
-              "type": data['materia']['type'],
-              "link": data['materia']['link'],
-              "key": data['materia']['key'],
-              "fileId": data['materia']['fileId'],
-              "duration": data['materia']['duration'],
-              "size": data['materia']['size'],
-              "thumb_url": data['materia']['thumb_url'],
-              "sorts": data['materia']['sorts'],
-              "addtime": data['materia']['addtime']
-            };
-            materia = MateriaDataType.fromJson(jsonMateria);
-            print(materia.link);
-          }
-        });
-      }
-    } catch (e) {
-      print(e);
     }
   }
 
