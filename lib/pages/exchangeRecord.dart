@@ -38,11 +38,15 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
         context: context,
         path: MyApi.getUserScoreExchange,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "page": page,
           "psize": 20,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       total = result['total'];
       List data = result['data'];
       List<GoodsExchangeDataType> newData = data.map((e) {

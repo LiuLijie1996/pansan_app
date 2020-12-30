@@ -154,12 +154,14 @@ class _ExamDetailsState extends State<ExamDetails>
         context: context,
         path: MyApi.kaoTi,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "id": examSiteInfo.id,
           "type": examSiteInfo.type,
         },
       );
-      print("获取数据：${result['data']}");
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
 
       List data = result['data']['list'];
 

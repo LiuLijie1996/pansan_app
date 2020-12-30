@@ -74,6 +74,9 @@ class _AdvisoryDetailState extends State<AdvisoryDetail> with MyScreenUtil {
         },
       );
 
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List reply = result['data']['reply'];
       replyList = reply.map((e) {
         return ReplyItem.formJson({

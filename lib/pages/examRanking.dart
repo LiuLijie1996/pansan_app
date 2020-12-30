@@ -60,6 +60,10 @@ class _ExamRankingState extends State<ExamRanking>
     try {
       var result =
           await myRequest(context: context, path: MyApi.getTestItemList);
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
 
       List<NavDataType> newData = data.map((e) {
@@ -98,6 +102,9 @@ class _ExamRankingState extends State<ExamRanking>
           "test_id": testId,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
 
       myExamRankoing = ExamRankingDataType.fromJson({
         "rank": result['userTestData']['rank'],
@@ -437,6 +444,9 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
           "id": widget.nav.id,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
 
       List data = result['data'];
       examTimeLineDataList = data.map((e) {

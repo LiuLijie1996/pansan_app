@@ -36,7 +36,7 @@ class ErrorInfo {
   sendError(errInfo, context) async {
     await myRequest(
       context: context,
-      path: "/api/error",
+      path: MyApi.error,
       data: {
         "errInfo": "$errInfo",
         "user_id": true,

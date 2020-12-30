@@ -72,9 +72,13 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         path: MyApi.courseDetail,
         data: {
           "id": arguments.id,
-          "user_id": 1,
+          "user_id": true,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List chapter = result['data']['chapter'];
 
       chapterTotal = result['data']['chapterTotal'];
@@ -197,6 +201,9 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
           path: MyApi.courseProgress,
           data: data,
         );
+
+        // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+        if (result == null) return;
       } catch (e) {
         print(e);
         ErrorInfo(msg: "$e", errInfo: e, context: context);
@@ -756,6 +763,9 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
           "chapter_id": widget.chapterId,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
     } catch (e) {
       print(e);
       ErrorInfo(msg: "$e", errInfo: e, context: context);

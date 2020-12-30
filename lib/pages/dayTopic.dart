@@ -45,6 +45,10 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
           "id": 4374,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
       // 遍历数据
       dataList = data.map((e) {

@@ -53,6 +53,9 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
         },
       );
 
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       dayTopicDetail = DayTopicDetailDataType.fromJson({
         "id": result['data']['id'],
         "d_id": result['data']['d_id'],
@@ -79,7 +82,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
   // 发送阅读完成请求
   saveTodayStudy() async {
     try {
-      await myRequest(
+      var result = await myRequest(
         context: context,
         path: MyApi.saveTodayStudy,
         data: {
@@ -87,6 +90,9 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
           "id": widget.arguments.id,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
     } catch (e) {
       ErrorInfo(
         context: context,

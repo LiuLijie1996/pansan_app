@@ -363,6 +363,10 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   getBannerList() async {
     try {
       var result = await myRequest(context: context, path: MyApi.indexBanner);
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
 
       bannerList = data.map((e) {
@@ -393,6 +397,9 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
         },
       );
 
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
       data.forEach((e) {
         var status = e['status'];
@@ -421,6 +428,10 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           "user_id": 1,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
 
       data.forEach((e) {
@@ -476,6 +487,10 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           "psize": 20,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
       newsTotal = result['total'];
 
@@ -522,6 +537,10 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           "psize": 20,
         },
       );
+
+      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
+      if (result == null) return;
+
       List data = result['data'];
       courseTotal = result['total'];
 

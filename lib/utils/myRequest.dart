@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import '../db/UserDB.dart';
 import '../models/UserInfoDataType.dart';
 import 'package:flutter/material.dart';
-import '../pages/login.dart';
 
 /// 接口
 class MyApi {
@@ -11,15 +10,10 @@ class MyApi {
   static Future<UserInfoDataType> get userInfo async {
     // 获取用户信息
     List<UserInfoDataType> userInfoList = await UserDB.findAll();
-    // 关闭数据库
-    UserDB.dispose();
-
     UserInfoDataType info;
-
     if (userInfoList.length != 0) {
       info = userInfoList[0];
     }
-
     return info;
   }
 
@@ -199,10 +193,16 @@ class MyApi {
 
   /// 公告详情
   static const getOneMessage = "/api/user/getOneMessage";
+
+  /// 应用报错时发送数据给后台
+  static const error = "/api/error";
 }
 
 String test = "http://192.168.0.5:80/pansanApp"; //测试接口
 String href = "http://192.168.0.8:88/index.php/v2"; //上线接口
+
+// 当前是否在登录页面
+bool isLoginPage = false;
 
 Future myRequest({
   @required BuildContext context,
@@ -242,17 +242,26 @@ Future myRequest({
     );
   }
 
+  print("登录状态码：${response.data['code']}  接口：$path");
   // 判断是否登录
   if (response.data['code'] != 200) {
-    // 跳转到登录页
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/login',
-      (route) => route == null,
-    );
+    if (!isLoginPage) {
+      print("--- 跳转到登录页 $isLoginPage ---");
+      isLoginPage = true;
+      // 跳转到登录页
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login',
+        (route) => route == null,
+      );
+    }
   } else {
-    // 返回请求到的数据
-    return response.data;
+    if (path != '/api/error') {
+      print('返回请求到的数据');
+      isLoginPage = false;
+      // 返回请求到的数据
+      return response.data;
+    }
   }
 }
 
