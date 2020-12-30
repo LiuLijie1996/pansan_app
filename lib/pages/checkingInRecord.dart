@@ -44,9 +44,6 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
         },
       );
 
-      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
-      if (result == null) return;
-
       List data = result['data'];
       checkingInRecordList = data.map((e) {
         return CheckingInRecordDataType.fromJson({

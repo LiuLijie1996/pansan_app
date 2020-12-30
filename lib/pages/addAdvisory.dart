@@ -100,9 +100,6 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                         data: query,
                       );
 
-                      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
-                      if (result == null) return;
-
                       Fluttertoast.showToast(
                         msg: "${result['msg']}",
                         toastLength: Toast.LENGTH_LONG,

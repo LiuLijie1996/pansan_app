@@ -65,9 +65,6 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
         "id": widget.arguments.id,
       });
 
-      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
-      if (result == null) return;
-
       int total = result['total'] ?? 0;
       List data = result['data'];
       List<ExamListDataType> newData = data.map((e) {

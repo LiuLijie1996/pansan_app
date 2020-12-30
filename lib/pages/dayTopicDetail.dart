@@ -52,9 +52,6 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
         },
       );
 
-      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
-      if (result == null) return;
-
       dayTopicDetail = DayTopicDetailDataType.fromJson({
         "id": result['data']['id'],
         "d_id": result['data']['d_id'],
@@ -87,9 +84,6 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
           "id": widget.arguments.id,
         },
       );
-
-      // 如果返回null说明已经跳转到登录页了，没有任何数据返回
-      if (result == null) return;
     } catch (e) {
       ErrorInfo(
         errInfo: e,
