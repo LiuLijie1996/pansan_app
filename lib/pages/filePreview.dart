@@ -92,9 +92,11 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
       url: "$dcsApi${chapterChildren.materia.link}",
       appBar: AppBar(
         title: Text(
-          validTime == 0
-              ? '阅读完成'
-              : "有效阅读时间：${validTime != null ? validTime < 10 ? '0' + validTime.toString() : validTime : ''} 秒",
+          // validTime == 0
+          //     ? '阅读完成'
+          //     : "有效阅读时间：${validTime != null ? validTime < 10 ? '0' + validTime.toString() : validTime : ''} 秒",
+
+          chapterChildren.name,
         ),
       ),
     );

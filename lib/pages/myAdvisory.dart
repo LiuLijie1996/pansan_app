@@ -101,33 +101,31 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
                           status: false,
                           padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
                         );
-                      } else {
-                        // 继续请求数据
-
-                        getAdvisoryData(page: ++myAdvData['page']);
-
-                        return MyProgress(
-                          padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
-                        );
                       }
+
+                      // 继续请求数据
+                      getAdvisoryData(page: ++myAdvData['page']);
+                      return MyProgress(
+                        padding: EdgeInsets.only(top: 0.0, bottom: dp(20.0)),
+                      );
                     }
 
-                    return Container(
-                      padding: EdgeInsets.only(
-                        left: dp(20.0),
-                        right: dp(20.0),
-                        top: dp(30.0),
-                        bottom: dp(30.0),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // 跳转到咨询详情
-                          Navigator.pushNamed(
-                            context,
-                            '/advisoryDetail',
-                            arguments: item,
-                          );
-                        },
+                    return InkWell(
+                      onTap: () {
+                        // 跳转到咨询详情
+                        Navigator.pushNamed(
+                          context,
+                          '/advisoryDetail',
+                          arguments: item,
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: dp(20.0),
+                          right: dp(20.0),
+                          top: dp(30.0),
+                          bottom: dp(30.0),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

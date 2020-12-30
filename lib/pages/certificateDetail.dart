@@ -90,7 +90,12 @@ class _CertificateDetailState extends State<CertificateDetail>
       body: ListView(
         children: [
           Container(
-            padding: EdgeInsets.all(dp(20.0)),
+            padding: EdgeInsets.only(
+              left: dp(20.0),
+              right: dp(20.0),
+              top: dp(30.0),
+              bottom: dp(30.0),
+            ),
             margin: EdgeInsets.all(dp(20.0)),
             decoration: BoxDecoration(
                 color: Colors.blue,
@@ -98,7 +103,7 @@ class _CertificateDetailState extends State<CertificateDetail>
             child: Text(
               "姓名：${widget.arguments.name}   身份证号：$_idCard",
               style: TextStyle(
-                fontSize: dp(26.0),
+                fontSize: dp(30.0),
                 color: Colors.white,
               ),
             ),

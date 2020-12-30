@@ -27,15 +27,11 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
 
     // 获取关键词
     getAntistop();
-  }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
-    // 获取焦点
-    FocusScope.of(context).requestFocus(_inputFocus);
+    Future(() {
+      // 获取焦点
+      FocusScope.of(context).requestFocus(_inputFocus);
+    });
   }
 
   @override
@@ -154,8 +150,10 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
           ),
         ),
         actions: [
+          // 点击搜索
           InkWell(
             onTap: () {
+              // 跳转页面
               Navigator.pushNamed(
                 context,
                 "/courseList",
@@ -166,7 +164,6 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
               _inputFocus.unfocus(); //失去焦点
               searchValue = ''; //删除要搜索的内容
               associateList = []; //清空联想词
-              setState(() {}); //刷新页面
             },
             child: Container(
               margin: EdgeInsets.only(right: dp(20.0)),
@@ -195,7 +192,6 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
                     _inputController.text = ''; //清空输入框内容
                     associateList = []; //清空联想词
                     searchValue = ''; //删除要搜索的内容
-                    setState(() {}); //刷新页面
                   },
                 )
               : Expanded(
