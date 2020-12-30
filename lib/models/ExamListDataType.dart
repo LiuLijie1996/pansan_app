@@ -1,5 +1,4 @@
-// 考试列表项数据类型
-
+/// 考试列表项数据类型
 class ExamListDataType {
   ///列表项id
   int id;

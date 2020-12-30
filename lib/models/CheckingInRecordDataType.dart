@@ -1,3 +1,4 @@
+/// 考勤记录数据类型
 class CheckingInRecordDataType {
   int id;
   int dId;

@@ -1,3 +1,4 @@
+///消息通知数据类型
 class UserMessageDataType {
   int id;
   String name;

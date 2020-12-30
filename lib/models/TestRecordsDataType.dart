@@ -1,7 +1,6 @@
-// 考试记录数据类型
-
 import './ExamListDataType.dart'; // 考试列表项数据类型
 
+/// 考试记录数据类型
 class TestRecordsDataType {
   int id;
   int testId;

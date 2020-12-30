@@ -1,5 +1,4 @@
 ///用户信息数据类型
-
 class UserInfoDataType {
   ///用户id
   int id;

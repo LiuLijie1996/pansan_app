@@ -1,3 +1,4 @@
+///课程计划数据类型
 class CoursePlanDataType {
   int id;
   int classId;

@@ -1,3 +1,4 @@
+///新闻数据类型
 class NewsDataType {
   ///新闻id
   int id;

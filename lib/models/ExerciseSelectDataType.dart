@@ -1,5 +1,4 @@
-// 练习列表数据
-
+/// 练习列表数据
 class ExerciseSelectDataType {
   int id;
   int dId;

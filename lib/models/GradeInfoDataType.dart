@@ -1,4 +1,4 @@
-// 班级信息数据类型
+/// 班级信息数据类型
 class GradeInfoDataType {
   int classId;
   String name;

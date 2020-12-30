@@ -1,4 +1,4 @@
-// 视频的数据类型
+/// 视频的数据类型
 class MateriaDataType {
   int id;
   String name;

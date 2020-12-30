@@ -1,3 +1,4 @@
+///积分规则数据类型
 class IntegralRuleDataType {
   int id;
   String name;

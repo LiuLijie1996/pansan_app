@@ -1,5 +1,4 @@
-// 考试排行数据类型
-
+/// 考试排行数据类型
 class ExamRankingDataType {
   int id;
   int rank;

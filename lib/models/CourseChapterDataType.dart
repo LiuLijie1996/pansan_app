@@ -1,7 +1,6 @@
 import './MateriaDataType.dart';
 
-// 课程章节数据类型
-
+/// 课程章节数据类型
 class CourseChapterDataType {
   int id;
   int dId;

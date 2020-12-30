@@ -1,3 +1,4 @@
+///商品数据类型
 class GoodsDataType {
   int id;
   String name;

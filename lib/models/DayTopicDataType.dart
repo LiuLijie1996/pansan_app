@@ -1,3 +1,4 @@
+///一日一题数据类型
 class DayTopicDataType {
   ///时间线上的时间
   int time;

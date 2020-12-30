@@ -1,5 +1,4 @@
-// 三违情况数据类型
-
+/// 三违情况数据类型
 class IllegalManageDataType {
   int id;
   int pid;

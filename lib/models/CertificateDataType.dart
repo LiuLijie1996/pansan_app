@@ -1,3 +1,4 @@
+///证书数据类型
 class CertificateDataType {
   int id;
   String idCard;

@@ -1,5 +1,6 @@
 import 'package:pansan_app/models/GoodsDataType.dart';
 
+///商品兑换的数据类型
 class GoodsExchangeDataType {
   int id;
   int dId;

@@ -1,3 +1,4 @@
+///咨询类型
 class AdvisoryDataType {
   /// 咨询 id
   int id;

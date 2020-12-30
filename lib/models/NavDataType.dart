@@ -1,5 +1,4 @@
-// 导航数据类型
-
+/// 导航数据类型
 class NavDataType {
   ///导航id
   int id;

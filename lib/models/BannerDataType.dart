@@ -1,3 +1,4 @@
+///轮播图数据类型
 class BannerDataType {
   ///banner的id
   int id;

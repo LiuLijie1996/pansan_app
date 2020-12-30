@@ -1,5 +1,4 @@
-// 专项练习列表数据类型
-
+/// 专项练习列表数据类型
 class ExerciseDataType {
   int id;
   int dId;

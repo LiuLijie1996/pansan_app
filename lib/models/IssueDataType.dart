@@ -1,3 +1,4 @@
+///试题的数据类型
 class IssueDataType {
   ///题目id
   int id;
