@@ -277,9 +277,9 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                     ),
                     // Html
                     Html(
-                      data: arguments.content,
+                      data: "<div>${arguments.content}</div>",
                       style: {
-                        "p": Style(
+                        "div": Style(
                           fontSize: FontSize.percent(fontSize),
                           lineHeight: dp(3.0),
                         ),
