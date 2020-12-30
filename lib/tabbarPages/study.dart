@@ -86,7 +86,7 @@ class _StudyState extends State<Study>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取头部tabbar失败",
       );
     }
   }
@@ -101,7 +101,7 @@ class _StudyState extends State<Study>
       var result = await myRequest(
         path: MyApi.courseList,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "pid": id,
           "page": page,
           "psize": psize,
@@ -150,7 +150,7 @@ class _StudyState extends State<Study>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取课程失败",
       );
     }
   }
@@ -279,13 +279,14 @@ class _StudyState extends State<Study>
                               itemCount: data.length + 1,
                               itemBuilder: (BuildContext context, int index) {
                                 var item;
-                                if (index == tabItem.total) {
-                                  return MyProgress(status: false);
-                                }
 
                                 try {
                                   item = data[index];
                                 } catch (err) {
+                                  // 判断后台是否还有数据
+                                  if (data.length == tabItem.total) {
+                                    return MyProgress(status: false);
+                                  }
                                   // 请求数据
                                   this.getCourseList(
                                     id: _currentNavId,

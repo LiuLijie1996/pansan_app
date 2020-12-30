@@ -1,5 +1,4 @@
-// 课程数据类型
-
+/// 课程数据类型
 class CourseDataType {
   ///课程id
   int id;

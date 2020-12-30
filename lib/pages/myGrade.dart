@@ -56,7 +56,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.getUserClass,
         data: {
-          "user_id": 1,
+          "user_id": true,
         },
       );
 
@@ -79,7 +79,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

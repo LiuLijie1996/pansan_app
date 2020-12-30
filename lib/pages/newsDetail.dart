@@ -142,7 +142,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取新闻详情失败",
       );
     }
   }
@@ -513,7 +513,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   // 阅读完成
   readAccomplish() async {
     try {
-      var result = await myRequest(
+      await myRequest(
         path: MyApi.newsUserScore,
         data: {
           "id": arguments.id,
@@ -523,7 +523,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "上传进度失败",
       );
     }
   }
@@ -541,7 +541,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "点赞失败",
       );
       return false;
     }

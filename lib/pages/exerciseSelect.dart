@@ -117,8 +117,6 @@ class _ExerciseSelectState extends State<ExerciseSelect>
       int total = result['total'] ?? 0;
       List data = result['data'];
 
-      print(widget.arguments.id);
-
       List newData = data.map((e) {
         return ExerciseSelectDataType.fromJson({
           "id": e['id'],
@@ -149,7 +147,7 @@ class _ExerciseSelectState extends State<ExerciseSelect>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取练习列表失败",
       );
     }
   }
@@ -168,32 +166,24 @@ class _ExerciseSelectState extends State<ExerciseSelect>
                 ExerciseSelectDataType item = exerciseData['data'][index];
 
                 //添加时间
-                String _addtime;
-                try {
-                  DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
-                    item.addtime * 1000,
-                  );
+                DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+                  item.addtime * 1000,
+                );
 
-                  //格式化添加时间
-                  _addtime = formatDate(
-                    addtime,
-                    [yyyy, '年', mm, '月', dd, '日'],
-                  );
-                } catch (e) {
-                  print("报错信息：$e");
-                }
+                //格式化添加时间
+                String _addtime = formatDate(
+                  addtime,
+                  [yyyy, '年', mm, '月', dd, '日'],
+                );
 
-                String scale;
-                try {
-                  scale = "${(item.progress * 100).ceil()}%";
-                } catch (e) {
-                  print("报错信息：$e");
-                }
+                String scale = "${(item.progress * 100).ceil()}%";
 
+                // 进度
                 double progress = Tween(
                   begin: 0.0,
                   end: double.parse("${item.progress}"),
                 ).animate(animation).value;
+
                 return Container(
                   padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: ListTile(

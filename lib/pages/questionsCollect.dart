@@ -86,7 +86,7 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

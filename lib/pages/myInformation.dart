@@ -34,7 +34,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "上传失败",
       );
     }
   }

@@ -1,5 +1,4 @@
 /*一日一题*/
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
@@ -41,7 +40,7 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
         path: MyApi.getTodayUserStudy,
         data: {
           "user_id": true,
-          "id": 4374,
+          // "id": 4374,
         },
       );
 
@@ -72,7 +71,7 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取一日一题数据失败",
       );
     }
   }

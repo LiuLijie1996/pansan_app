@@ -67,7 +67,7 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取积分规则失败",
       );
     }
   }

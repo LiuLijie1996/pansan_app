@@ -80,7 +80,7 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取兑换记录失败",
       );
     }
   }

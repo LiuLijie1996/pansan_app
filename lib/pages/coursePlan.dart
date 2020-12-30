@@ -1,7 +1,6 @@
 // 课程计划
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:pansan_app/utils/fileMethod.dart';
 import '../models/CoursePlanDataType.dart';
 import '../utils/myRequest.dart';
@@ -59,7 +58,7 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取课程计划失败",
       );
     }
   }

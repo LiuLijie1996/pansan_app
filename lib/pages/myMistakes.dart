@@ -86,7 +86,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

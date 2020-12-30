@@ -59,11 +59,9 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
   // 获取专项练习列表
   getDataList({page = 1}) async {
     try {
-      // 判断有没有id
-      bool is_id = widget.arguments.id != null;
       Map<String, dynamic> query = {};
-      // 如果有id，传入id给后台
-      if (is_id) {
+      // 判断有没有id 如果有id，传入id给后台
+      if (widget.arguments.id != null) {
         query['id'] = widget.arguments.id;
       }
       var result = await myRequest(
@@ -102,7 +100,7 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取专项练习列表失败",
       );
     }
   }

@@ -68,7 +68,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
   // 阅读完成
   readAccomplish() async {
     try {
-      var result = await myRequest(
+      await myRequest(
         path: MyApi.newsUserScore,
         data: {
           "course_id": courseData.id, //课程id
@@ -81,7 +81,10 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
         },
       );
     } catch (e) {
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(
+        msg: "发送进度失败",
+        errInfo: e,
+      );
     }
   }
 

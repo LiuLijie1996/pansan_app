@@ -57,7 +57,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
     } catch (err) {
       ErrorInfo(
         errInfo: err,
-        msg: err,
+        msg: "获取关键词失败",
       );
     }
   }
@@ -104,7 +104,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
     } catch (err) {
       ErrorInfo(
         errInfo: err,
-        msg: err,
+        msg: "获取联想词失败",
       );
     }
   }

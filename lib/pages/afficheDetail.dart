@@ -7,7 +7,6 @@ import 'package:flutter_html/style.dart';
 import '../models/UserMessageDataType.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/fileMethod.dart';
-import '../utils/myRequest.dart';
 
 class AfficheDetail extends StatefulWidget {
   final UserMessageDataType arguments;

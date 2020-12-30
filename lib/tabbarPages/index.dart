@@ -97,7 +97,7 @@ class Index extends StatelessWidget with MyScreenUtil {
 
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "扫码错误",
       );
     }
   }
@@ -375,7 +375,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取轮播图失败",
       );
     }
   }
@@ -403,7 +403,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取通知公告失败",
       );
     }
   }
@@ -414,7 +414,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.newKaoshi,
         data: {
-          "user_id": 1,
+          "user_id": true,
         },
       );
 
@@ -454,7 +454,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取最新考试失败",
       );
     }
   }
@@ -498,7 +498,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取新闻失败",
       );
     }
   }
@@ -511,7 +511,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.courseList,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "page": page,
           "psize": 20,
         },
@@ -562,7 +562,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取课程失败",
       );
     }
   }

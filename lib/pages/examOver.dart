@@ -73,14 +73,15 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
         "option": option,
       };
     }).toList();
+
+    // 发送给后台的数据
     var query = {
-      "user_id": 1, //用户id
+      "user_id": true, //用户id
       "test_id": examSiteInfo.id, //考试id
       "fraction": total_points, //总得分
       "type": passing_mark, //考试是否及格
       "data": newDataList, //所有考试题目
     };
-
     // 提交试卷
     myRequest(path: MyApi.saveUserTest, data: query).then((value) {
       print(value);

@@ -92,7 +92,7 @@ class _MyCollectState extends State<MyCollect>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

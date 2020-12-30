@@ -86,7 +86,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取考试列表失败",
       );
     }
   }

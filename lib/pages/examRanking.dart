@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flutter/scheduler.dart';
 import '../mixins/withScreenUtil.dart';
 import '../utils/myRequest.dart';
 import '../models/NavDataType.dart';
@@ -77,7 +76,7 @@ class _ExamRankingState extends State<ExamRanking>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取我要考试分类失败",
       );
     }
   }
@@ -92,7 +91,7 @@ class _ExamRankingState extends State<ExamRanking>
         path: MyApi.testRankList,
         data: {
           "id": id,
-          "user_id": 1,
+          "user_id": true,
           "test_id": testId,
         },
       );
@@ -150,7 +149,7 @@ class _ExamRankingState extends State<ExamRanking>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取考试排行失败",
       );
     }
   }
@@ -483,7 +482,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取时间线失败",
       );
     }
   }

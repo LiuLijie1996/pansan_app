@@ -98,7 +98,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取分类失败",
       );
     }
   }

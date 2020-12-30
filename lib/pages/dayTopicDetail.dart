@@ -69,7 +69,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取一日一题详情失败",
       );
     }
   }
@@ -77,7 +77,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
   // 发送阅读完成请求
   saveTodayStudy() async {
     try {
-      var result = await myRequest(
+      await myRequest(
         path: MyApi.saveTodayStudy,
         data: {
           "user_id": true,
@@ -87,7 +87,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "发送阅读进度失败",
       );
     }
   }

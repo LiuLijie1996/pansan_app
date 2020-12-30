@@ -86,7 +86,7 @@ class _IntegralCentreState extends State<IntegralCentre>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取商品失败",
       );
     }
   }
@@ -215,7 +215,7 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "兑换商品失败",
       );
     }
   }

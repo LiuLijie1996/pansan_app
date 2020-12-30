@@ -65,7 +65,7 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取考勤记录失败",
       );
     }
   }

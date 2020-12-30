@@ -105,7 +105,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

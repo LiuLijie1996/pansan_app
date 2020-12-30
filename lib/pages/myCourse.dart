@@ -58,7 +58,7 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.getUserCourseList,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "page": page,
           "psize": psize,
         },
@@ -86,7 +86,7 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取失败",
       );
     }
   }

@@ -129,7 +129,7 @@ class _StaffServeState extends State<StaffServe>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取数据失败",
       );
     }
   }

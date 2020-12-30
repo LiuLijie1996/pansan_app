@@ -181,7 +181,7 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取我的咨询失败",
       );
     }
   }

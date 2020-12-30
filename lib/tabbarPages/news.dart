@@ -77,15 +77,14 @@ class _NewsState extends State<News>
                               itemBuilder: (BuildContext context, int index) {
                                 var item;
 
-                                // 判断后台是否还有数据
-                                if (index == tabItem.total) {
-                                  return MyProgress(status: false);
-                                }
-
                                 try {
                                   item = tabItem.data[index];
                                 } catch (err) {
-                                  print("报错信息：$err");
+                                  // 判断后台是否还有数据
+                                  if (data.length == tabItem.total) {
+                                    return MyProgress(status: false);
+                                  }
+
                                   // 请求数据
                                   this.getNewsList(
                                     index: _currentIndex,
@@ -160,7 +159,7 @@ class _NewsState extends State<News>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取头部tabBar失败",
       );
     }
   }
@@ -221,7 +220,7 @@ class _NewsState extends State<News>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "通过导航获取新闻失败",
       );
     }
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../components/MyIcon.dart';
 import '../utils/ErrorInfo.dart';
@@ -26,6 +27,9 @@ class _LoginState extends State<Login> with MyScreenUtil {
 
   String account = ''; //输入的账号
   String pwd = ''; //输入的密码
+
+  // 上次点击返回的时间
+  int preTime = new DateTime.now().millisecondsSinceEpoch;
 
   @override
   void initState() {
@@ -58,177 +62,202 @@ class _LoginState extends State<Login> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: dp(200.0),
-              ),
-              Image.asset(
-                "assets/images/login_logo.png",
-                width: dp(240.0),
-                height: dp(240.0),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: dp(40.0),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: dp(20.0), //阴影范围
-                              spreadRadius: 0.1, //阴影浓度
-                              color: Colors.blue[100], //阴影颜色
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(dp(6.0)),
-                        ),
-                        child: TextFormField(
-                          scrollPadding: EdgeInsets.all(0.0),
-                          controller: _controller1,
-                          decoration: InputDecoration(
-                            hintText: "请输入身份证号码",
-                            border: InputBorder.none,
-                            // border: OutlineInputBorder(
-                            //   borderRadius:
-                            //       BorderRadius.all(Radius.circular(50.0)),
-                            //   borderSide: BorderSide(
-                            //     width: 0.5,
-                            //     color: Colors.grey[100],
-                            //   ),
-                            // ),
-                            prefixIcon: Icon(
-                              Icons.person,
+    return WillPopScope(
+      onWillPop: () async {
+        int currenTime = new DateTime.now().millisecondsSinceEpoch;
+
+        // 点击返回键的操作
+        if (currenTime - preTime > 500) {
+          preTime = currenTime;
+          Fluttertoast.showToast(
+            msg: "你今天真好看",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black45,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else {
+          // 退出app
+          await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: dp(200.0),
+                ),
+                Image.asset(
+                  "assets/images/login_logo.png",
+                  width: dp(240.0),
+                  height: dp(240.0),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: dp(40.0),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: dp(20.0), //阴影范围
+                                spreadRadius: 0.1, //阴影浓度
+                                color: Colors.blue[100], //阴影颜色
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(dp(6.0)),
+                          ),
+                          child: TextFormField(
+                            scrollPadding: EdgeInsets.all(0.0),
+                            controller: _controller1,
+                            decoration: InputDecoration(
+                              hintText: "请输入身份证号码",
+                              border: InputBorder.none,
+                              // border: OutlineInputBorder(
+                              //   borderRadius:
+                              //       BorderRadius.all(Radius.circular(50.0)),
+                              //   borderSide: BorderSide(
+                              //     width: 0.5,
+                              //     color: Colors.grey[100],
+                              //   ),
+                              // ),
+                              prefixIcon: Icon(
+                                Icons.person,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: dp(40.0),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: dp(20.0), //阴影范围
-                              spreadRadius: 0.1, //阴影浓度
-                              color: Colors.blue[100], //阴影颜色
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(dp(6.0)),
-                        ),
-                        child: TextFormField(
-                          controller: _controller2,
-                          obscureText: _obscureText,
-                          decoration: InputDecoration(
-                            hintText: "请输入密码",
-                            suffixIcon: InkWell(
-                              child: Icon(
-                                _obscureText == true
-                                    ? myIcon['eye-off']
-                                    : myIcon['eye-open'],
+                      SizedBox(
+                        height: dp(40.0),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: dp(20.0), //阴影范围
+                                spreadRadius: 0.1, //阴影浓度
+                                color: Colors.blue[100], //阴影颜色
                               ),
+                            ],
+                            borderRadius: BorderRadius.circular(dp(6.0)),
+                          ),
+                          child: TextFormField(
+                            controller: _controller2,
+                            obscureText: _obscureText,
+                            decoration: InputDecoration(
+                              hintText: "请输入密码",
+                              suffixIcon: InkWell(
+                                child: Icon(
+                                  _obscureText == true
+                                      ? myIcon['eye-off']
+                                      : myIcon['eye-open'],
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                              ),
+                              border: InputBorder.none,
+                              // border: OutlineInputBorder(
+                              //   borderRadius:
+                              //       BorderRadius.all(Radius.circular(50.0)),
+                              //   borderSide: BorderSide(
+                              //     width: 0.5,
+                              //     color: Colors.grey[100],
+                              //   ),
+                              // ),
+                              prefixIcon: Icon(
+                                myIcon['pwd'],
+                                size: dp(40.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(
+                          left: dp(60.0),
+                          right: dp(60.0),
+                          top: dp(40.0),
+                          bottom: dp(40.0),
+                        ),
+                        // padding: EdgeInsets.all(25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              child: Text("注册账号"),
                               onTap: () {
-                                setState(() {
-                                  _obscureText = !_obscureText;
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return Register();
+                                    },
+                                  ),
+                                );
                               },
                             ),
-                            border: InputBorder.none,
-                            // border: OutlineInputBorder(
-                            //   borderRadius:
-                            //       BorderRadius.all(Radius.circular(50.0)),
-                            //   borderSide: BorderSide(
-                            //     width: 0.5,
-                            //     color: Colors.grey[100],
-                            //   ),
-                            // ),
-                            prefixIcon: Icon(
-                              myIcon['pwd'],
-                              size: dp(40.0),
+                            InkWell(
+                              child: Text("忘记密码"),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ForgetPwd();
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: dp(60.0),
-                        right: dp(60.0),
-                        top: dp(40.0),
-                        bottom: dp(40.0),
-                      ),
-                      // padding: EdgeInsets.all(25.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            child: Text("注册账号"),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Register();
-                                  },
-                                ),
-                              );
-                            },
+                      Container(
+                        width: double.infinity,
+                        padding:
+                            EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(dp(20.0)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(dp(6.0)),
                           ),
-                          InkWell(
-                            child: Text("忘记密码"),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ForgetPwd();
-                                  },
-                                ),
-                              );
-                            },
+                          child: Text(
+                            "立即登录",
+                            style: TextStyle(fontSize: dp(32.0)),
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(left: dp(40.0), right: dp(40.0)),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(dp(20.0)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(dp(6.0)),
+                          color: account == ''
+                              ? Colors.grey
+                              : pwd == ''
+                                  ? Colors.grey
+                                  : Colors.blue,
+                          textColor: Colors.white,
+                          onPressed: isLogin,
                         ),
-                        child: Text(
-                          "立即登录",
-                          style: TextStyle(fontSize: dp(32.0)),
-                        ),
-                        color: account == ''
-                            ? Colors.grey
-                            : pwd == ''
-                                ? Colors.grey
-                                : Colors.blue,
-                        textColor: Colors.white,
-                        onPressed: isLogin,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

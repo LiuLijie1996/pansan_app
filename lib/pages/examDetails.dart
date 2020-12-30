@@ -195,8 +195,10 @@ class _ExamDetailsState extends State<ExamDetails>
         setState(() {});
       }
     } catch (e) {
-      print(e);
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(
+        msg: "考试考题失败",
+        errInfo: e,
+      );
     }
   }
 

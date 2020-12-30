@@ -88,7 +88,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取题目失败",
       );
     }
   }

@@ -63,7 +63,7 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取通知公告失败",
       );
     }
   }

@@ -40,7 +40,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.getUserTestRecordList,
         data: {
-          "user_id": 1,
+          "user_id": true,
         },
       );
       List data = result['data'];
@@ -101,7 +101,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取考试记录失败",
       );
     }
   }
@@ -118,7 +118,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.getUserTestAnswerList,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "test_id": test_id,
           "test_type": test_type,
         },
@@ -162,7 +162,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取考题失败",
       );
     }
   }

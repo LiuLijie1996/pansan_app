@@ -70,7 +70,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
           "isTags": arguments['isTags'],
           "page": page,
           "psize": 20,
-          "user_id": 1,
+          "user_id": true,
         },
       );
 
@@ -121,8 +121,10 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
         });
       }
     } catch (err) {
-      print(err);
-      ErrorInfo(msg: "$err", errInfo: err);
+      ErrorInfo(
+        msg: "获取课程失败",
+        errInfo: err,
+      );
     }
   }
 

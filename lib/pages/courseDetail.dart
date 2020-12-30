@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import '../components/MyVideoPlayer.dart';
@@ -141,7 +140,10 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         });
       }).toList();
     } catch (e) {
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(
+        msg: "获取课程详情信息失败",
+        errInfo: e,
+      );
     }
 
     if (this.mounted) {
@@ -176,29 +178,26 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
       }
 
       // 上传数据前先更新之前后台给的音视频进度
-      print("上传数据前先更行之前后台给的音视频进度");
       chapterChildren.materia.studyDuration = duration;
 
-      // 需要发给后台的数据
-      var data = {
-        "course_id": arguments.id, //课程id
-        "chapter_id": chapterId, //章节id
-        "article_id": chapterChildren.id, //子章节id
-        "duration": duration, //播放进度
-        "finish": duration >= validTime, //是否完成
-        "user_id": true,
-        "type": chapterChildren.materia.type, //资源类型
-      };
-      print("$data");
-
       try {
-        var result = await myRequest(
+        await myRequest(
           path: MyApi.courseProgress,
-          data: data,
+          data: {
+            "user_id": true,
+            "course_id": arguments.id, //课程id
+            "chapter_id": chapterId, //章节id
+            "article_id": chapterChildren.id, //子章节id
+            "duration": duration, //播放进度
+            "finish": duration >= validTime, //是否完成
+            "type": chapterChildren.materia.type, //资源类型
+          },
         );
       } catch (e) {
-        print(e);
-        ErrorInfo(msg: "$e", errInfo: e);
+        ErrorInfo(
+          msg: "上传进度失败",
+          errInfo: e,
+        );
       }
     }
   }
@@ -742,21 +741,23 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
   // 阅读完成
   readAccomplish() async {
     try {
-      var result = await myRequest(
+      await myRequest(
         path: MyApi.courseProgress,
         data: {
+          "user_id": true,
           "course_id": widget.courseData.id, //课程id
           "article_id": arguments.id, //图文id
           "type": arguments.type, //类型
           "duration": 0, //阅读时间
           "finish": validTime == 0, //是否完成
-          "user_id": true,
           "chapter_id": widget.chapterId,
         },
       );
     } catch (e) {
-      print(e);
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(
+        msg: "上传进度失败",
+        errInfo: e,
+      );
     }
   }
 

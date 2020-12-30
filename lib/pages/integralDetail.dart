@@ -89,7 +89,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
     } catch (e) {
       ErrorInfo(
         errInfo: e,
-        msg: e,
+        msg: "获取积分明细失败",
       );
     }
   }
