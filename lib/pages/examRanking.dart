@@ -418,7 +418,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
   getTimeLineData() async {
     try {
       var result = await myRequest(
-        path: MyApi.getTestList,
+        path: MyApi.examTimeLine,
         data: {
           "id": widget.nav.id,
         },

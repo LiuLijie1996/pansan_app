@@ -27,6 +27,7 @@ class _MyCollectState extends State<MyCollect>
   int page = 1;
   int psize = 20;
   List data = [];
+  bool isInitialize = false; //初始化是否完成
 
   @override
   void initState() {
@@ -84,6 +85,7 @@ class _MyCollectState extends State<MyCollect>
       }).toList();
 
       if (this.mounted) {
+        isInitialize = true;
         setState(() {});
       }
     } catch (e) {
@@ -101,6 +103,11 @@ class _MyCollectState extends State<MyCollect>
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("我的收藏"),
@@ -115,6 +122,9 @@ class _MyCollectState extends State<MyCollect>
         children: tabs.map((e) {
           int index = tabs.indexOf(e);
           if (index == 0) {
+            if (data.length == 0) {
+              return EmptyBox();
+            }
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {

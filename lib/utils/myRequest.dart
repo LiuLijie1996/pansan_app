@@ -30,6 +30,9 @@ class MyApi {
   /// 考试列表
   static const getTestList = "/api/exam/getTestList";
 
+  /// 获取考试时间线
+  static const examTimeLine = "/api/user/getTestList";
+
   /// 考试结束提交试卷
   static const saveUserTest = "/api/exam/saveUserTest";
 
@@ -144,13 +147,12 @@ String href = "http://192.168.0.8:88/index.php/v2"; //上线接口
 
 Future myRequest({
   String method = "post", //请求方式
-  bool online = false, //线上（true）还是 线下（false）
   String path = "", //请求地址
-  dynamic data, //发送的数据
+  Map<String, dynamic> data, //发送的数据
 }) async {
   var dio = Dio();
   // 拼接接口
-  var url = online ? href + path : test + path;
+  var url = test + path;
 
   if (data != null && data['user_id'] != null) {
     data['user_id'] = 1; //3390   1970

@@ -32,7 +32,7 @@ myCollect					我的收藏
 questionsCollect			试题收藏页面
 myCourse					我的课程
 myGrade						我的班级
-examRanking					考试排行
+examRanking					考试排行、选择考试
 checkingInRecord			考勤记录
 myInformation				个人信息
 myMistakes					我的错题

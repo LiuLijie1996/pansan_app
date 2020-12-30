@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pansan_app/components/ErrorInfo.dart';
+import '../components/ErrorInfo.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../components/TestSelect.dart';
