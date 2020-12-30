@@ -140,6 +140,12 @@ class MyApi {
 
   /// 考试记录对应的考题
   static const getUserTestAnswerList = "/api/user/getUserTestAnswerList";
+
+  /// 一日一题详情
+  static const getOneTodayStudy = "/api/user/getOneTodayStudy";
+
+  /// 一日一题阅读完成
+  static const saveTodayStudy = "/api/user/saveTodayStudy";
 }
 
 String test = "http://192.168.0.5:80/pansanApp"; //测试接口

@@ -16,38 +16,79 @@ class DayTopic extends StatefulWidget {
 }
 
 class _DayTopicState extends State<DayTopic> with MyScreenUtil {
-  Timer timer;
-  int _currentMyWidget = 0;
-  List myWidget = [MyProgress(), EmptyBox()];
-
   List<DayTopicDataType> dataList = [];
+  bool isInitialize = false; //初始化是否完成
 
-  _DayTopicState() {
-    // 倒计时
-    timer = Timer(Duration(seconds: 5), () {
-      setState(() {
-        _currentMyWidget = 1;
-      });
-    });
+  @override
+  void initState() {
+    super.initState();
 
-    //获取数据
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    //获取一日一题数据
     this.getDayTopic();
+  }
+
+  //获取一日一题数据
+  getDayTopic() async {
+    try {
+      var result = await myRequest(
+        path: MyApi.getTodayUserStudy,
+        data: {
+          "user_id": true,
+          "id": 4374,
+        },
+      );
+      List data = result['data'];
+      // 遍历数据
+      dataList = data.map((e) {
+        // 遍历child成员
+        List children = e['child'].map((item) {
+          return {
+            "status": item['status'],
+            "name": item['name'],
+            "id": item['id'],
+            "study_time": item["study_time"],
+          };
+        }).toList();
+
+        // 返回新数据
+        return DayTopicDataType.fromJson({
+          "time": e['time'],
+          "child": children,
+        });
+      }).toList();
+
+      if (this.mounted) {
+        isInitialize = true;
+        setState(() {});
+      }
+    } catch (e) {
+      print("getDayTopic   $e");
+    }
   }
 
   @override
   void dispose() {
-    // 清除定时器
-    timer?.cancel();
-    timer = null;
     // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("一日一题"),
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         // 下拉刷新的回调
@@ -56,7 +97,7 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
         },
         child: Container(
           child: dataList.length == 0
-              ? myWidget[_currentMyWidget]
+              ? EmptyBox()
               : ListView(
                   children: dataList.map((e) {
                     return DayTopicItem(
@@ -68,54 +109,6 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
       ),
     );
   }
-
-  getDayTopic() async {
-    try {
-      var result = await myRequest(
-        path: MyApi.getTodayUserStudy,
-        data: {
-          "id": 4374,
-        },
-      );
-      List data = result['data'];
-
-      // 遍历数据
-      dataList = data.map((e) {
-        // 遍历child成员
-        List child = e['child'].map((item) {
-          Map newItem = {
-            "status": item['status'],
-            "name": item['name'],
-            "id": item['id'],
-            "study_time": item["study_time"],
-          };
-          return newItem;
-        }).toList();
-
-        List<Child> newChild = child.map((item) {
-          Map<String, dynamic> newItem = {
-            "status": item['status'],
-            "name": item['name'],
-            "id": item['id'],
-            "study_time": item["study_time"],
-          };
-          return Child.fromJson(newItem);
-        }).toList();
-
-        // 返回新数据
-        return DayTopicDataType(
-          time: int.parse("${e['time']}"),
-          child: newChild,
-        );
-      }).toList();
-
-      if (this.mounted) {
-        setState(() {});
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 }
 
 // 一日一题成员组件
@@ -126,7 +119,7 @@ class DayTopicItem extends StatelessWidget with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
-    List<Child> child = item.child;
+    List<TimeChildren> child = item.child;
 
     //时间
     DateTime time = DateTime.fromMillisecondsSinceEpoch(
@@ -167,7 +160,12 @@ class DayTopicItem extends StatelessWidget with MyScreenUtil {
 
               return InkWell(
                 onTap: () {
-                  print(e);
+                  // 跳转到详情页
+                  Navigator.pushNamed(
+                    context,
+                    "/dayTopicDetail",
+                    arguments: e,
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: dp(20.0)),

@@ -15,6 +15,7 @@ my.dart     我的
 ```
 addAdvisory					添加咨询
 dayTopic					一日一题
+dayTopicDetail				一日一题详情
 informAffiche				通知公告
 login						登录、注册、忘记密码
 searchCourseList			课程列表

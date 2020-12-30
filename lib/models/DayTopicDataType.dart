@@ -3,17 +3,21 @@ class DayTopicDataType {
   int time;
 
   ///时间线上的成员列表
-  List<Child> child;
+  List<TimeChildren> child;
 
   DayTopicDataType({this.time, this.child});
 
   DayTopicDataType.fromJson(Map<String, dynamic> json) {
-    time = json['time'];
-    if (json['child'] != null) {
-      child = new List<Child>();
-      json['child'].forEach((v) {
-        child.add(new Child.fromJson(v));
-      });
+    try {
+      time = json['time'];
+      if (json['child'] != null) {
+        child = new List<TimeChildren>();
+        json['child'].forEach((v) {
+          child.add(new TimeChildren.fromJson(v));
+        });
+      }
+    } catch (e) {
+      print("DayTopicDataType  $e");
     }
   }
 
@@ -27,7 +31,7 @@ class DayTopicDataType {
   }
 }
 
-class Child {
+class TimeChildren {
   ///状态 1已学习  2未学习
   int status;
 
@@ -40,13 +44,17 @@ class Child {
   ///具体时间
   int studyTime;
 
-  Child({this.status, this.name, this.id, this.studyTime});
+  TimeChildren({this.status, this.name, this.id, this.studyTime});
 
-  Child.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    name = json['name'];
-    id = json['id'];
-    studyTime = json['study_time'];
+  TimeChildren.fromJson(Map<String, dynamic> json) {
+    try {
+      status = json['status'];
+      name = json['name'];
+      id = json['id'];
+      studyTime = json['study_time'];
+    } catch (e) {
+      print("TimeChildren $e");
+    }
   }
 
   Map<String, dynamic> toJson() {

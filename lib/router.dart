@@ -40,6 +40,7 @@ import './pages/exchangeRecord.dart';
 import './pages/checkingInRecord.dart';
 import './pages/ExamRanking.dart';
 import './pages/QuestionsCollect.dart';
+import './pages/DayTopicDetail.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -169,6 +170,13 @@ Map<String, Function> routers = {
   //考勤记录
   "/coursePlan": (context, {arguments}) {
     return CoursePlan(
+      arguments: arguments,
+    );
+  },
+
+  //一日一题详情
+  "/dayTopicDetail": (context, {arguments}) {
+    return DayTopicDetail(
       arguments: arguments,
     );
   },

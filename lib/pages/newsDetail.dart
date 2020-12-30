@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:pansan_app/components/MyProgress.dart';
+import '../components/MyProgress.dart';
 import "../components/MyVideoPlayer.dart";
 import "../components/MyIcon.dart";
 import '../models/NewsDataType.dart';
