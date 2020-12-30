@@ -57,7 +57,8 @@ class _ExamRankingState extends State<ExamRanking>
   // 获取导航
   Future getNavList() async {
     try {
-      var result = await myRequest(path: MyApi.getTestItemList);
+      var result =
+          await myRequest(context: context, path: MyApi.getTestItemList);
       List data = result['data'];
 
       List<NavDataType> newData = data.map((e) {
@@ -84,6 +85,7 @@ class _ExamRankingState extends State<ExamRanking>
   }) async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.testRankList,
         data: {
           "id": id,
@@ -418,6 +420,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
   getTimeLineData() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.examTimeLine,
         data: {
           "id": widget.nav.id,

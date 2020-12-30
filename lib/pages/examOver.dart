@@ -82,7 +82,8 @@ class ExamOver extends StatelessWidget with MyScreenUtil {
     };
 
     // 提交试卷
-    myRequest(path: MyApi.saveUserTest, data: query).then((value) {
+    myRequest(context: context, path: MyApi.saveUserTest, data: query)
+        .then((value) {
       print(value);
     });
 

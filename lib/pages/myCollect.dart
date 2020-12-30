@@ -51,9 +51,10 @@ class _MyCollectState extends State<MyCollect>
   getNewsCollect() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getNewsCollect,
         data: {
-          "user_id": 1,
+          "user_id": true,
         },
       );
 

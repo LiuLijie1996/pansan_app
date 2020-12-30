@@ -151,6 +151,7 @@ class _ExamDetailsState extends State<ExamDetails>
   getDataList() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.kaoTi,
         data: {
           "user_id": 1,
@@ -197,7 +198,7 @@ class _ExamDetailsState extends State<ExamDetails>
       }
     } catch (e) {
       print(e);
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(msg: "$e", errInfo: e, context: context);
     }
   }
 

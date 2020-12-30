@@ -37,6 +37,7 @@ class _CertificateDetailState extends State<CertificateDetail>
   getUserCert() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getUserCert,
         data: {
           "idCard": widget.arguments.idCard,

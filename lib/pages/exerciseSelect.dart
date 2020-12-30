@@ -107,6 +107,7 @@ class _ExerciseSelectState extends State<ExerciseSelect>
   getDataList({page = 1}) async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getPracticeList,
         data: {
           "id": widget.arguments.id,

@@ -65,6 +65,7 @@ class _AdvisoryDetailState extends State<AdvisoryDetail> with MyScreenUtil {
   getUserServiceReply() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getUserServiceReply,
         data: {
           "user_id": true,

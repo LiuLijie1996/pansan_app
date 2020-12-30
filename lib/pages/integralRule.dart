@@ -26,7 +26,7 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
   // 获取积分规则
   getIntegralRuleData() async {
     try {
-      var result = await myRequest(path: MyApi.getScoreRule);
+      var result = await myRequest(context: context, path: MyApi.getScoreRule);
       List data = result['data'];
       integralRuleDataList = data.map((e) {
         var child = e['child'].map((item) {

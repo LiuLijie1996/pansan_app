@@ -59,7 +59,8 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
   // 获取数据
   getExamData({page = 1}) async {
     try {
-      var result = await myRequest(path: MyApi.getTestList, data: {
+      var result =
+          await myRequest(context: context, path: MyApi.getTestList, data: {
         "user_id": 1,
         "id": widget.arguments.id,
       });

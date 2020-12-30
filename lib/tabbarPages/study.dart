@@ -37,7 +37,8 @@ class _StudyState extends State<Study>
   // 获取头部tabbar
   getTopTabBar() async {
     try {
-      var result = await myRequest(path: MyApi.getCourseItemList);
+      var result =
+          await myRequest(context: context, path: MyApi.getCourseItemList);
       List courseNavList = result['data'];
       // 遍历课程导航
       tabs = courseNavList.map((item) {
@@ -95,6 +96,7 @@ class _StudyState extends State<Study>
   }) async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.courseList,
         data: {
           "user_id": 1,

@@ -44,7 +44,7 @@ class ExerciseOver extends StatelessWidget with MyScreenUtil {
       "answer_num": correct_num + mistake_num, //答题数量
       "data": dataList, //题目
     };
-    myRequest(path: MyApi.saveUserPractice, data: query).then(
+    myRequest(context: context, path: MyApi.saveUserPractice, data: query).then(
       (value) {
         print(value);
       },

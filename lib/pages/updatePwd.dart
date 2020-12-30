@@ -198,6 +198,7 @@ class _UpdatePwdState extends State<UpdatePwd> with MyScreenUtil {
                           if (pwd1 != '') {
                             if (pwd1 == pwd2) {
                               var result = await myRequest(
+                                context: context,
                                 path: MyApi.login,
                                 data: {"pwd1": pwd1, "pwd2": pwd2},
                               );

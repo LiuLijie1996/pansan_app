@@ -11,6 +11,7 @@ import '../db/UserDB.dart';
 
 // 登录页面
 class Login extends StatefulWidget {
+  static BuildContext context;
   Login({Key key}) : super(key: key);
 
   @override
@@ -31,6 +32,18 @@ class _LoginState extends State<Login> with MyScreenUtil {
     // TODO: implement initState
     super.initState();
 
+    // 初始化
+    myInitialize();
+  }
+
+  // 初始化
+  myInitialize() async {
+    // 删除数据库
+    await UserDB.delete();
+    // 关闭数据库
+    UserDB.dispose();
+
+    // 输入框控制器
     _controller1.addListener(() {
       setState(() {
         account = _controller1.text;
@@ -236,6 +249,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
 
       // 请求登录
       var result = await myRequest(
+        context: context,
         path: MyApi.login,
         data: {
           "username": account,
@@ -274,12 +288,8 @@ class _LoginState extends State<Login> with MyScreenUtil {
         "bindPhone": data['bindPhone'],
       });
 
-      // 删除数据库
-      await UserDB.delete();
-
       // 存储用户信息
-      int id = await UserDB.addData(userInfo);
-      print("用户id：$id");
+      await UserDB.addData(userInfo);
 
       // 关闭数据库
       UserDB.dispose();
@@ -289,7 +299,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
       // 跳转到首页
       Navigator.pushNamed(context, "/home");
     } catch (e) {
-      ErrorInfo(msg: "登录失败", errInfo: e);
+      ErrorInfo(msg: "登录失败", errInfo: e, context: context);
     }
   }
 
@@ -533,6 +543,7 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                             if (idCard != '') {
                               if (verifyCode != '') {
                                 var result = await myRequest(
+                                  context: context,
                                   path: MyApi.login,
                                   data: {
                                     "phone": phone,
@@ -716,6 +727,7 @@ class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
                           if (userName != '') {
                             if (idCard != '') {
                               var result = await myRequest(
+                                context: context,
                                 path: MyApi.login,
                                 data: {"userName": userName, "idCard": idCard},
                               );

@@ -34,6 +34,7 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getUserScoreExchange,
         data: {
           "user_id": 1,

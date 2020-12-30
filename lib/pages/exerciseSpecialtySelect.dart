@@ -68,6 +68,7 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
         query['id'] = widget.arguments.id;
       }
       var result = await myRequest(
+        context: context,
         path: MyApi.getAllQuestionItemList,
         data: query,
       );

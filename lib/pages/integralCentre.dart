@@ -52,6 +52,7 @@ class _IntegralCentreState extends State<IntegralCentre>
   }) async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.goodsList,
         data: {
           "page": page,
@@ -187,13 +188,14 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
   GoodsItemWidget({Key key, @required this.goodsItem}) : super(key: key);
 
   // 点击兑换时弹窗提示
-  showToast() async {
+  showToast(context) async {
     try {
       // 请求后台进行兑换
       var result = await myRequest(
+        context: context,
         path: MyApi.userExchangeScore,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "goods_id": goodsItem.id,
           "score": goodsItem.score,
         },
@@ -252,7 +254,9 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100.0),
                         ),
-                        onPressed: showToast,
+                        onPressed: () {
+                          showToast(context);
+                        },
                         child: Text(
                           "兑换",
                           style: TextStyle(color: Colors.white),

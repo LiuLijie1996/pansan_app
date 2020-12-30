@@ -62,6 +62,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
   getDataList() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getOnePractice,
         data: {
           "id": widget.arguments.id,

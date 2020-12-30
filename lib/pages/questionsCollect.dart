@@ -48,6 +48,7 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
   getQuestionCollect() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getQuestionCollect,
         data: {
           "user_id": 1,

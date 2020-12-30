@@ -75,6 +75,8 @@ abstract class UserDB {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
+    print("保存用户信息成功");
+
     return id;
   }
 
@@ -85,6 +87,8 @@ abstract class UserDB {
 
     // 获取所有数据
     List<Map<String, dynamic>> maps = await db.query('users');
+
+    print("获取所有用户信息成功");
 
     // 格式化数据
     return List.generate(
@@ -107,6 +111,8 @@ abstract class UserDB {
       where: "id=${data.id}", //查询条件
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    print("修改用户信息成功");
   }
 
   // 删除数据
@@ -116,6 +122,8 @@ abstract class UserDB {
 
     // 删除数据
     await db.delete("users");
+
+    print("删除用户信息成功");
   }
 
   // 关闭数据库

@@ -278,20 +278,21 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
   }
 
   // 点赞
-  Future<bool> saveUserUpvote() async {
-    try {
-      await myRequest(
-        path: MyApi.saveUserUpvote,
-        data: {
-          "id": item.id,
-        },
-      );
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
+  // Future<bool> saveUserUpvote(context) async {
+  //   try {
+  //     await myRequest(
+  //       context: context,
+  //       path: MyApi.saveUserUpvote,
+  //       data: {
+  //         "id": item.id,
+  //       },
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 }
 
 // 课程卡片

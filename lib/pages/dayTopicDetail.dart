@@ -45,6 +45,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
   getDetail() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getOneTodayStudy,
         data: {
           "id": widget.arguments.id,
@@ -74,6 +75,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
   saveTodayStudy() async {
     try {
       await myRequest(
+        context: context,
         path: MyApi.saveTodayStudy,
         data: {
           "user_id": true,

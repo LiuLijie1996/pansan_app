@@ -1,8 +1,24 @@
 import 'package:dio/dio.dart';
 import 'dart:math' as math;
+import '../db/UserDB.dart';
+import '../models/UserInfoDataType.dart';
+import 'package:flutter/material.dart';
+import '../pages/login.dart';
 
 /// 接口
 class MyApi {
+  static Future<String> get userToken async {
+    List<UserInfoDataType> userInfoList = await UserDB.findAll();
+    String token;
+
+    if (userInfoList.length != 0) {
+      UserInfoDataType userInfo = userInfoList[0];
+      token = userInfo.token;
+    }
+
+    return token;
+  }
+
   /// 最新课程、联想词
   static const courseList = "/api/course/courseList";
 
@@ -161,6 +177,7 @@ String test = "http://192.168.0.5:80/pansanApp"; //测试接口
 String href = "http://192.168.0.8:88/index.php/v2"; //上线接口
 
 Future myRequest({
+  @required BuildContext context,
   String method = "post", //请求方式
   String path = "", //请求地址
   Map<String, dynamic> data, //发送的数据
@@ -174,13 +191,39 @@ Future myRequest({
   }
 
   Response response;
+
   if (method == 'post') {
-    response = await dio.post(url, data: data);
+    response = await dio.post(
+      url,
+      data: data,
+      options: Options(
+        headers: {
+          "token": await MyApi.userToken,
+        },
+      ),
+    );
   } else {
-    response = await dio.get(url, queryParameters: data);
+    response = await dio.get(
+      url,
+      queryParameters: data,
+      options: Options(
+        headers: {
+          "token": await MyApi.userToken,
+        },
+      ),
+    );
   }
 
-  return response.data;
+  // 判断是否登录
+  if (response.data['code'] != 200) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+      (route) => route == null,
+    );
+  } else {
+    return response.data;
+  }
 }
 
 //文件上传
@@ -208,6 +251,11 @@ Future<Response> dioUpload({
   var result = await dio.post(
     url,
     data: formdata,
+    options: Options(
+      headers: {
+        "Token": await MyApi.userToken,
+      },
+    ),
     // queryParameters: map,
     onSendProgress: (int count, int total) {
       var rate = "${(count / total * 100).floor()}%";

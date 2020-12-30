@@ -59,9 +59,10 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
   getUserScoreList() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.getUserScoreList,
         data: {
-          "user_id": 1,
+          "user_id": true,
           "page": 1,
           "psize": 20,
           "integral_date": selectTime,

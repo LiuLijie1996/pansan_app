@@ -69,6 +69,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
   readAccomplish() async {
     try {
       var result = await myRequest(
+        context: context,
         path: MyApi.newsUserScore,
         data: {
           "course_id": courseData.id, //课程id
@@ -82,7 +83,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
       );
     } catch (e) {
       print(e);
-      ErrorInfo(msg: "$e", errInfo: e);
+      ErrorInfo(msg: "$e", errInfo: e, context: context);
     }
   }
 

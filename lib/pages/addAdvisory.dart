@@ -95,6 +95,7 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                     try {
                       // 发送数据给后台
                       var result = await myRequest(
+                        context: context,
                         path: MyApi.addUserService,
                         data: query,
                       );
