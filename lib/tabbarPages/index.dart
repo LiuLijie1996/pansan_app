@@ -96,7 +96,6 @@ class Index extends StatelessWidget with MyScreenUtil {
       print('扫码错误: $e');
 
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -362,7 +361,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   // 获取轮播图
   getBannerList() async {
     try {
-      var result = await myRequest(context: context, path: MyApi.indexBanner);
+      var result = await myRequest(path: MyApi.indexBanner);
 
       // 如果返回null说明已经跳转到登录页了，没有任何数据返回
       if (result == null) return;
@@ -378,7 +377,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -390,7 +388,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     try {
       unreadNum = 0;
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserMessage,
         data: {
           "user_id": true,
@@ -411,7 +408,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       setState(() {});
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -422,7 +418,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   getExamList() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.newKaoshi,
         data: {
           "user_id": 1,
@@ -467,7 +462,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -480,7 +474,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getIndexNewsList,
         data: {
           "page": page,
@@ -516,7 +509,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -529,7 +521,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.courseList,
         data: {
           "user_id": 1,
@@ -585,7 +576,6 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

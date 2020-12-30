@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
   // 获取关键词
   getAntistop() async {
     try {
-      var result = await myRequest(context: context, path: MyApi.getCourseTags);
+      var result = await myRequest(path: MyApi.getCourseTags);
       List data = result['data'];
       antistopList = data.map((e) {
         return "${e['name']}";
@@ -56,7 +56,6 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
       }
     } catch (err) {
       ErrorInfo(
-        context: context,
         errInfo: err,
         msg: err,
       );
@@ -67,7 +66,6 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
   getAssociate() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.courseList,
         data: {
           "searchValue": searchValue,
@@ -105,7 +103,6 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
       }
     } catch (err) {
       ErrorInfo(
-        context: context,
         errInfo: err,
         msg: err,
       );

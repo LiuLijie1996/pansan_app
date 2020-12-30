@@ -38,7 +38,6 @@ class _CertificateDetailState extends State<CertificateDetail>
   getUserCert() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserCert,
         data: {
           "idCard": widget.arguments.idCard,
@@ -79,7 +78,6 @@ class _CertificateDetailState extends State<CertificateDetail>
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: "获取证书详情数据失败",
       );

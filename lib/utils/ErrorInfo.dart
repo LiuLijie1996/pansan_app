@@ -9,15 +9,12 @@ class ErrorInfo {
 
     ///报错的信息
     @required errInfo,
-
-    ///上下文
-    @required BuildContext context,
   }) {
     // 弹窗提示
     this.showToast(msg);
 
     // 发送错误信息给后台
-    this.sendError(errInfo, context);
+    this.sendError(errInfo);
   }
 
   showToast(msg) {
@@ -33,9 +30,8 @@ class ErrorInfo {
   }
 
   // 将错误信息发给后台
-  sendError(errInfo, context) async {
+  sendError(errInfo) async {
     await myRequest(
-      context: context,
       path: MyApi.error,
       data: {
         "errInfo": "$errInfo",

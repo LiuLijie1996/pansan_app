@@ -64,7 +64,6 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   searchCourseData({page = 1}) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.courseList,
         data: {
           "searchValue": arguments['searchValue'],
@@ -123,7 +122,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
       }
     } catch (err) {
       print(err);
-      ErrorInfo(msg: "$err", errInfo: err, context: context);
+      ErrorInfo(msg: "$err", errInfo: err);
     }
   }
 

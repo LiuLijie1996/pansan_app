@@ -49,7 +49,6 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
   getQuestionCollect() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getQuestionCollect,
         data: {
           "user_id": 1,
@@ -86,7 +85,6 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

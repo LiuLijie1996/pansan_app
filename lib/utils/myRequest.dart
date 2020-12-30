@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'dart:math' as math;
 import '../db/UserDB.dart';
 import '../models/UserInfoDataType.dart';
-import 'package:flutter/material.dart';
 
 /// 接口
 class MyApi {
@@ -205,7 +203,6 @@ String href = "http://192.168.0.8:88/index.php/v2"; //上线接口
 bool isLoginPage = false;
 
 Future myRequest({
-  @required BuildContext context,
   String method = "post", //请求方式
   String path = "", //请求地址
   Map<String, dynamic> data, //发送的数据
@@ -242,27 +239,8 @@ Future myRequest({
     );
   }
 
-  print("登录状态码：${response.data['code']}  接口：$path");
-  // 判断是否登录
-  if (response.data['code'] != 200) {
-    if (!isLoginPage) {
-      print("--- 跳转到登录页 $isLoginPage ---");
-      isLoginPage = true;
-      // 跳转到登录页
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login',
-        (route) => route == null,
-      );
-    }
-  } else {
-    if (path != '/api/error') {
-      print('返回请求到的数据');
-      isLoginPage = false;
-      // 返回请求到的数据
-      return response.data;
-    }
-  }
+  // 返回请求到的数据
+  return response.data;
 }
 
 //文件上传

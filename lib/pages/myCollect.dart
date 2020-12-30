@@ -52,7 +52,6 @@ class _MyCollectState extends State<MyCollect>
   getNewsCollect() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getNewsCollect,
         data: {
           "user_id": true,
@@ -92,7 +91,6 @@ class _MyCollectState extends State<MyCollect>
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

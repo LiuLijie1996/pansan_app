@@ -38,7 +38,6 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
   getTestRecordsData() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserTestRecordList,
         data: {
           "user_id": 1,
@@ -101,7 +100,6 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -118,7 +116,6 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserTestAnswerList,
         data: {
           "user_id": 1,
@@ -164,7 +161,6 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       return newData;
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

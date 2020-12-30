@@ -121,8 +121,7 @@ class _NewsState extends State<News>
   // 获取头部tabBar
   getTopTabBar() async {
     try {
-      var result =
-          await myRequest(context: context, path: MyApi.getNewsItemList);
+      var result = await myRequest(path: MyApi.getNewsItemList);
       List news = result['data'];
       // 遍历新闻导航
       tabs = news.map((item) {
@@ -160,7 +159,6 @@ class _NewsState extends State<News>
       });
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -176,7 +174,6 @@ class _NewsState extends State<News>
     try {
       // 请求数据
       var result = await myRequest(
-        context: context,
         path: MyApi.newsList,
         data: {
           "pid": this.tabs[index].id,
@@ -223,7 +220,6 @@ class _NewsState extends State<News>
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

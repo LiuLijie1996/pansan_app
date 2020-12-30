@@ -37,7 +37,6 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
   getCheckingInRecord() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getAttendDetail,
         data: {
           "user_id": true,
@@ -68,7 +67,6 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

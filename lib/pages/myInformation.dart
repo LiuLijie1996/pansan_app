@@ -33,7 +33,6 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
       print(result);
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

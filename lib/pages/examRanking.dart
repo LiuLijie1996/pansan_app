@@ -58,8 +58,7 @@ class _ExamRankingState extends State<ExamRanking>
   // 获取导航
   Future getNavList() async {
     try {
-      var result =
-          await myRequest(context: context, path: MyApi.getTestItemList);
+      var result = await myRequest(path: MyApi.getTestItemList);
 
       // 如果返回null说明已经跳转到登录页了，没有任何数据返回
       if (result == null) return;
@@ -80,7 +79,6 @@ class _ExamRankingState extends State<ExamRanking>
       tabs.addAll(newData);
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -94,7 +92,6 @@ class _ExamRankingState extends State<ExamRanking>
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.testRankList,
         data: {
           "id": id,
@@ -158,7 +155,6 @@ class _ExamRankingState extends State<ExamRanking>
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -438,7 +434,6 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
   getTimeLineData() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.examTimeLine,
         data: {
           "id": widget.nav.id,
@@ -496,7 +491,6 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

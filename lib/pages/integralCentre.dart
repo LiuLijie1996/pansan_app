@@ -53,7 +53,6 @@ class _IntegralCentreState extends State<IntegralCentre>
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.goodsList,
         data: {
           "page": page,
@@ -86,7 +85,6 @@ class _IntegralCentreState extends State<IntegralCentre>
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -197,7 +195,6 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
     try {
       // 请求后台进行兑换
       var result = await myRequest(
-        context: context,
         path: MyApi.userExchangeScore,
         data: {
           "user_id": true,
@@ -217,7 +214,6 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
       );
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

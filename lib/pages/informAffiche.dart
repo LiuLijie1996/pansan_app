@@ -35,7 +35,6 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
   getUserMessage() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserMessage,
         data: {
           "user_id": true,
@@ -63,7 +62,6 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
       setState(() {});
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -118,7 +116,6 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
 
                     //发送已读通知公告
                     myRequest(
-                      context: context,
                       path: MyApi.saveUserMessage,
                       data: {
                         "user_id": true,

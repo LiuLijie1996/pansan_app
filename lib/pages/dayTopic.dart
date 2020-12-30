@@ -38,7 +38,6 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
   getDayTopic() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getTodayUserStudy,
         data: {
           "user_id": true,
@@ -75,7 +74,6 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

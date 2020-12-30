@@ -249,7 +249,6 @@ class _LoginState extends State<Login> with MyScreenUtil {
 
       // 请求登录
       var result = await myRequest(
-        context: context,
         path: MyApi.login,
         data: {
           "username": account,
@@ -299,7 +298,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
       // 跳转到首页
       Navigator.pushNamed(context, "/home");
     } catch (e) {
-      ErrorInfo(msg: "登录失败", errInfo: e, context: context);
+      ErrorInfo(msg: "登录失败", errInfo: e);
     }
   }
 
@@ -543,7 +542,6 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                             if (idCard != '') {
                               if (verifyCode != '') {
                                 var result = await myRequest(
-                                  context: context,
                                   path: MyApi.login,
                                   data: {
                                     "phone": phone,
@@ -727,7 +725,6 @@ class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
                           if (userName != '') {
                             if (idCard != '') {
                               var result = await myRequest(
-                                context: context,
                                 path: MyApi.login,
                                 data: {"userName": userName, "idCard": idCard},
                               );

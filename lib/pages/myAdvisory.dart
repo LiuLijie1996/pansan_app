@@ -147,7 +147,6 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
   getAdvisoryData({page = 1}) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserServiceList,
         data: {
           "user_id": true,
@@ -181,7 +180,6 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
       });
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

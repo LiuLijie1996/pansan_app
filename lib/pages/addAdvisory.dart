@@ -96,7 +96,6 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                     try {
                       // 发送数据给后台
                       var result = await myRequest(
-                        context: context,
                         path: MyApi.addUserService,
                         data: query,
                       );
@@ -115,7 +114,6 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                       );
                     } catch (err) {
                       ErrorInfo(
-                        context: context,
                         errInfo: err,
                         msg: "添加失败：$err",
                       );

@@ -80,13 +80,11 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   getNewsDetail() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getNewsOne,
         data: {
           "id": arguments.id,
         },
       );
-      print(arguments.id);
       var data = result['data'];
       var newData = {
         "id": data['id'],
@@ -143,7 +141,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -517,7 +514,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   readAccomplish() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.newsUserScore,
         data: {
           "id": arguments.id,
@@ -526,7 +522,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       );
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
@@ -537,7 +532,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   Future<bool> saveUserUpvote() async {
     try {
       await myRequest(
-        context: context,
         path: MyApi.saveUserUpvote,
         data: {
           "id": arguments.id,
@@ -546,7 +540,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       return true;
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

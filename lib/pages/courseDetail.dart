@@ -68,7 +68,6 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
   getCourseDetail() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.courseDetail,
         data: {
           "id": arguments.id,
@@ -145,7 +144,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         });
       }).toList();
     } catch (e) {
-      ErrorInfo(msg: "$e", errInfo: e, context: context);
+      ErrorInfo(msg: "$e", errInfo: e);
     }
 
     if (this.mounted) {
@@ -197,7 +196,6 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
 
       try {
         var result = await myRequest(
-          context: context,
           path: MyApi.courseProgress,
           data: data,
         );
@@ -206,7 +204,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         if (result == null) return;
       } catch (e) {
         print(e);
-        ErrorInfo(msg: "$e", errInfo: e, context: context);
+        ErrorInfo(msg: "$e", errInfo: e);
       }
     }
   }
@@ -751,7 +749,6 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
   readAccomplish() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.courseProgress,
         data: {
           "course_id": widget.courseData.id, //课程id
@@ -768,7 +765,7 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
       if (result == null) return;
     } catch (e) {
       print(e);
-      ErrorInfo(msg: "$e", errInfo: e, context: context);
+      ErrorInfo(msg: "$e", errInfo: e);
     }
   }
 

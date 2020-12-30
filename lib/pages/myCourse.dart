@@ -56,7 +56,6 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
   }) async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserCourseList,
         data: {
           "user_id": 1,
@@ -86,7 +85,6 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

@@ -34,7 +34,6 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
   getCoursePlan() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getTimeTableList,
         data: {
           "class_id": arguments.classId,
@@ -62,7 +61,6 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );

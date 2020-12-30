@@ -60,7 +60,6 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
   getUserScoreList() async {
     try {
       var result = await myRequest(
-        context: context,
         path: MyApi.getUserScoreList,
         data: {
           "user_id": true,
@@ -89,7 +88,6 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
       }
     } catch (e) {
       ErrorInfo(
-        context: context,
         errInfo: e,
         msg: e,
       );
