@@ -58,6 +58,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: err,
         msg: "获取关键词失败",
+        path: MyApi.getCourseTags,
       );
     }
   }
@@ -105,6 +106,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: err,
         msg: "获取联想词失败",
+        path: MyApi.courseList,
       );
     }
   }

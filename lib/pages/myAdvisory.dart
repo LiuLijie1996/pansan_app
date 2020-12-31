@@ -182,6 +182,7 @@ class _MyAdvisoryState extends State<MyAdvisory> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取我的咨询失败",
+        path: MyApi.getUserServiceList,
       );
     }
   }

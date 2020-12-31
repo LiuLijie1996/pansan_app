@@ -59,6 +59,7 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取课程计划失败",
+        path: MyApi.getTimeTableList,
       );
     }
   }

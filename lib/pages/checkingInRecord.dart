@@ -66,6 +66,7 @@ class _CheckingInRecordState extends State<CheckingInRecord> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取考勤记录失败",
+        path: MyApi.getAttendDetail,
       );
     }
   }

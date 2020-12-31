@@ -87,6 +87,7 @@ class _QuestionsCollectState extends State<QuestionsCollect> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getQuestionCollect,
       );
     }
   }

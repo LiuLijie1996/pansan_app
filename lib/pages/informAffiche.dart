@@ -64,6 +64,7 @@ class _InformAfficheState extends State<InformAffiche> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取通知公告失败",
+        path: MyApi.getUserMessage,
       );
     }
   }

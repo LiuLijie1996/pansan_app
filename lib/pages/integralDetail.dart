@@ -90,6 +90,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取积分明细失败",
+        path: MyApi.getUserScoreList,
       );
     }
   }

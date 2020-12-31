@@ -87,6 +87,7 @@ class _IntegralCentreState extends State<IntegralCentre>
       ErrorInfo(
         errInfo: e,
         msg: "获取商品失败",
+        path: MyApi.goodsList,
       );
     }
   }
@@ -216,6 +217,7 @@ class GoodsItemWidget extends StatelessWidget with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "兑换商品失败",
+        path: MyApi.userExchangeScore,
       );
     }
   }

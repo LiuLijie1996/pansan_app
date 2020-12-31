@@ -68,6 +68,7 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取积分规则失败",
+        path: MyApi.getScoreRule,
       );
     }
   }

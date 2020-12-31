@@ -160,6 +160,7 @@ class _NewsState extends State<News>
       ErrorInfo(
         errInfo: e,
         msg: "获取头部tabBar失败",
+        path: MyApi.getNewsItemList,
       );
     }
   }
@@ -221,6 +222,7 @@ class _NewsState extends State<News>
       ErrorInfo(
         errInfo: e,
         msg: "通过导航获取新闻失败",
+        path: MyApi.newsList,
       );
     }
   }

@@ -77,6 +77,7 @@ class _CertificateDetailState extends State<CertificateDetail>
       ErrorInfo(
         errInfo: e,
         msg: "获取证书详情数据失败",
+        path: MyApi.getUserCert,
       );
     }
   }

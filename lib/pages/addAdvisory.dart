@@ -113,6 +113,7 @@ class _AddAdvisoryState extends State<AddAdvisory> with MyScreenUtil {
                       ErrorInfo(
                         errInfo: err,
                         msg: "添加失败：$err",
+                        path: MyApi.addUserService,
                       );
                     }
 

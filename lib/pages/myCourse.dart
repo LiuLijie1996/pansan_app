@@ -87,6 +87,7 @@ class _MyCourseState extends State<MyCourse> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getUserCourseList,
       );
     }
   }

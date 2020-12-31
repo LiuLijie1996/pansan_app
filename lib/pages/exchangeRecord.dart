@@ -81,6 +81,7 @@ class _ExchangeRecordState extends State<ExchangeRecord> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取兑换记录失败",
+        path: MyApi.getUserScoreExchange,
       );
     }
   }

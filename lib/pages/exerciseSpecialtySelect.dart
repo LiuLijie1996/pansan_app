@@ -101,6 +101,7 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
       ErrorInfo(
         errInfo: e,
         msg: "获取专项练习列表失败",
+        path: MyApi.getAllQuestionItemList,
       );
     }
   }

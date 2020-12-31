@@ -77,6 +77,7 @@ class _ExamRankingState extends State<ExamRanking>
       ErrorInfo(
         errInfo: e,
         msg: "获取我要考试分类失败",
+        path: MyApi.getTestItemList,
       );
     }
   }
@@ -150,6 +151,7 @@ class _ExamRankingState extends State<ExamRanking>
       ErrorInfo(
         errInfo: e,
         msg: "获取考试排行失败",
+        path: MyApi.testRankList,
       );
     }
   }
@@ -483,6 +485,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取时间线失败",
+        path: MyApi.examTimeLine,
       );
     }
   }

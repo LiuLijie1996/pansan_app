@@ -87,6 +87,7 @@ class _ExamSelectState extends State<ExamSelect> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取考试列表失败",
+        path: MyApi.getTestList,
       );
     }
   }

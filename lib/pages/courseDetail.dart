@@ -143,6 +143,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
       ErrorInfo(
         msg: "获取课程详情信息失败",
         errInfo: e,
+        path: MyApi.courseDetail,
       );
     }
 
@@ -197,6 +198,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         ErrorInfo(
           msg: "上传进度失败",
           errInfo: e,
+          path: MyApi.courseProgress,
         );
       }
     }
@@ -757,6 +759,7 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
       ErrorInfo(
         msg: "上传进度失败",
         errInfo: e,
+        path: MyApi.courseProgress,
       );
     }
   }

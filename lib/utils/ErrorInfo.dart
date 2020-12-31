@@ -9,12 +9,15 @@ class ErrorInfo {
 
     ///报错的信息
     @required errInfo,
+
+    ///发生错误的接口
+    @required path,
   }) {
     // 弹窗提示
     this.showToast(msg);
 
     // 发送错误信息给后台
-    this.sendError(errInfo);
+    this.sendError(errInfo: errInfo, path: path);
   }
 
   showToast(msg) {
@@ -30,12 +33,19 @@ class ErrorInfo {
   }
 
   // 将错误信息发给后台
-  sendError(errInfo) async {
+  sendError({
+    ///报错的信息
+    @required errInfo,
+
+    ///发生错误的接口
+    @required path,
+  }) async {
     await myRequest(
       path: MyApi.error,
       data: {
         "errInfo": "$errInfo",
         "user_id": true,
+        "path": path,
       },
     );
   }

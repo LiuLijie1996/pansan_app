@@ -148,6 +148,7 @@ class _ExerciseSelectState extends State<ExerciseSelect>
       ErrorInfo(
         errInfo: e,
         msg: "获取练习列表失败",
+        path: MyApi.getPracticeList,
       );
     }
   }

@@ -70,6 +70,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取一日一题详情失败",
+        path: MyApi.getOneTodayStudy,
       );
     }
   }
@@ -88,6 +89,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "发送阅读进度失败",
+        path: MyApi.saveTodayStudy,
       );
     }
   }

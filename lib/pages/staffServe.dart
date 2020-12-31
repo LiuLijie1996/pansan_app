@@ -130,6 +130,7 @@ class _StaffServeState extends State<StaffServe>
       ErrorInfo(
         errInfo: e,
         msg: "获取数据失败",
+        path: MyApi.getUserServiceList,
       );
     }
   }

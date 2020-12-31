@@ -98,6 +98,7 @@ class Index extends StatelessWidget with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "扫码错误",
+        path: "",
       );
     }
   }
@@ -376,6 +377,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取轮播图失败",
+        path: MyApi.indexBanner,
       );
     }
   }
@@ -404,6 +406,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取通知公告失败",
+        path: MyApi.getUserMessage,
       );
     }
   }
@@ -455,6 +458,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取最新考试失败",
+        path: MyApi.newKaoshi,
       );
     }
   }
@@ -499,6 +503,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取新闻失败",
+        path: MyApi.getIndexNewsList,
       );
     }
   }
@@ -563,6 +568,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取课程失败",
+        path: MyApi.courseList,
       );
     }
   }

@@ -327,7 +327,11 @@ class _LoginState extends State<Login> with MyScreenUtil {
       // 跳转到首页
       Navigator.pushNamed(context, "/home");
     } catch (e) {
-      ErrorInfo(msg: "登录失败", errInfo: e);
+      ErrorInfo(
+        msg: "登录失败",
+        errInfo: e,
+        path: MyApi.login,
+      );
     }
   }
 

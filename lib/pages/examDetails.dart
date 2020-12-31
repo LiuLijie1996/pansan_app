@@ -198,6 +198,7 @@ class _ExamDetailsState extends State<ExamDetails>
       ErrorInfo(
         msg: "考试考题失败",
         errInfo: e,
+        path: MyApi.kaoTi,
       );
     }
   }
@@ -659,22 +660,15 @@ class _ExamDetailsState extends State<ExamDetails>
 
   // 跳转到考试结束页面
   toExamOverPage() {
-    try {
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(
-        context,
-        "/examOver",
-        arguments: {
-          "dataList": dataList,
-          "expend_time": expend_time,
-          "examSiteInfo": widget.examSiteInfo,
-        },
-      );
-    } catch (e) {
-      ErrorInfo(
-        errInfo: e,
-        msg: e,
-      );
-    }
+    Navigator.pop(context);
+    Navigator.pushReplacementNamed(
+      context,
+      "/examOver",
+      arguments: {
+        "dataList": dataList,
+        "expend_time": expend_time,
+        "examSiteInfo": widget.examSiteInfo,
+      },
+    );
   }
 }

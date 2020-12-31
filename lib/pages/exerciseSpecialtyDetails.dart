@@ -89,6 +89,7 @@ class _ExerciseSpecialtyDetailsState extends State<ExerciseSpecialtyDetails>
       ErrorInfo(
         errInfo: e,
         msg: "获取题目失败",
+        path: MyApi.getQuestionList,
       );
     }
   }

@@ -143,6 +143,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取新闻详情失败",
+        path: MyApi.getNewsOne,
       );
     }
   }
@@ -524,6 +525,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "上传进度失败",
+        path: MyApi.newsUserScore,
       );
     }
   }
@@ -542,6 +544,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "点赞失败",
+        path: MyApi.saveUserUpvote,
       );
       return false;
     }

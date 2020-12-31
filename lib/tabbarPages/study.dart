@@ -87,6 +87,7 @@ class _StudyState extends State<Study>
       ErrorInfo(
         errInfo: e,
         msg: "获取头部tabbar失败",
+        path: MyApi.getCourseItemList,
       );
     }
   }
@@ -151,6 +152,7 @@ class _StudyState extends State<Study>
       ErrorInfo(
         errInfo: e,
         msg: "获取课程失败",
+        path: MyApi.courseList,
       );
     }
   }

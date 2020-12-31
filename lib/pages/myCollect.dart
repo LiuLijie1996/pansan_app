@@ -93,6 +93,7 @@ class _MyCollectState extends State<MyCollect>
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getNewsCollect,
       );
     }
   }

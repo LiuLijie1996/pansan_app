@@ -80,6 +80,7 @@ class _MyGradeState extends State<MyGrade> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getUserClass,
       );
     }
   }

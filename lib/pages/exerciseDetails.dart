@@ -106,6 +106,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getOnePractice,
       );
     }
   }

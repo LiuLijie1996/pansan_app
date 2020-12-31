@@ -102,6 +102,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取考试记录失败",
+        path: MyApi.getUserTestRecordList,
       );
     }
   }
@@ -163,6 +164,7 @@ class _TestRecordsState extends State<TestRecords> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取考题失败",
+        path: MyApi.getUserTestAnswerList,
       );
     }
   }

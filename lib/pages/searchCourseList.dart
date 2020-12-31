@@ -124,6 +124,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
       ErrorInfo(
         msg: "获取课程失败",
         errInfo: err,
+        path: MyApi.courseList,
       );
     }
   }

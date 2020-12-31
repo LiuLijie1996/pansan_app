@@ -72,6 +72,7 @@ class _DayTopicState extends State<DayTopic> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取一日一题数据失败",
+        path: MyApi.getTodayUserStudy,
       );
     }
   }

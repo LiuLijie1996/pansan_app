@@ -26,15 +26,16 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
 
     try {
       // 上传文件
-      var result = await dioUpload(
-        path: MyApi.upload,
-        filePath: image.path,
-      );
-      print(result);
+      // var result = await dioUpload(
+      //   path: MyApi.upload,
+      //   filePath: image.path,
+      // );
+      // print(result);
     } catch (e) {
       ErrorInfo(
         errInfo: e,
         msg: "上传失败",
+        path: MyApi.upload,
       );
     }
   }

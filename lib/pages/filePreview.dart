@@ -84,6 +84,7 @@ class _FilePreviewState extends State<FilePreview> with MyScreenUtil {
       ErrorInfo(
         msg: "发送进度失败",
         errInfo: e,
+        path: MyApi.newsUserScore,
       );
     }
   }

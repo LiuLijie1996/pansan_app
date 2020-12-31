@@ -87,6 +87,7 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取失败",
+        path: MyApi.getUserErrQuestion,
       );
     }
   }
