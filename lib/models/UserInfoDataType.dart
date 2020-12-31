@@ -24,14 +24,14 @@ class UserInfoDataType {
   ///身份证
   String idCard;
 
-  ///工号
+  ///职工编号
   String no;
 
   ///手机号
   String phone;
 
   ///部门
-  int department;
+  String department;
 
   ///学历
   String education;

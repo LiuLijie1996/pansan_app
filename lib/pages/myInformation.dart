@@ -1,9 +1,13 @@
 // 个人信息
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../components/MyProgress.dart';
+import '../models/UserInfoDataType.dart';
 import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
+import '../db/UserDB.dart';
 
 class MyInformation extends StatefulWidget {
   MyInformation({Key key}) : super(key: key);
@@ -12,8 +16,23 @@ class MyInformation extends StatefulWidget {
   _MyInformationState createState() => _MyInformationState();
 }
 
-class _MyInformationState extends State<MyInformation> with MyScreenUtil {
+class _MyInformationState extends State<MyInformation>
+    with MyScreenUtil, UserInfoMixin {
+  _MyInformationState() {
+    this.userInfo;
+  }
+
   PickedFile _image;
+  UserInfoDataType user;
+
+  @override
+  // TODO: implement userInfo
+  Future<UserInfoDataType> get userInfo async {
+    user = await super.userInfo;
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
 
   /*打开相册*/
   _openGallery() async {
@@ -24,14 +43,40 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
       _image = image ?? _image;
     });
 
-    print(image);
+    if (image == null) return;
 
     try {
+      var myRequest = MyRequest(line: true).request;
       // 上传文件
-      await myRequest(
+      var result = await myRequest(
         method: "upload",
         path: MyApi.upload,
         filePath: image.path,
+      );
+
+      // 得到返回的头像地址，修改数据库中的用户信息
+      var result2 = await myRequest(
+        method: "post",
+        path: MyApi.editUser,
+        data: {
+          "user_id": true,
+          "headUrl": result['data']['link'],
+        },
+      );
+
+      // 修改本地数据库的用户信息
+      user.headUrl = result['data']['link'];
+      UserDB.update(user);
+
+      // 弹窗提示
+      Fluttertoast.showToast(
+        msg: "上传成功",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black45,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
     } catch (e) {
       ErrorInfo(
@@ -44,6 +89,11 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("个人资料"),
@@ -66,7 +116,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                       backgroundImage: _image != null
                           ? AssetImage(_image.path)
                           : NetworkImage(
-                              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725210985,2088815523&fm=26&gp=0.jpg",
+                              "${user.headUrl != null ? user.headUrl : 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725210985,2088815523&fm=26&gp=0.jpg'}",
                             ),
                     ),
                     SizedBox(
@@ -100,7 +150,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("姓名"),
-                          Text("小明"),
+                          Text("${user.name}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -123,7 +173,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("性别"),
-                          Text("男"),
+                          Text("${user.sex == 1 ? '男' : '女'}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -146,7 +196,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("身份证号"),
-                          Text("123456789987456321"),
+                          Text("${user.idCard}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -169,7 +219,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("职工编号"),
-                          Text("123456"),
+                          Text("${user.no != null ? user.no : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -192,7 +242,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("部门"),
-                          Text("技术测试部门"),
+                          Text("${user.department}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -215,7 +265,9 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("最高学历"),
-                          Text("博士"),
+                          Text(
+                            "${user.education != null ? user.education : ''}",
+                          ),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -238,7 +290,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("参加工作时间"),
-                          Text("2020-01-01"),
+                          Text("${user.jobtime != null ? user.jobtime : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -261,7 +313,9 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("现技能等级"),
-                          Text("100"),
+                          Text(
+                            "${user.skillLevel != null ? user.skillLevel : ''}",
+                          ),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -284,7 +338,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("专业技术资格"),
-                          Text("巴拉巴拉"),
+                          Text("${user.title != null ? user.title : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -307,7 +361,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("现职业工种"),
-                          Text("巴拉巴拉"),
+                          Text("${user.typeWork != null ? user.typeWork : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -330,7 +384,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("岗位工种"),
-                          Text("巴拉巴拉"),
+                          Text("${user.jobWork != null ? user.jobWork : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(
@@ -353,7 +407,7 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("职衔"),
-                          Text("巴拉巴拉"),
+                          Text("${user.job != null ? user.job : ''}"),
                         ],
                       ),
                       padding: EdgeInsets.only(

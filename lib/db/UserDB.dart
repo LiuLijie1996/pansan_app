@@ -32,7 +32,7 @@ abstract class UserDB {
           idCard TEXT,
           No TEXT,
           phone TEXT,
-          department int,
+          department TEXT,
           education TEXT,
           title TEXT,
           job TEXT,

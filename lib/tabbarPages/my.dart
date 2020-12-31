@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/mixins.dart';
+import '../components/MyIcon.dart';
+import '../mixins/mixins.dart';
+import '../components/MyProgress.dart';
+import '../models/UserInfoDataType.dart';
 
 // 我的页面
-class My extends StatelessWidget {
-  const My({Key key}) : super(key: key);
+class My extends StatelessWidget with UserInfoMixin {
+  My({Key key}) : super(key: key) {
+    this.userInfo;
+  }
+
+  UserInfoDataType user;
+
+  @override
+  // TODO: implement userInfo
+  Future<UserInfoDataType> get userInfo async {
+    user = await super.userInfo;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class My extends StatelessWidget {
                           borderRadius: BorderRadius.circular(60.0),
                           image: DecorationImage(
                             image: NetworkImage(
-                              "https://f12.baidu.com/it/u1=3858850547&u2=1025200327&fm=76",
+                              "${user.headUrl != null ? user.headUrl : 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725210985,2088815523&fm=26&gp=0.jpg'}",
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -57,7 +69,7 @@ class My extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "小明",
+                              "${user.name}",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
@@ -67,7 +79,7 @@ class My extends StatelessWidget {
                               height: 10.0,
                             ),
                             Text(
-                              "技术部门",
+                              "${user.department}",
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.white,
@@ -186,8 +198,8 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
 }
 
 // 功能列表
-class FunctionList extends StatelessWidget with MyScreenUtil {
-  const FunctionList({Key key}) : super(key: key);
+class FunctionList extends StatelessWidget with MyScreenUtil, UserInfoMixin {
+  FunctionList({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

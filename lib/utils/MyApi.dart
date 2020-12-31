@@ -123,8 +123,8 @@ class MyApi {
   /// 我的课程
   static const getUserCourseList = "/api/user/getUserCourseList";
 
-  /// 上传
-  static const upload = "/api/upload";
+  /// 上传图片
+  static const upload = "/upload/uploadImg";
 
   /// 我的错题
   static const getUserErrQuestion = "/api/user/getUserErrQuestion";
@@ -155,4 +155,7 @@ class MyApi {
 
   /// 应用报错时发送数据给后台
   static const error = "/api/error";
+
+  /// 修改用户信息
+  static const editUser = "/user/editUser";
 }

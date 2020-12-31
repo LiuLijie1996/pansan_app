@@ -1,9 +1,8 @@
+export './MyApi.dart';
 import 'package:dio/dio.dart';
 import 'dart:math' as math;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import './MyApi.dart';
-export './MyApi.dart';
 import '../models/UserInfoDataType.dart';
 import '../mixins/mixins.dart';
 
@@ -15,24 +14,27 @@ class MyRequest extends UserInfoMixin {
   ///用户信息
   UserInfoDataType user;
 
-  ///后台地址
+  ///初始后台地址
   String location = 'http://192.168.0.5:80/pansanApp';
 
-  ///完整请求接口
-  String url;
+  ///是否上线
+  bool line;
+
+  ///接口
+  String path;
 
   ///发给后台的数据
   Map<String, dynamic> query;
 
-  MyRequest({bool line = false}) : super() {
+  MyRequest({this.line = false}) {
     // 如果项目上线了，将后台地址改成线上的
-    if (line) {
+    if (this.line) {
       location = "http://192.168.0.8:88/index.php/v2";
     }
   }
 
-  // 初始化
-  Future<Map> initialize({
+  ///发起请求
+  Future<Map> request({
     ///请求方式
     String method = "post",
 
@@ -48,42 +50,38 @@ class MyRequest extends UserInfoMixin {
     // 获取用户信息
     this.user = await userInfo;
 
-    // 拼接接口
-    this.url = location + path;
+    // 接口
+    this.path = path;
 
-    // 判断需不需要给后台传用户的id
-    if (data != null && data['user_id'] != null) {
-      data['user_id'] = this.user.id;
-    }
+    // 设置发给后台的数据
+    this.setSendData(data);
 
-    // 发给后台的数据
-    this.query = data;
-
-    // 后台返回的数据
+    // 请求数据
     Map result;
     switch (method) {
       case 'post':
-        result = await _postData();
+        result = await this.postData();
         break;
       case 'get':
-        result = await _getData();
+        result = await this.getData();
         break;
       case 'upload':
-        result = await _uploadFile(filePath: filePath);
+        result = await this.uploadFile(filePath: filePath);
         break;
     }
 
+    // 后台返回的数据
     return result;
   }
 
   /// get请求数据
-  Future<Map> _getData() async {
+  Future<Map> getData() async {
     Response response = await dio.get(
-      this.url,
-      queryParameters: this._newQuery(query: query),
+      this.location + this.path, //拼接完整的接口
+      queryParameters: this.query,
       options: Options(
         headers: {
-          "token": user.token,
+          "token": this.user != null ? this.user.token : null,
         },
       ),
     );
@@ -93,45 +91,45 @@ class MyRequest extends UserInfoMixin {
   }
 
   /// post请求数据
-  Future<Map> _postData() async {
+  Future<Map> postData() async {
     print('post请求数据');
     Response response = await dio.post(
-      this.url,
-      data: this._newQuery(query: query),
+      this.location + this.path, //拼接完整的接口
+      data: this.query,
       options: Options(
         headers: {
-          "token": user.token,
+          "token": this.user != null ? this.user.token : null,
         },
       ),
     );
-
-    print("$url 发起请求数据  ${response.data['code']}");
 
     // 返回请求到的数据
     return response.data;
   }
 
   ///上传文件
-  Future<Map> _uploadFile({
+  Future<Map> uploadFile({
     ///文件地址
     String filePath,
   }) async {
     FormData formdata = FormData.fromMap({
       // "fileUpload" 相当于网页的 input 输入框的 name 值一样
-      "fileUpload": await MultipartFile.fromFile(
+      "file": await MultipartFile.fromFile(
         filePath, //文件路径
         // filename: "pic", //图片名称
       )
     });
 
+    print("接口：${this.location + this.path}");
+
     // Map<String, dynamic> map = {'fileType': "KTP_IMG"};
     //上传结果
     Response response = await dio.post(
-      this.url,
+      this.location + this.path, //拼接完整的接口
       data: formdata,
       options: Options(
         headers: {
-          "token": this.user.token,
+          "token": this.user != null ? this.user.token : null,
         },
       ),
       // queryParameters: map,
@@ -141,21 +139,22 @@ class MyRequest extends UserInfoMixin {
       },
     );
 
-    return response.data;
+    return json.decode(response.data);
   }
 
-    // 设置传给后台的数据
-   Map<String, dynamic> _newQuery({Map<String, dynamic> query}) {
+  // 设置传给后台的数据
+  Map<String, dynamic> setSendData(Map<String, dynamic> value) {
     // token：pansan
     // t：时间戳
     // nonce（随机6位字符串）：ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678
     // sign（大写md5）： t + nonce + token
 
-    // 秘钥
-    var token = "pansan";
     var str = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
     var maxLen = str.length;
-    // 设置的随机字符串
+
+    // 秘钥
+    var token = "pansan";
+    // 随机字符串
     var nonce = '';
     for (var i = 0; i < 6; i++) {
       var random = math.Random();
@@ -165,26 +164,36 @@ class MyRequest extends UserInfoMixin {
 
     // 时间戳
     var t = new DateTime.now().millisecondsSinceEpoch;
+    // md5加密
     var encode = utf8.encode("$t$nonce$token");
     var sign = md5.convert(encode).toString().toUpperCase();
 
-    Map<String, dynamic> data = {
-      "nonce": nonce,
-      "t": t,
-      "sign": sign,
-    };
+    // 判断传给后台的数据有没有user_id
+    if (value != null && value['user_id'] != null) {
+      if (this.user != null) {
+        value['user_id'] = this.user.id;
+      }
+    }
 
-    if (query != null) {
-      data = {
-        ...query,
+    if (value == null) {
+      this.query = {
+        "nonce": nonce,
+        "t": t,
+        "sign": sign,
+      };
+    } else {
+      this.query = {
+        ...value,
         "nonce": nonce,
         "t": t,
         "sign": sign,
       };
     }
 
-    return data;
+    print("设置传给后台的数据：${this.query}");
+
+    return this.query;
   }
 }
 
-var myRequest = MyRequest().initialize;
+var myRequest = MyRequest().request;
