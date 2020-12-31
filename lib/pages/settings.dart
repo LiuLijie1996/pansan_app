@@ -1,7 +1,7 @@
 // 设置页面
 import 'package:flutter/material.dart';
 import '../components/MyIcon.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../pages/login.dart';
 
 class Settings extends StatelessWidget with MyScreenUtil {

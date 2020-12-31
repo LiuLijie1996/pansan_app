@@ -1,7 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import '../models/MateriaDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 
 class MyAudioplayers extends StatefulWidget {
   MateriaDataType materia;

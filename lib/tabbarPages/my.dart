@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pansan_app/components/MyIcon.dart';
-import 'package:pansan_app/mixins/withScreenUtil.dart';
+import 'package:pansan_app/mixins/mixins.dart';
 
 // 我的页面
 class My extends StatelessWidget {

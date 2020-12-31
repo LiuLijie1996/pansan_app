@@ -5,7 +5,7 @@ import 'package:pansan_app/utils/fileMethod.dart';
 import '../models/CoursePlanDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/GradeInfoDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/ErrorInfo.dart';
 
 class CoursePlan extends StatefulWidget {

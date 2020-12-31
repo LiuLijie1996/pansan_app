@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../components/CardItem.dart';
 import '../components/EmptyBox.dart';
@@ -60,6 +60,7 @@ class _MyCollectState extends State<MyCollect>
 
       total = result['total'];
       List resultData = result['data'];
+
       data = resultData.map((e) {
         return NewsDataType.fromJson({
           "id": e['id'],

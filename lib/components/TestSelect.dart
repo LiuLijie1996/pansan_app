@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './MyChoiceButton.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 
 // 题目选择

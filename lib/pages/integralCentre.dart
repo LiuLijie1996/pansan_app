@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../components/MyProgress.dart';
 import '../utils/myRequest.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/GoodsDataType.dart';
 import '../utils/ErrorInfo.dart';
 

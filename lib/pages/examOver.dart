@@ -2,7 +2,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import '../components/MyTags.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 import '../models/ExamListDataType.dart';
 import '../utils/myRequest.dart';

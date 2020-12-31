@@ -88,8 +88,6 @@ abstract class UserDB {
     // 获取所有数据
     List<Map<String, dynamic>> maps = await db.query('users');
 
-    print("获取所有用户信息成功");
-
     // 格式化数据
     return List.generate(
       maps.length,

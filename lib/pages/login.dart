@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../components/MyIcon.dart';
 import '../utils/ErrorInfo.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/UserInfoDataType.dart';
 import '../db/UserDB.dart';

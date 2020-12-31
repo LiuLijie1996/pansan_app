@@ -7,7 +7,7 @@ import '../tabbarPages/index.dart';
 import '../tabbarPages/my.dart';
 import '../tabbarPages/news.dart';
 import '../tabbarPages/study.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 
 // 底部导航
 class MyBottomNavigationBar extends StatefulWidget {

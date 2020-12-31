@@ -5,7 +5,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/DayTopicDetailDataType.dart';
 import '../models/DayTopicDataType.dart';
 import '../utils/myRequest.dart';

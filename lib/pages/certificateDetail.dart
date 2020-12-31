@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/CertificateDataType.dart';
 import '../models/CertificateDetailDataType.dart';
 import '../utils/myRequest.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/ErrorInfo.dart';
 
 class CertificateDetail extends StatefulWidget {

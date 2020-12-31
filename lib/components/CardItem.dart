@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import './MyIcon.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/NewsDataType.dart';
 import '../models/CourseDataType.dart';
 import '../utils/myRequest.dart';

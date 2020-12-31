@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 
 //考试选项的按钮

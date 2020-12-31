@@ -75,24 +75,28 @@ class NewsDataType {
       this.collect});
 
   NewsDataType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    pid = json['pid'];
-    title = json['title'];
-    desc = json['desc'];
-    thumbUrl = json['thumb_url'];
-    imgList = json['img_list'];
-    type = json['type'];
-    materiaId = json['materia_id'];
-    content = json['content'];
-    tuij = json['tuij'];
-    addtime = json['addtime'];
-    viewNum = json['view_num'];
-    upvote = json['upvote'];
-    materia = json['materia'];
-    newsImgText = json['newsImgText'];
-    newsVideo = json['newsVideo'];
-    collect = json['collect'];
-    newsContent = json['news_content'];
+    try {
+      id = json['id'];
+      pid = json['pid'];
+      title = json['title'];
+      desc = json['desc'];
+      thumbUrl = json['thumb_url'];
+      imgList = json['img_list'];
+      type = json['type'];
+      materiaId = json['materia_id'];
+      content = json['content'];
+      tuij = json['tuij'];
+      addtime = json['addtime'];
+      viewNum = json['view_num'];
+      upvote = json['upvote'];
+      materia = json['materia'];
+      newsImgText = json['newsImgText'];
+      newsVideo = json['newsVideo'];
+      collect = json['collect'];
+      newsContent = json['news_content'];
+    } catch (e) {
+      print("NewsDataType  $e");
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 import '../components/TestSelect.dart';
 import '../components/MyIcon.dart';

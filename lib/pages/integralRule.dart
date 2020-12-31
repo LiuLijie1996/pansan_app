@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import '../utils/myRequest.dart';
 import '../models/IntegralRuleDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/ErrorInfo.dart';
 
 class IntegralRule extends StatefulWidget {

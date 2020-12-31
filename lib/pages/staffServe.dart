@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import '../components/MyProgress.dart';
 import '../components/EmptyBox.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/fileMethod.dart';
 import '../models/CertificateDataType.dart'; //证书类型

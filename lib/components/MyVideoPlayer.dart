@@ -7,7 +7,7 @@ import 'package:orientation/orientation.dart';
 import 'package:event_bus/event_bus.dart';
 import './MyIcon.dart';
 import './MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/MateriaDataType.dart';
 
 // 立即新建一个公共的eventBus

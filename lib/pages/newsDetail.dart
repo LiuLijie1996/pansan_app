@@ -10,7 +10,7 @@ import "../components/MyVideoPlayer.dart";
 import "../components/MyIcon.dart";
 import '../models/NewsDataType.dart';
 import '../models/MateriaDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
 

@@ -8,7 +8,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 // 组件
 import '../components/CardItem.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../tabbarPages/MyBottomNavigationBar.dart';
 import '../components/MyIcon.dart';
 import '../components/MyTags.dart';
@@ -133,8 +133,8 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     // TODO: implement initState
     super.initState();
 
-    // 获取数据
-    getData();
+    // 初始化
+    myInitialize();
   }
 
   @override
@@ -317,18 +317,20 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
     );
   }
 
-  // 获取数据
-  getData() {
-    // 获取轮播图
-    getBannerList();
-    // 获取最新考试
-    getExamList();
-    // 获取新闻
-    getNewsList();
-    // 获取课程
-    getCourseList();
-    // 获取未读的通知公告数量
-    getUnreadNum();
+  // 初始化
+  myInitialize() {
+    // // 获取轮播图
+    // getBannerList();
+    // // 获取最新考试
+    // getExamList();
+    // // 获取新闻
+    // getNewsList();
+    // // 获取课程
+    // getCourseList();
+    // // 获取未读的通知公告数量
+    // getUnreadNum();
+
+    futureGetData();
   }
 
   // 同步请求数据
@@ -525,10 +527,8 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       List data = result['data'];
       courseTotal = result['total'];
 
-      if (page == 1) {
-        courseList = [];
-      }
-      courseList.addAll(data.map((e) {
+      print("-------获取课程${data.length}------");
+      List<CourseDataType> newData = data.map((e) {
         List chapter = e['chapter'].map((item) {
           return {
             "id": item['id'],
@@ -559,10 +559,15 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
           "chapter": chapter,
           "view_num": e['view_num'],
         });
-      }).toList());
+      }).toList();
 
       if (this.mounted) {
-        setState(() {});
+        setState(() {
+          if (page == 1) {
+            courseList = [];
+          }
+          courseList.addAll(newData);
+        });
       }
     } catch (e) {
       ErrorInfo(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/CardItem.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/NewsDataType.dart';
 import '../models/NavDataType.dart';

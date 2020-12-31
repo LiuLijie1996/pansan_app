@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
 import '../utils/ErrorInfo.dart';

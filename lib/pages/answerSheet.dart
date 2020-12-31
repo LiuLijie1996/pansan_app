@@ -1,7 +1,7 @@
 // 答题卡
 
 import 'package:flutter/material.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 
 class AnswerSheet extends StatelessWidget with MyScreenUtil {

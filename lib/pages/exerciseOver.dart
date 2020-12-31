@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/IssueDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../components/MyIcon.dart';
 import '../utils/myRequest.dart';
 import '../models/ExerciseSelectDataType.dart';

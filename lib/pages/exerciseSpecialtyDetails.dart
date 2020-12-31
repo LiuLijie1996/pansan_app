@@ -7,7 +7,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import '../components/MyIcon.dart';
 import '../components/TestSelect.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/ExerciseDataType.dart';

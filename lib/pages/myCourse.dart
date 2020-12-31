@@ -7,7 +7,7 @@ import 'package:date_format/date_format.dart';
 import '../components/CardItem.dart';
 import '../components/EmptyBox.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
 import '../utils/ErrorInfo.dart';

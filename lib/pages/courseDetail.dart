@@ -13,7 +13,7 @@ import '../models/CourseDataType.dart';
 import '../models/CourseChapterDataType.dart';
 import '../models/MateriaDataType.dart';
 import '../utils/myRequest.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../components/MyIcon.dart';
 import '../components/MyAudioplayers.dart';
 import '../utils/ErrorInfo.dart';

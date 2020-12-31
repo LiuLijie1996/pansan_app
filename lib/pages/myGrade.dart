@@ -7,7 +7,7 @@ import '../models/GradeInfoDataType.dart';
 import '../components/EmptyBox.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
 

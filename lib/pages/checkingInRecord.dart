@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/CheckingInRecordDataType.dart';
 import '../utils/myRequest.dart';
 import '../models/GradeInfoDataType.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/ErrorInfo.dart';
 
 class CheckingInRecord extends StatefulWidget {

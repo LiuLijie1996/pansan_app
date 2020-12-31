@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../components/EmptyBox.dart';
 import '../components/MyProgress.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/ExerciseDataType.dart';
 import '../utils/ErrorInfo.dart';

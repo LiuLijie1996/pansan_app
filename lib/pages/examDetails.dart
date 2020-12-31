@@ -10,7 +10,7 @@ import '../utils/ErrorInfo.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
 import '../components/TestSelect.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../models/ExamListDataType.dart';
 import '../models/IssueDataType.dart';
 import '../utils/myRequest.dart';

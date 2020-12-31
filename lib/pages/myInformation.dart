@@ -1,7 +1,7 @@
 // 个人信息
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../mixins/withScreenUtil.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
 
@@ -24,13 +24,15 @@ class _MyInformationState extends State<MyInformation> with MyScreenUtil {
       _image = image ?? _image;
     });
 
+    print(image);
+
     try {
       // 上传文件
-      // var result = await dioUpload(
-      //   path: MyApi.upload,
-      //   filePath: image.path,
-      // );
-      // print(result);
+      await myRequest(
+        method: "upload",
+        path: MyApi.upload,
+        filePath: image.path,
+      );
     } catch (e) {
       ErrorInfo(
         errInfo: e,
