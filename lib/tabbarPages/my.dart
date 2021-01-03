@@ -143,7 +143,14 @@ class _MyState extends State<My> with UserInfoMixin {
             Container(
               color: Colors.white,
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: FunctionList(),
+              child: FunctionList(
+                setState: () async {
+                  List<UserInfoDataType> userDB = await UserDB.findAll();
+                  user = userDB[0];
+
+                  setState(() {});
+                },
+              ),
             ),
           ],
         ),
@@ -226,7 +233,8 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
 
 // 功能列表
 class FunctionList extends StatelessWidget with MyScreenUtil {
-  FunctionList({Key key}) : super(key: key);
+  Function() setState;
+  FunctionList({Key key, this.setState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -270,10 +278,12 @@ class FunctionList extends StatelessWidget with MyScreenUtil {
       itemBuilder: (BuildContext context, int index) {
         var e = funcList[index];
         return InkWell(
-          onTap: () {
-            if (e['router'] != '') {
-              // 路由跳转
-              Navigator.pushNamed(context, "${e['router']}");
+          onTap: () async {
+            // 路由跳转
+            await Navigator.pushNamed(context, "${e['router']}");
+
+            if (e['router'] == '/myInformation') {
+              setState();
             }
           },
           child: Container(
