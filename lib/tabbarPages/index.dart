@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:date_format/date_format.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 // 扫码
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -79,7 +81,49 @@ class Index extends StatelessWidget with MyScreenUtil {
     try {
       // 此处为扫码结果，barcode为二维码的内容
       String barcode = await BarcodeScanner.scan();
-      print('扫码结果: ' + barcode);
+      var result1 = await myRequest(
+        path: MyApi.userAddClass,
+        data: {
+          "user_id": true,
+          "class_id": barcode,
+        },
+      );
+
+      // 弹窗提示
+      var alertResult = await showAlert(context, msg: '${result1['msg']}');
+
+      // 判断是否确定
+      if (alertResult) {
+        String myApi;
+
+        // 判断签到还是加入班级
+        if (result1['code'] == 101) {
+          myApi = MyApi.addClass;
+        } else {
+          myApi = MyApi.signClass;
+        }
+
+        // 发送签到(或加入班级)请求
+        var result2 = await myRequest(
+          path: myApi,
+          data: {
+            "user_id": true,
+            "class_id": barcode,
+          },
+        );
+
+        Fluttertoast.showToast(
+          msg: "${result2['msg']}",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black45,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+        print(result2);
+      }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         // 未授予APP相机权限
@@ -97,10 +141,39 @@ class Index extends StatelessWidget with MyScreenUtil {
 
       ErrorInfo(
         errInfo: e,
-        msg: "扫码错误",
+        // msg: "扫码错误",
         path: "",
       );
     }
+  }
+
+  Future<bool> showAlert(
+    context, {
+    msg = '',
+  }) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('$msg'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            FlatButton(
+              child: Text('确认'),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

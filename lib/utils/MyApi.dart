@@ -170,4 +170,13 @@ class MyApi {
 
   /// 收藏新闻
   static const addNewsCollect = "/api/news/addNewsCollect";
+
+  /// 扫码加入班级
+  static const userAddClass = "/api/user/userAddClass";
+
+  /// 真正的加入班级请求
+  static const addClass = "/api/user/addClass";
+
+  /// 签到
+  static const signClass = "/api/user/signClass";
 }

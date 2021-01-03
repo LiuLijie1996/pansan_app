@@ -89,7 +89,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
+      onWillPop: () {
         // 点击返回键的操作
         if (_preTime == null ||
             DateTime.now().difference(_preTime) > Duration(seconds: 2)) {
@@ -104,10 +104,14 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
             textColor: Colors.white,
             fontSize: 16.0,
           );
+
+          return Future(() => false);
         } else {
           _preTime = DateTime.now();
           // 退出app
-          await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          // return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+
+          return Future(() => true);
         }
       },
       child: Scaffold(

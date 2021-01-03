@@ -5,7 +5,7 @@ import './myRequest.dart';
 class ErrorInfo {
   ErrorInfo({
     ///弹出的提示语
-    @required msg,
+    msg,
 
     ///报错的信息
     @required errInfo,
@@ -13,8 +13,10 @@ class ErrorInfo {
     ///发生错误的接口
     @required path,
   }) {
-    // 弹窗提示
-    this.showToast(msg);
+    if (msg != null) {
+      // 弹窗提示
+      this.showToast(msg);
+    }
 
     // 发送错误信息给后台
     this.sendError(errInfo: errInfo, path: path);
