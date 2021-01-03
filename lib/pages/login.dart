@@ -286,6 +286,9 @@ class _LoginState extends State<Login> with MyScreenUtil {
       );
 
       Map data = result['data'];
+
+      var integral = data['integral'];
+
       UserInfoDataType userInfo = UserInfoDataType.fromJson({
         "id": data['id'],
         "pid": data['pid'],
@@ -293,6 +296,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
         "password": data['password'],
         "headUrl": data['headUrl'],
         "sex": data['sex'],
+        "integral": integral == null ? null : int.parse("$integral"),
         "birthday": data['birthday'],
         "idCard": data['idCard'],
         "No": data['No'],
@@ -316,7 +320,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
         "bindPhone": data['bindPhone'],
       });
 
-      print(userInfo.headUrl);
+      print("存储用户信息：${userInfo.integral}");
 
       // 存储用户信息
       await UserDB.addData(userInfo);

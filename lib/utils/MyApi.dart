@@ -179,4 +179,7 @@ class MyApi {
 
   /// 签到
   static const signClass = "/api/user/signClass";
+
+  /// 签到
+  static const getuserScoreTotal = "/api/user/getuserScoreTotal";
 }

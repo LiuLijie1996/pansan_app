@@ -118,7 +118,11 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
                           color: Colors.blue,
                           onPressed: () {
                             // 下载文件
-                            downloadFile(link: item.link);
+                            myRequest(
+                              context: context,
+                              method: "download",
+                              filePath: item.link,
+                            );
                           },
                           child: Text(
                             "下载",

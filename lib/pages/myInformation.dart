@@ -19,7 +19,8 @@ class MyInformation extends StatefulWidget {
 class _MyInformationState extends State<MyInformation>
     with MyScreenUtil, UserInfoMixin {
   _MyInformationState() {
-    this.userInfo;
+    // 获取用户信息
+    this.userInfo();
   }
 
   // 用户信息
@@ -27,8 +28,8 @@ class _MyInformationState extends State<MyInformation>
 
   @override
   // TODO: implement userInfo
-  Future<UserInfoDataType> get userInfo async {
-    user = await super.userInfo;
+  Future<UserInfoDataType> userInfo() async {
+    user = await super.userInfo();
     if (this.mounted) {
       setState(() {});
     }

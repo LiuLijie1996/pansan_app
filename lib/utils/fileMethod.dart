@@ -52,8 +52,3 @@ class FilePreview {
     );
   }
 }
-
-// 下载文件
-Function downloadFile = ({@required String link}) {
-  print(link);
-};

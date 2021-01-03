@@ -5,8 +5,10 @@ import '../utils/myRequest.dart';
 import '../mixins/mixins.dart';
 import '../models/GoodsDataType.dart';
 import '../utils/ErrorInfo.dart';
+import '../db/UserDB.dart';
+import '../models/UserInfoDataType.dart';
 
-// 积分中心页面
+/// 积分中心页面
 class IntegralCentre extends StatefulWidget {
   IntegralCentre({Key key}) : super(key: key);
 
@@ -15,7 +17,8 @@ class IntegralCentre extends StatefulWidget {
 }
 
 class _IntegralCentreState extends State<IntegralCentre>
-    with SingleTickerProviderStateMixin, MyScreenUtil {
+    with SingleTickerProviderStateMixin, MyScreenUtil, UserInfoMixin {
+  UserInfoDataType user;
   TabController _tabController; //需要定义一个Controller
   List<GoodsDataType> goodsList = []; //商品列表
   int total = 0; //商品总数量
@@ -36,15 +39,30 @@ class _IntegralCentreState extends State<IntegralCentre>
   ];
 
   @override
+  // TODO: implement userInfo
+  Future<UserInfoDataType> userInfo() async {
+    user = await super.userInfo();
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // 获取用户信息
+    this.userInfo();
 
     // 创建Controller
     _tabController = TabController(length: tabs.length, vsync: this);
 
     // 获取商品列表
     getGoodsList();
+
+    // 获取积分
+    getIntegral();
   }
 
   // 获取商品列表
@@ -92,8 +110,39 @@ class _IntegralCentreState extends State<IntegralCentre>
     }
   }
 
+  // 获取积分
+  getIntegral() async {
+    try {
+      var result = await myRequest(
+        path: MyApi.getuserScoreTotal,
+        data: {
+          "user_id": true,
+        },
+      );
+
+      user.integral = int.parse("${result['data']['list']}");
+      // 修改积分
+      UserDB.update(user);
+
+      if (this.mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      ErrorInfo(
+        msg: "获取总积分失败",
+        errInfo: e,
+        path: MyApi.getNewsOne,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -107,7 +156,7 @@ class _IntegralCentreState extends State<IntegralCentre>
                 child: Column(
                   children: [
                     Text(
-                      "100",
+                      "${user.integral}",
                       style: TextStyle(
                         fontSize: dp(50.0),
                       ),

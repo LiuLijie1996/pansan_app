@@ -7,6 +7,7 @@ import 'package:flutter_html/style.dart';
 import '../models/UserMessageDataType.dart';
 import '../mixins/mixins.dart';
 import '../utils/fileMethod.dart';
+import '../components/MyIcon.dart';
 
 class AfficheDetail extends StatefulWidget {
   final UserMessageDataType arguments;
@@ -17,6 +18,8 @@ class AfficheDetail extends StatefulWidget {
 }
 
 class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   int fontSize = 120;
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
   List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '大号字体', "超大号字体"];
@@ -30,7 +33,9 @@ class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
   }
 
   // 初始化
-  myInitialeze() {}
+  myInitialeze() {
+    print("初始化：${widget.arguments.name}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +49,20 @@ class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
       [yyyy, '年', mm, '月', dd, "日"],
     );
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("公告详情"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState.openEndDrawer();
+            },
+            icon: Icon(
+              aliIconfont.wenzi,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       endDrawer: Container(
         width: MediaQuery.of(context).size.width / 2,

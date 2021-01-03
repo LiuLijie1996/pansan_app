@@ -1,8 +1,13 @@
 export './MyApi.dart';
-import 'package:dio/dio.dart';
 import 'dart:math' as math;
 import 'dart:convert';
+import 'dart:io';
+import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../models/UserInfoDataType.dart';
 import '../mixins/mixins.dart';
 
@@ -35,10 +40,13 @@ class MyRequest extends UserInfoMixin {
 
   ///发起请求
   Future<Map> request({
-    ///请求方式  post请求    get请求   upload上传文件
+    ///上下文
+    BuildContext context,
+
+    ///请求方式  post请求    get请求   upload上传文件  download下载文件
     String method = "post",
 
-    ///上传文件时，文件的地址  将method改成upload类型
+    ///上传（下载）文件时，文件的地址  将method改成upload类型
     String filePath,
 
     ///请求地址
@@ -48,7 +56,7 @@ class MyRequest extends UserInfoMixin {
     Map<String, dynamic> data,
   }) async {
     // 获取用户信息
-    this.user = await userInfo;
+    this.user = await userInfo();
 
     // 接口
     this.path = path;
@@ -67,6 +75,9 @@ class MyRequest extends UserInfoMixin {
         break;
       case 'upload':
         result = await this.uploadFile(filePath: filePath);
+        break;
+      case 'download':
+        result = await this.downloadFile(context: context, fileUrl: filePath);
         break;
     }
 
@@ -143,6 +154,71 @@ class MyRequest extends UserInfoMixin {
     );
 
     return json.decode(response.data);
+  }
+
+  ///下载文件
+  Future downloadFile({
+    ///上下文
+    BuildContext context,
+
+    ///文件地址
+    String fileUrl,
+  }) async {
+    try {
+      await isGrantedFn();
+
+      // //获取文档地址
+      // String dir = (await getApplicationDocumentsDirectory()).path;
+
+      String dir;
+      if (Theme.of(context).platform == TargetPlatform.android) {
+        //获取android文档地址
+        dir = (await getExternalStorageDirectory()).path;
+      } else {
+        //获取ios文档地址
+        dir = (await getApplicationDocumentsDirectory()).path;
+      }
+
+      print("获取文档地址  $dir");
+      print("文件Url  $fileUrl");
+
+      List fileSplit = fileUrl.split("/");
+      // 获取文件名称
+      String fileName = fileSplit[fileSplit.length - 1];
+      //拼接保存路径
+      File file = File("$dir/$fileName");
+      print("保存路径：${file.path}");
+
+      // 保存路径
+      var filePath = file.path;
+
+      // 下载文件
+      Response response = await dio.download(
+        fileUrl,
+        filePath,
+        onReceiveProgress: (count, total) {
+          var progress = (((count / total) * 100).ceil()).toString() + "%";
+          print(progress);
+        },
+      );
+
+      print("下载文件：${response.statusCode}");
+
+      // String content = file.readAsStringSync(); //读取文件信息
+      // print("读取文件信息：$content");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 申请权限
+  Future isGrantedFn() async {
+    bool status = await Permission.storage.isGranted;
+    print("申请权限  $status");
+    //判断如果还没拥有读写权限就申请获取权限
+    if (!status) {
+      return await Permission.storage.request().isGranted;
+    }
   }
 
   // 设置传给后台的数据

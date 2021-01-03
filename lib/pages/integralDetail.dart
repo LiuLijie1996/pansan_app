@@ -6,6 +6,8 @@ import '../components/EmptyBox.dart';
 import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
+import '../mixins/mixins.dart';
+import '../models/UserInfoDataType.dart';
 
 // 积分明细数据类型
 class IntegralDataType {
@@ -37,7 +39,10 @@ class IntegralDetail extends StatefulWidget {
   _IntegralDetailState createState() => _IntegralDetailState();
 }
 
-class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
+class _IntegralDetailState extends State<IntegralDetail>
+    with MyScreenUtil, UserInfoMixin {
+  UserInfoDataType user;
+
   ///积分列表
   List<IntegralDataType> integralList = [];
 
@@ -48,9 +53,22 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
   int selectTime = DateTime.now().millisecondsSinceEpoch;
 
   @override
+  // TODO: implement userInfo
+  Future<UserInfoDataType> userInfo() async {
+    user = await super.userInfo();
+
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // 获取用户信息
+    this.userInfo();
 
     // 获取积分明细
     this.getUserScoreList();
@@ -63,22 +81,24 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
         path: MyApi.getUserScoreList,
         data: {
           "user_id": true,
-          "page": 1,
-          "psize": 20,
           "integral_date": selectTime,
         },
       );
 
       List data = result['data']['list'];
-      dayScore = result['data']['score'];
       integralList = data.map((e) {
+        int branch = double.parse("${e['branch']}").ceil();
+
+        // 计算总积分
+        dayScore += branch;
+
         return IntegralDataType.formJson({
           "id": e['id'],
           "pid": e['pid'],
           "user_id": e['user_id'],
           "type": e['type'],
           "addtime": e['addtime'],
-          "branch": e['branch'],
+          "branch": branch,
           "d_id": e['d_id'],
         });
       }).toList();
@@ -132,7 +152,7 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
               color: Colors.blue,
             ),
             child: Text(
-              "100",
+              user == null ? "" : "${user.integral}",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: dp(100.0),
@@ -252,7 +272,10 @@ class _IntegralDetailState extends State<IntegralDetail> with MyScreenUtil {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$type"),
-                      Text("$_addtime"),
+                      Text(
+                        "+${item.branch}分",
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ],
                   ),
                 );

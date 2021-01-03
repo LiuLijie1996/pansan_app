@@ -22,13 +22,14 @@ class _MyState extends State<My> with UserInfoMixin {
     // TODO: implement initState
     super.initState();
 
-    this.userInfo;
+    // 获取用户信息
+    this.userInfo();
   }
 
   @override
   // TODO: implement userInfo
-  Future<UserInfoDataType> get userInfo async {
-    user = await super.userInfo;
+  Future<UserInfoDataType> userInfo() async {
+    user = await super.userInfo();
 
     if (this.mounted) {
       setState(() {});

@@ -11,11 +11,14 @@ abstract class MyScreenUtil {
 
 ///用户信息
 abstract class UserInfoMixin {
+  UserInfoDataType user;
+
   // 初始化
-  Future<UserInfoDataType> get userInfo async {
+  Future<UserInfoDataType> userInfo() async {
     // 获取用户信息
     List<UserInfoDataType> userInfoList = await UserDB.findAll();
     if (userInfoList.length != 0) {
+      this.user = userInfoList[0];
       return userInfoList[0];
     }
   }

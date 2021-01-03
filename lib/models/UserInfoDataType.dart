@@ -18,6 +18,9 @@ class UserInfoDataType {
   ///性别 1男  2女
   int sex;
 
+  ///用户积分
+  int integral;
+
   ///生日
   int birthday;
 
@@ -88,6 +91,7 @@ class UserInfoDataType {
       this.password,
       this.headUrl,
       this.sex,
+      this.integral,
       this.birthday,
       this.idCard,
       this.no,
@@ -117,6 +121,7 @@ class UserInfoDataType {
     password = json['password'];
     headUrl = json['headUrl'];
     sex = json['sex'];
+    integral = json['integral'];
     birthday = json['birthday'];
     idCard = json['idCard'];
     no = json['No'];
@@ -148,6 +153,7 @@ class UserInfoDataType {
     data['password'] = this.password;
     data['headUrl'] = this.headUrl;
     data['sex'] = this.sex;
+    data['integral'] = this.integral;
     data['birthday'] = this.birthday;
     data['idCard'] = this.idCard;
     data['No'] = this.no;
