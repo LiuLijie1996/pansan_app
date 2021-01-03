@@ -283,7 +283,7 @@ class _ExamDetailsState extends State<ExamDetails>
                   context,
                   "/questionsCorrection",
                   arguments: {
-                    "issueData": dataList[_currentIndex],
+                    "issueData": _currentItem,
                   },
                 );
               },
@@ -336,19 +336,19 @@ class _ExamDetailsState extends State<ExamDetails>
                           Container(
                             margin: EdgeInsets.only(bottom: dp(6.0)),
                             child: Icon(
-                              dataList[_currentIndex].userFavor
+                              _currentItem.userFavor
                                   ? aliIconfont.full_collect
                                   : aliIconfont.collect,
-                              color: dataList[_currentIndex].userFavor
+                              color: _currentItem.userFavor
                                   ? Colors.red
                                   : Colors.blue,
                               size: dp(40.0),
                             ),
                           ),
                           Text(
-                            dataList[_currentIndex].userFavor ? "已收藏" : "收藏",
+                            _currentItem.userFavor ? "已收藏" : "收藏",
                             style: TextStyle(
-                              color: dataList[_currentIndex].userFavor
+                              color: _currentItem.userFavor
                                   ? Colors.red
                                   : Colors.blue,
                               fontSize: dp(28.0),
@@ -358,10 +358,19 @@ class _ExamDetailsState extends State<ExamDetails>
                         ],
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      // 发送收藏请求
+                      myRequest(
+                        path: MyApi.addQuestionCollect,
+                        data: {
+                          "user_id": true,
+                          "id": _currentItem.id,
+                        },
+                      );
+
                       setState(() {
-                        bool userFavor = dataList[_currentIndex].userFavor;
-                        dataList[_currentIndex].userFavor = !userFavor;
+                        bool userFavor = _currentItem.userFavor;
+                        _currentItem.userFavor = !userFavor;
                       });
                     },
                   ),

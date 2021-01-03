@@ -253,6 +253,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                   children: [
                     // 标题
                     Container(
+                      alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(
                         top: dp(20.0),
                         bottom: dp(20.0),
@@ -304,7 +305,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                       },
                     ),
 
-                    // 点赞数量
+                    // 底部
                     Container(
                       padding: EdgeInsets.only(
                         bottom: dp(20.0),
@@ -314,6 +315,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // 阅读量
                           Container(
                             child: Row(
                               children: [
@@ -322,44 +324,57 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                             ),
                           ),
 
-                          // 点赞数量
-                          Container(
-                            child: InkWell(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    aliIconfont.zan,
-                                    size: dp(32.0),
+                          Row(
+                            children: [
+                              // 点赞
+                              Container(
+                                child: InkWell(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        aliIconfont.zan,
+                                        size: dp(32.0),
+                                      ),
+                                      SizedBox(width: dp(10.0)),
+                                      Text("点赞"),
+                                    ],
                                   ),
-                                  SizedBox(width: dp(10.0)),
-                                  Text("点赞"),
-                                ],
+                                  onTap: () async {
+                                    await saveUserUpvote();
+                                  },
+                                ),
                               ),
-                              onTap: () async {
-                                var result = await saveUserUpvote();
-                                if (result == true) {
-                                  Fluttertoast.showToast(
-                                    msg: "点赞成功",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.black45,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: "点赞失败",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.black45,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                }
-                              },
-                            ),
+
+                              SizedBox(width: dp(20.0)),
+
+                              // 收藏
+                              Container(
+                                child: InkWell(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        arguments.collect
+                                            ? aliIconfont.full_collect
+                                            : aliIconfont.collect,
+                                        size: dp(32.0),
+                                        color: arguments.collect
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
+                                      SizedBox(width: dp(10.0)),
+                                      Text("收藏"),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // 收藏新闻
+                                    collectNews();
+
+                                    arguments.collect = !arguments.collect;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -407,6 +422,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                   children: [
                     // 标题
                     Container(
+                      alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(
                         top: dp(20.0),
                         bottom: dp(20.0),
@@ -454,7 +470,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                       child: MyVideoPlayer(materia: materia),
                     ),
 
-                    // 点赞数量
+                    // 底部
                     Container(
                       padding: EdgeInsets.only(
                         top: dp(20.0),
@@ -465,6 +481,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // 阅读量
                           Container(
                             child: Row(
                               children: [
@@ -473,44 +490,57 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                             ),
                           ),
 
-                          // 点赞数量
-                          Container(
-                            child: InkWell(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    aliIconfont.zan,
-                                    size: dp(32.0),
+                          Row(
+                            children: [
+                              // 点赞
+                              Container(
+                                child: InkWell(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        aliIconfont.zan,
+                                        size: dp(32.0),
+                                      ),
+                                      SizedBox(width: dp(10.0)),
+                                      Text("点赞"),
+                                    ],
                                   ),
-                                  SizedBox(width: dp(10.0)),
-                                  Text("点赞"),
-                                ],
+                                  onTap: () async {
+                                    await saveUserUpvote();
+                                  },
+                                ),
                               ),
-                              onTap: () async {
-                                var result = await saveUserUpvote();
-                                if (result == true) {
-                                  Fluttertoast.showToast(
-                                    msg: "点赞成功",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.black45,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: "点赞失败",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.black45,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                }
-                              },
-                            ),
+
+                              SizedBox(width: dp(20.0)),
+
+                              // 收藏
+                              Container(
+                                child: InkWell(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        arguments.collect
+                                            ? aliIconfont.full_collect
+                                            : aliIconfont.collect,
+                                        size: dp(32.0),
+                                        color: arguments.collect
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
+                                      SizedBox(width: dp(10.0)),
+                                      Text("收藏"),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // 收藏新闻
+                                    collectNews();
+
+                                    arguments.collect = !arguments.collect;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -547,20 +577,57 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
   // 点赞
   Future<bool> saveUserUpvote() async {
     try {
-      await myRequest(
+      var result = await myRequest(
         path: MyApi.saveUserUpvote,
         data: {
           "id": arguments.id,
         },
       );
-      return true;
+
+      Fluttertoast.showToast(
+        msg: "${result['msg']}",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black45,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     } catch (e) {
       ErrorInfo(
         errInfo: e,
         msg: "点赞失败",
         path: MyApi.saveUserUpvote,
       );
-      return false;
+    }
+  }
+
+  // 收藏新闻
+  collectNews() async {
+    try {
+      var result = await myRequest(
+        path: MyApi.addNewsCollect,
+        data: {
+          "user_id": true,
+          "id": arguments.id,
+        },
+      );
+
+      Fluttertoast.showToast(
+        msg: "${result['msg']}",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black45,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } catch (e) {
+      ErrorInfo(
+        msg: "收藏失败",
+        errInfo: e,
+        path: MyApi.addNewsCollect,
+      );
     }
   }
 }

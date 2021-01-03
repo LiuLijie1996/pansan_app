@@ -370,7 +370,11 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                       ),
                       InkWell(
                         onTap: () {
-                          print("跳转到完成情况");
+                          Navigator.pushNamed(
+                            context,
+                            "/finishSituation",
+                            arguments: widget.arguments,
+                          );
                         },
                         child: Row(
                           children: [

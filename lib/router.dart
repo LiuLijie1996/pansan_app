@@ -43,6 +43,7 @@ import './pages/QuestionsCollect.dart';
 import './pages/DayTopicDetail.dart';
 import './pages/CertificateDetail.dart';
 import './pages/AfficheDetail.dart';
+import './pages/FinishSituation.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -193,6 +194,13 @@ Map<String, Function> routers = {
   //公告详情
   "/afficheDetail": (context, {arguments}) {
     return AfficheDetail(
+      arguments: arguments,
+    );
+  },
+
+  //完成情况
+  "/finishSituation": (context, {arguments}) {
+    return FinishSituation(
       arguments: arguments,
     );
   },

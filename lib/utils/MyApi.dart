@@ -161,4 +161,13 @@ class MyApi {
 
   /// 修改用户信息
   static const saveeErrorCorrection = "/api/exam/saveeErrorCorrection";
+
+  /// 完成情况
+  static const courseSituation = "/api/course/courseSituation";
+
+  /// 收藏题目
+  static const addQuestionCollect = "/api/exam/addQuestionCollect";
+
+  /// 收藏新闻
+  static const addNewsCollect = "/api/news/addNewsCollect";
 }
