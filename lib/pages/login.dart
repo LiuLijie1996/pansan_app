@@ -316,6 +316,8 @@ class _LoginState extends State<Login> with MyScreenUtil {
         "bindPhone": data['bindPhone'],
       });
 
+      print(userInfo.headUrl);
+
       // 存储用户信息
       await UserDB.addData(userInfo);
 

@@ -158,4 +158,7 @@ class MyApi {
 
   /// 修改用户信息
   static const editUser = "/user/editUser";
+
+  /// 修改用户信息
+  static const saveeErrorCorrection = "/api/exam/saveeErrorCorrection";
 }

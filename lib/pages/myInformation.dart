@@ -22,7 +22,7 @@ class _MyInformationState extends State<MyInformation>
     this.userInfo;
   }
 
-  PickedFile _image;
+  // 用户信息
   UserInfoDataType user;
 
   @override
@@ -39,38 +39,44 @@ class _MyInformationState extends State<MyInformation>
     PickedFile image = await ImagePicker().getImage(
       source: ImageSource.gallery, // 打开相册
     );
-    setState(() {
-      _image = image ?? _image;
-    });
 
     if (image == null) return;
 
     try {
       var myRequest = MyRequest(line: true).request;
-      // 上传文件
+
+      // 上传头像
       var result = await myRequest(
         method: "upload",
         path: MyApi.upload,
         filePath: image.path,
       );
 
-      // 得到返回的头像地址，修改数据库中的用户信息
-      var result2 = await myRequest(
+      // 获取后台返回的图片地址
+      var photo = result['data']['link'];
+
+      // 修改本地数据库的用户信息
+      user.headUrl = photo;
+      UserDB.update(user);
+
+      // 刷新页面
+      if (this.mounted) {
+        setState(() {});
+      }
+
+      // 得到返回的头像地址，上传给后台
+      var reault = await myRequest(
         method: "post",
         path: MyApi.editUser,
         data: {
           "user_id": true,
-          "headUrl": result['data']['link'],
+          "headUrl": photo,
         },
       );
 
-      // 修改本地数据库的用户信息
-      user.headUrl = result['data']['link'];
-      UserDB.update(user);
-
       // 弹窗提示
       Fluttertoast.showToast(
-        msg: "上传成功",
+        msg: "${reault['msg']}",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
@@ -113,11 +119,9 @@ class _MyInformationState extends State<MyInformation>
                   children: [
                     CircleAvatar(
                       radius: dp(80.0),
-                      backgroundImage: _image != null
-                          ? AssetImage(_image.path)
-                          : NetworkImage(
-                              "${user.headUrl != null ? user.headUrl : 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725210985,2088815523&fm=26&gp=0.jpg'}",
-                            ),
+                      backgroundImage: NetworkImage(
+                        "${user.headUrl != null ? user.headUrl : 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725210985,2088815523&fm=26&gp=0.jpg'}",
+                      ),
                     ),
                     SizedBox(
                       height: dp(20.0),

@@ -91,6 +91,9 @@ class MyIcon {
   ///赞
   IconData zan = const IconData(0xe647, fontFamily: 'iconfont');
 
+  ///文字大小
+  IconData wenzi = const IconData(0xe678, fontFamily: 'iconfont');
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       "home": home,

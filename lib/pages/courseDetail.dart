@@ -697,6 +697,8 @@ class CourseTextDetail extends StatefulWidget {
 }
 
 class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   ChapterChildren arguments;
   int validTime; //阅读有效时间
   Timer _timer; //定时器
@@ -776,9 +778,21 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("图文详情"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState.openEndDrawer();
+            },
+            icon: Icon(
+              aliIconfont.wenzi,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

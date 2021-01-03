@@ -3,23 +3,45 @@ import '../components/MyIcon.dart';
 import '../mixins/mixins.dart';
 import '../components/MyProgress.dart';
 import '../models/UserInfoDataType.dart';
+import '../components/MyProgress.dart';
+import '../db/UserDB.dart';
 
 // 我的页面
-class My extends StatelessWidget with UserInfoMixin {
-  My({Key key}) : super(key: key) {
+class My extends StatefulWidget {
+  My({Key key}) : super(key: key);
+
+  @override
+  _MyState createState() => _MyState();
+}
+
+class _MyState extends State<My> with UserInfoMixin {
+  UserInfoDataType user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
     this.userInfo;
   }
-
-  UserInfoDataType user;
 
   @override
   // TODO: implement userInfo
   Future<UserInfoDataType> get userInfo async {
     user = await super.userInfo;
+
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("职工素质提升平台"),
@@ -92,8 +114,13 @@ class My extends StatelessWidget with UserInfoMixin {
                   ),
                   Container(
                     child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, "/myInformation");
+                      onTap: () async {
+                        await Navigator.pushNamed(context, "/myInformation");
+
+                        List<UserInfoDataType> userDB = await UserDB.findAll();
+                        user = userDB[0];
+
+                        setState(() {});
                       },
                       child: Icon(
                         myIcon['bi'],
@@ -198,7 +225,7 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
 }
 
 // 功能列表
-class FunctionList extends StatelessWidget with MyScreenUtil, UserInfoMixin {
+class FunctionList extends StatelessWidget with MyScreenUtil {
   FunctionList({Key key}) : super(key: key);
 
   @override

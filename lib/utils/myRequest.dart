@@ -35,10 +35,10 @@ class MyRequest extends UserInfoMixin {
 
   ///发起请求
   Future<Map> request({
-    ///请求方式
+    ///请求方式  post请求    get请求   upload上传文件
     String method = "post",
 
-    ///上传文件时，文件的地址
+    ///上传文件时，文件的地址  将method改成upload类型
     String filePath,
 
     ///请求地址
@@ -75,7 +75,7 @@ class MyRequest extends UserInfoMixin {
   }
 
   /// get请求数据
-  Future<Map> getData() async {
+  Future getData() async {
     Response response = await dio.get(
       this.location + this.path, //拼接完整的接口
       queryParameters: this.query,
@@ -86,13 +86,14 @@ class MyRequest extends UserInfoMixin {
       ),
     );
 
+    print("get返回的数据：${response.data}");
+
     // 返回请求到的数据
     return response.data;
   }
 
   /// post请求数据
-  Future<Map> postData() async {
-    print('post请求数据');
+  Future postData() async {
     Response response = await dio.post(
       this.location + this.path, //拼接完整的接口
       data: this.query,
@@ -103,12 +104,14 @@ class MyRequest extends UserInfoMixin {
       ),
     );
 
+    print("post返回的数据：${response.data}");
+
     // 返回请求到的数据
     return response.data;
   }
 
   ///上传文件
-  Future<Map> uploadFile({
+  Future uploadFile({
     ///文件地址
     String filePath,
   }) async {

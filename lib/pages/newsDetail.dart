@@ -25,6 +25,8 @@ class NewsDetail extends StatefulWidget {
 }
 
 class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   NewsDataType arguments;
   int validTime;
   Timer _timer; //定时器
@@ -168,9 +170,21 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     if (arguments.type == 1) {
       // 图文详情
       return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("新闻详情"),
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState.openEndDrawer();
+              },
+              icon: Icon(
+                aliIconfont.wenzi,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
         endDrawer: Container(
           width: MediaQuery.of(context).size.width / 2,

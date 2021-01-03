@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../mixins/mixins.dart';
 import '../models/IssueDataType.dart';
+import '../utils/myRequest.dart';
 
 class QuestionsCorrection extends StatefulWidget {
   final IssueDataType issueData;
@@ -125,12 +126,19 @@ class _QuestionsCorrectionState extends State<QuestionsCorrection>
               padding: EdgeInsets.only(left: dp(50.0), right: dp(50.0)),
               child: SizedBox(
                 child: RaisedButton(
-                  onPressed: () {
-                    Map data = {
+                  onPressed: () async {
+                    Map<String, dynamic> data = {
+                      "user_id": true,
                       "id": issueData.id,
-                      "err_type": _currentErrIndex,
+                      "type": _currentErrIndex + 1,
                       "content": _inputValue,
                     };
+
+                    // 发送给后台
+                    await myRequest(
+                      path: MyApi.saveeErrorCorrection,
+                      data: data,
+                    );
 
                     Navigator.pop(context, data);
                   },
