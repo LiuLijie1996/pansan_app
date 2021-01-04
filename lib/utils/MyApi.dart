@@ -182,4 +182,7 @@ class MyApi {
 
   /// 签到
   static const getuserScoreTotal = "/api/user/getuserScoreTotal";
+
+  /// 修改密码 user_id   newPwd
+  static const editPassWord = "/api/user/editPassWord";
 }

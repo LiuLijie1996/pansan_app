@@ -29,6 +29,7 @@ newsDetail					新闻详情
 courseDetail				课程详情
 finishSituation				完成情况
 searchPage					搜索页
+coursePlan					课程计划
 
 myAdvisory					我的咨询
 advisoryDetail				咨询信息详情
@@ -81,7 +82,7 @@ class CertificateDataType
     
 ///证书详情数据类型
 class CertificateDetailDataType
-    
+
 /// 课程章节数据类型
 class CourseChapterDataType
     

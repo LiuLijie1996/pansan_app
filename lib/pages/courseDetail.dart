@@ -640,7 +640,16 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                print('下载');
+                                                var link = child.materia.link;
+                                                if (link != null) {
+                                                  // 下载文件
+                                                  myRequest(
+                                                    context: context,
+                                                    method: "download",
+                                                    filePath:
+                                                        child.materia.link,
+                                                  );
+                                                }
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.only(
@@ -650,7 +659,9 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                                   right: dp(10.0),
                                                 ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.blue,
+                                                  color: child.type == 3
+                                                      ? Colors.grey
+                                                      : Colors.blue,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           3.0),

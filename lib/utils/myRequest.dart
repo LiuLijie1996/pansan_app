@@ -8,11 +8,13 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../models/UserInfoDataType.dart';
 import '../mixins/mixins.dart';
+import '../components/LoadWidget.dart';
 
 ///请求数据的类
-class MyRequest extends UserInfoMixin {
+class MyRequest extends UserInfoMixin with LoadWidget {
   ///Dio
   Dio dio = Dio();
 
@@ -165,6 +167,7 @@ class MyRequest extends UserInfoMixin {
     String fileUrl,
   }) async {
     try {
+      // 获取权限
       await isGrantedFn();
 
       // //获取文档地址
@@ -192,20 +195,50 @@ class MyRequest extends UserInfoMixin {
       // 保存路径
       var filePath = file.path;
 
+      //判断文件是否存在
+      bool isEmpty = file.existsSync();
+      if (isEmpty) {
+        Fluttertoast.showToast(
+          msg: "文件已存在",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black45,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return;
+      }
+
       // 下载文件
-      Response response = await dio.download(
-        fileUrl,
-        filePath,
-        onReceiveProgress: (count, total) {
-          var progress = (((count / total) * 100).ceil()).toString() + "%";
-          print(progress);
-        },
-      );
+      try {
+        Response response = await dio.download(
+          fileUrl,
+          filePath,
+          onReceiveProgress: (count, total) {
+            var progress = (((count / total) * 100).ceil()).toString() + "%";
 
-      print("下载文件：${response.statusCode}");
+            // 显示弹窗
+            showLoad(context, msg: progress);
 
-      // String content = file.readAsStringSync(); //读取文件信息
-      // print("读取文件信息：$content");
+            if (progress == '100%') {
+              // 隐藏弹窗
+              hideLoad(context);
+            }
+          },
+        );
+        print("下载完成状态码：${response.statusCode}");
+      } catch (e) {
+        Fluttertoast.showToast(
+          msg: "文件权限过高,下载失败",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black45,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
     } catch (e) {
       print(e);
     }

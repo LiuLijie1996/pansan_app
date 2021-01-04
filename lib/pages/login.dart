@@ -285,6 +285,11 @@ class _LoginState extends State<Login> with MyScreenUtil {
         },
       );
 
+      if (result['code'] == 0) {
+        myShowToast(msg: "${result['msg']}");
+        return;
+      }
+
       Map data = result['data'];
 
       var integral = data['integral'];

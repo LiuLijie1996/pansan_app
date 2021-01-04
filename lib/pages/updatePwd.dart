@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../components/MyIcon.dart';
 import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
@@ -198,10 +199,23 @@ class _UpdatePwdState extends State<UpdatePwd> with MyScreenUtil {
                           if (pwd1 != '') {
                             if (pwd1 == pwd2) {
                               var result = await myRequest(
-                                path: MyApi.login,
-                                data: {"pwd1": pwd1, "pwd2": pwd2},
+                                path: MyApi.editPassWord,
+                                data: {
+                                  "user_id": true,
+                                  "newPwd": pwd1,
+                                },
                               );
-                              print(result);
+                              Fluttertoast.showToast(
+                                msg: "${result['msg']}",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.black45,
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
+
+                              Navigator.pop(context);
                             }
                           }
                         },
