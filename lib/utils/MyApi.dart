@@ -194,4 +194,7 @@ class MyApi {
 
   /// 注册
   static const register = "/login/register";
+
+  /// 忘记密码
+  static const resetPassWord = "/login/resetPassWord";
 }

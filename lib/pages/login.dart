@@ -782,11 +782,16 @@ class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
                         onPressed: () async {
                           if (userName != '') {
                             if (idCard != '') {
+                              var myRequest = MyRequest(line: true).request;
                               var result = await myRequest(
-                                path: MyApi.login,
-                                data: {"userName": userName, "idCard": idCard},
+                                path: MyApi.resetPassWord,
+                                data: {
+                                  "name": userName,
+                                  "idCard": idCard,
+                                },
                               );
-                              print(result);
+                              myShowToast(msg: "${result['msg']}");
+                              Navigator.pop(context);
                             }
                           }
                         },
@@ -799,6 +804,18 @@ class _ForgetPwdState extends State<ForgetPwd> with MyScreenUtil {
           ),
         ),
       ),
+    );
+  }
+
+  myShowToast({@required msg}) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }
