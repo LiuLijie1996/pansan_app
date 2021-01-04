@@ -185,4 +185,7 @@ class MyApi {
 
   /// 修改密码 user_id   newPwd
   static const editPassWord = "/api/user/editPassWord";
+
+  /// 检查更新
+  static const version = "/api/index/version";
 }

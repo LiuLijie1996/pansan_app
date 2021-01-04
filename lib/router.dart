@@ -44,6 +44,7 @@ import './pages/DayTopicDetail.dart';
 import './pages/CertificateDetail.dart';
 import './pages/AfficheDetail.dart';
 import './pages/FinishSituation.dart';
+import './components/UpdateApp.dart';
 
 Map<String, Function> routers = {
   "/": (context) => StartPage(), //启动页
@@ -214,14 +215,26 @@ Function onGenerateRoute = (RouteSettings settings) {
     if (settings.arguments != null) {
       return MaterialPageRoute(
         builder: (context) {
-          return routerPage(context, arguments: settings.arguments);
+          return UpdateApp(
+            child: routerPage(context, arguments: settings.arguments),
+          );
+        },
+      );
+    }
+
+    if (routerName == "/") {
+      return MaterialPageRoute(
+        builder: (context) {
+          return routerPage(context);
         },
       );
     }
 
     return MaterialPageRoute(
       builder: (context) {
-        return routerPage(context);
+        return UpdateApp(
+          child: routerPage(context),
+        );
       },
     );
   } else {
