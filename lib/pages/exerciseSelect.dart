@@ -23,13 +23,12 @@ class ExerciseSelect extends StatefulWidget {
 
 class _ExerciseSelectState extends State<ExerciseSelect>
     with SingleTickerProviderStateMixin, MyScreenUtil {
-  Timer timer;
-  int _currentMyWidget = 0;
-  List myWidget = [MyProgress(), EmptyBox()];
-
   // 声明 AnimationController
   AnimationController _controller;
   Animation animation;
+
+  ///初始化是否完成
+  bool isInitialize = false;
 
   Map exerciseData = {
     "page": 1,
@@ -43,10 +42,25 @@ class _ExerciseSelectState extends State<ExerciseSelect>
     // TODO: implement initState
     super.initState();
 
+    // 初始化
+    this.myInitialize();
+  }
+
+  // 初始化
+  myInitialize() {
+    // 设置动画控制器
+    setController();
+
+    // 获取练习列表
+    getDataList();
+  }
+
+  // 设置动画控制器
+  setController() {
     // 初始化 controller
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5), //持续时间
+      duration: Duration(seconds: 3), //持续时间
     );
 
     // 设置曲线
@@ -80,28 +94,6 @@ class _ExerciseSelectState extends State<ExerciseSelect>
         }
       })
       ..forward();
-
-    // 倒计时
-    timer = Timer(Duration(seconds: 5), () {
-      setState(() {
-        _currentMyWidget = 1;
-      });
-    });
-
-    // 请求数据
-    getDataList();
-  }
-
-  @override
-  void dispose() {
-    // 清除动画
-    _controller.dispose();
-
-    // 清除定时器
-    timer?.cancel();
-    timer = null;
-    // TODO: implement dispose
-    super.dispose();
   }
 
   // 获取练习列表
@@ -137,12 +129,15 @@ class _ExerciseSelectState extends State<ExerciseSelect>
       }).toList();
 
       if (this.mounted) {
+        isInitialize = true;
         if (page == 1) {
           exerciseData['data'] = [];
         }
         exerciseData['page'] = page;
         exerciseData['total'] = total;
         exerciseData['data'].addAll(newData);
+
+        setState(() {});
       }
     } catch (e) {
       ErrorInfo(
@@ -154,98 +149,121 @@ class _ExerciseSelectState extends State<ExerciseSelect>
   }
 
   @override
+  void dispose() {
+    // 清除动画
+    _controller.dispose();
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
+
+    if (exerciseData['data'].length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("${widget.arguments.name}"),
+          centerTitle: true,
+        ),
+        body: EmptyBox(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.arguments.name}"),
         centerTitle: true,
       ),
-      body: exerciseData['data'].length == 0
-          ? myWidget[_currentMyWidget]
-          : ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                ExerciseSelectDataType item = exerciseData['data'][index];
+      body: ListView.separated(
+        itemBuilder: (BuildContext context, int index) {
+          ExerciseSelectDataType item = exerciseData['data'][index];
 
-                //添加时间
-                DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
-                  item.addtime * 1000,
-                );
+          //添加时间
+          DateTime addtime = DateTime.fromMillisecondsSinceEpoch(
+            item.addtime * 1000,
+          );
 
-                //格式化添加时间
-                String _addtime = formatDate(
-                  addtime,
-                  [yyyy, '年', mm, '月', dd, '日'],
-                );
+          //格式化添加时间
+          String _addtime = formatDate(
+            addtime,
+            [yyyy, '年', mm, '月', dd, '日'],
+          );
 
-                String scale = "${(item.progress * 100).ceil()}%";
+          String scale = "${(item.progress * 100).ceil()}%";
 
-                // 进度
-                double progress = Tween(
-                  begin: 0.0,
-                  end: double.parse("${item.progress}"),
-                ).animate(animation).value;
+          // 进度
+          double progress = Tween(
+            begin: 0.0,
+            end: double.parse("${item.progress}"),
+          ).animate(animation).value;
 
-                return Container(
-                  padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                  child: ListTile(
-                    leading: Container(
-                      width: dp(100.0),
-                      height: dp(100.0),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          GradientCircularProgressIndicator(
-                            colors: [
-                              Colors.blue[200],
-                              Colors.blue,
-                            ],
-                            radius: dp(50.0),
-                            stokeWidth: dp(10.0),
-                            strokeCapRound: true,
-                            value: progress, //进度
-                          ),
-                          Text("$scale"),
-                        ],
-                      ),
+          return Container(
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: ListTile(
+              leading: Container(
+                width: dp(100.0),
+                height: dp(100.0),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    GradientCircularProgressIndicator(
+                      colors: [
+                        Colors.blue[200],
+                        Colors.blue,
+                      ],
+                      radius: dp(50.0),
+                      stokeWidth: dp(10.0),
+                      strokeCapRound: true,
+                      value: progress, //进度
                     ),
-                    title: Text(
-                      "${item.name}",
-                      style: TextStyle(
-                        fontSize: dp(32.0),
-                      ),
-                    ),
-                    subtitle: Container(
-                      margin: EdgeInsets.only(top: dp(20.0)),
-                      child: Text("$_addtime"),
-                    ),
-                    trailing: RaisedButton(
-                      color: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(dp(100.0)),
-                      ),
-                      onPressed: () {
-                        print("去答题");
-                        Navigator.pushNamed(
-                          context,
-                          "/exerciseDetails",
-                          arguments: item,
-                        );
-                      },
-                      child: Text(
-                        "去答题",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                    Text("$scale"),
+                  ],
+                ),
+              ),
+              title: Text(
+                "${item.name}",
+                style: TextStyle(
+                  fontSize: dp(32.0),
+                ),
+              ),
+              subtitle: Container(
+                margin: EdgeInsets.only(top: dp(20.0)),
+                child: Text("$_addtime"),
+              ),
+              trailing: RaisedButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(dp(100.0)),
+                ),
+                onPressed: () {
+                  print("去答题");
+                  Navigator.pushNamed(
+                    context,
+                    "/exerciseDetails",
+                    arguments: item,
+                  );
+                },
+                child: Text(
+                  "去答题",
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
-              itemCount: exerciseData['data'].length,
+                ),
+              ),
             ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider();
+        },
+        itemCount: exerciseData['data'].length,
+      ),
     );
   }
 }

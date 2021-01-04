@@ -20,9 +20,8 @@ class ExerciseSpecialtySelect extends StatefulWidget {
 
 class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
     with MyScreenUtil {
-  Timer timer;
-  int _currentMyWidget = 0;
-  List myWidget = [MyProgress(), EmptyBox()];
+  ///初始化是否完成
+  bool isInitialize = false;
 
   Map exercisesData = {
     "page": 1,
@@ -36,24 +35,8 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
     // TODO: implement initState
     super.initState();
 
-    // 倒计时
-    timer = Timer(Duration(seconds: 5), () {
-      setState(() {
-        _currentMyWidget = 1;
-      });
-    });
-
     // 请求数据
     getDataList();
-  }
-
-  @override
-  void dispose() {
-    // 清除定时器
-    timer?.cancel();
-    timer = null;
-    // TODO: implement dispose
-    super.dispose();
   }
 
   // 获取专项练习列表
@@ -89,6 +72,7 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
 
       if (this.mounted) {
         setState(() {
+          isInitialize = true;
           if (page == 1) {
             exercisesData['data'] = [];
           }
@@ -108,42 +92,55 @@ class _ExerciseSpecialtySelectState extends State<ExerciseSpecialtySelect>
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
+
+    if (exercisesData['data'].length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("${widget.arguments.name}"),
+          centerTitle: true,
+        ),
+        body: EmptyBox(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.arguments.name}"),
         centerTitle: true,
       ),
-      body: exercisesData['data'].length == 0
-          ? myWidget[_currentMyWidget]
-          : ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                ExerciseDataType item = exercisesData['data'][index];
-                return ListTile(
-                  title: Text("${item.name}"),
-                  onTap: () {
-                    if (item.isChildren == true) {
-                      // 跳转到专项练习列表选择页
-                      Navigator.pushNamed(
-                        context,
-                        "/exerciseSpecialtySelect",
-                        arguments: item,
-                      );
-                    } else {
-                      // 跳转到答题页面
-                      Navigator.pushNamed(
-                        context,
-                        "/exerciseSpecialtyDetails",
-                        arguments: item,
-                      );
-                    }
-                  },
+      body: ListView.separated(
+        itemBuilder: (BuildContext context, int index) {
+          ExerciseDataType item = exercisesData['data'][index];
+          return ListTile(
+            title: Text("${item.name}"),
+            onTap: () {
+              if (item.isChildren == true) {
+                // 跳转到专项练习列表选择页
+                Navigator.pushNamed(
+                  context,
+                  "/exerciseSpecialtySelect",
+                  arguments: item,
                 );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
-              itemCount: exercisesData['data'].length,
-            ),
+              } else {
+                // 跳转到答题页面
+                Navigator.pushNamed(
+                  context,
+                  "/exerciseSpecialtyDetails",
+                  arguments: item,
+                );
+              }
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider();
+        },
+        itemCount: exercisesData['data'].length,
+      ),
     );
   }
 }

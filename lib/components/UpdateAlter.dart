@@ -84,6 +84,10 @@ class UpdateAlter {
                   child: ListView(
                     children: updateContent.map((e) {
                       return Container(
+                        padding: EdgeInsets.only(
+                          bottom: dp(10.0),
+                          top: dp(10.0),
+                        ),
                         child: Text(
                           "${e['content']}",
                           style: TextStyle(
@@ -101,14 +105,21 @@ class UpdateAlter {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        InkWell(
-                          onTap: () {
+                        RaisedButton(
+                          color: Colors.blue,
+                          onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text("暂不更新"),
+                          child: Text(
+                            "暂不更新",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        InkWell(
-                          onTap: () async {
+                        RaisedButton(
+                          color: Colors.blue,
+                          onPressed: () async {
                             print("跳转更新 $link");
                             if (await canLaunch(link)) {
                               await launch(link);
@@ -116,7 +127,12 @@ class UpdateAlter {
                               throw 'Could not launch $link';
                             }
                           },
-                          child: Text("立即更新"),
+                          child: Text(
+                            "立即更新",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
