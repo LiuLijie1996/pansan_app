@@ -188,4 +188,10 @@ class MyApi {
 
   /// 检查更新
   static const version = "/api/index/version";
+
+  /// 获取验证码
+  static const loginCode = "/login/code";
+
+  /// 注册
+  static const register = "/login/register";
 }

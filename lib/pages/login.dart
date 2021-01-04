@@ -10,7 +10,7 @@ import '../utils/myRequest.dart';
 import '../models/UserInfoDataType.dart';
 import '../db/UserDB.dart';
 
-// 登录页面
+/// 登录页面
 class Login extends StatefulWidget {
   static BuildContext context;
   Login({Key key}) : super(key: key);
@@ -359,7 +359,7 @@ class _LoginState extends State<Login> with MyScreenUtil {
   }
 }
 
-// 注册页面
+/// 注册页面
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
 
@@ -488,7 +488,7 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                           decoration: InputDecoration(
                             hintText: "请输入身份证号",
                             border: InputBorder.none,
-                            prefixIcon: Icon(aliIconfont.phone),
+                            prefixIcon: Icon(aliIconfont.id_card),
                           ),
                         ),
                       ),
@@ -520,9 +520,21 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                                 _verifyBtn == true ? "$_count s" : "获取验证码",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_verifyBtn == false) {
-                                  print("获取验证码");
+                                  // 获取验证码
+                                  var myRequest = MyRequest(line: true).request;
+                                  var result = await myRequest(
+                                    path: MyApi.loginCode,
+                                    data: {
+                                      "phone": phone,
+                                      "idCard": idCard,
+                                    },
+                                  );
+
+                                  myShowToast(msg: "${result['message']}");
+                                  if (result['code'] == 0) return;
+
                                   setState(() {
                                     _verifyBtn = true;
                                   });
@@ -534,7 +546,7 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                                       setState(() {
                                         _count--;
                                       });
-                                      print(_count);
+                                      // print(_count);
 
                                       if (_count <= 0) {
                                         // 清除定时器
@@ -585,15 +597,17 @@ class _RegisterState extends State<Register> with MyScreenUtil {
                           if (phone != '') {
                             if (idCard != '') {
                               if (verifyCode != '') {
+                                var myRequest = MyRequest(line: true).request;
                                 var result = await myRequest(
-                                  path: MyApi.login,
+                                  path: MyApi.register,
                                   data: {
                                     "phone": phone,
-                                    "verifyCode": verifyCode,
+                                    "sms_captcha": verifyCode,
                                     "idCard": idCard,
                                   },
                                 );
-                                print(result);
+                                myShowToast(msg: "${result['msg']}");
+                                Navigator.pop(context);
                               } else {
                                 myShowToast(msg: "请输入验证码");
                               }

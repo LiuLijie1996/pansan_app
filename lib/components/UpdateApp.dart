@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:package_info/package_info.dart';
+import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import './UpdateAlter.dart';
+import '../models/AppInfoDataType.dart';
 
 ///上次检查更新的时间
 int preExamineTime = 0;
@@ -18,7 +20,7 @@ class UpdateApp extends StatefulWidget {
   _UpdateAppState createState() => _UpdateAppState();
 }
 
-class _UpdateAppState extends State<UpdateApp> with UpdateAlter {
+class _UpdateAppState extends State<UpdateApp> with UpdateAlter, AppInfoMixin {
   ///更新的信息
   List updateContent = [];
 
@@ -49,17 +51,15 @@ class _UpdateAppState extends State<UpdateApp> with UpdateAlter {
     // 更新检查的时间
     preExamineTime = DateTime.now().millisecondsSinceEpoch;
 
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appName = packageInfo.appName; //应用名称
-    String packageName = packageInfo.packageName; //包名称
-    String version = packageInfo.version; //版本号
-    String buildNumber = packageInfo.buildNumber; //小版本号
+    // 获取应用信息
+    AppInfoDataType appInfo = await getAppInfo();
 
-    Map<String, dynamic> appInfo = {
-      "versionCode": buildNumber,
-    };
-
-    var result = await myRequest(path: MyApi.version, data: appInfo);
+    var result = await myRequest(
+      path: MyApi.version,
+      data: {
+        "versionCode": appInfo.buildNumber,
+      },
+    );
     var data = result['data'];
     if (data['code'] == 0) return;
     updateContent = (json.decode(data['content'])).map((e) {
@@ -72,7 +72,7 @@ class _UpdateAppState extends State<UpdateApp> with UpdateAlter {
     int versionCode = int.parse("${data['versionCode']}");
 
     // 判断是否弹窗升级
-    if (int.parse(buildNumber) < versionCode) {
+    if (int.parse(appInfo.buildNumber) < versionCode) {
       // 弹窗提示更新
       this.showAlter(
         context,

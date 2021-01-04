@@ -10,13 +10,17 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../models/UserInfoDataType.dart';
+import '../models/AppInfoDataType.dart';
 import '../mixins/mixins.dart';
 import '../components/LoadWidget.dart';
 
 ///请求数据的类
-class MyRequest extends UserInfoMixin with LoadWidget {
+class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   ///Dio
   Dio dio = Dio();
+
+  ///应用信息
+  AppInfoDataType appInfo;
 
   ///用户信息
   UserInfoDataType user;
@@ -58,7 +62,10 @@ class MyRequest extends UserInfoMixin with LoadWidget {
     Map<String, dynamic> data,
   }) async {
     // 获取用户信息
-    this.user = await userInfo();
+    this.user = await this.userInfo();
+
+    // 应用信息
+    this.appInfo = await this.getAppInfo();
 
     // 接口
     this.path = path;
@@ -95,14 +102,20 @@ class MyRequest extends UserInfoMixin with LoadWidget {
       options: Options(
         headers: {
           "token": this.user != null ? this.user.token : null,
+          "versionCode": this.appInfo.buildNumber,
         },
       ),
     );
 
-    print("get返回的数据：${response.data}");
+    Map data;
+    if ((response.data.runtimeType).toString() == 'String') {
+      data = json.decode(response.data);
+    } else {
+      data = response.data;
+    }
 
     // 返回请求到的数据
-    return response.data;
+    return data;
   }
 
   /// post请求数据
@@ -113,14 +126,24 @@ class MyRequest extends UserInfoMixin with LoadWidget {
       options: Options(
         headers: {
           "token": this.user != null ? this.user.token : null,
+          "versionCode": this.appInfo.buildNumber,
         },
       ),
     );
 
-    print("post返回的数据：${response.data}");
+    print("完整的接口：${this.location + this.path}");
+    print("post请求到的数据：${response.data}");
+    print((response.data.runtimeType).toString());
+
+    Map data;
+    if ((response.data.runtimeType).toString() == 'String') {
+      data = json.decode(response.data);
+    } else {
+      data = response.data;
+    }
 
     // 返回请求到的数据
-    return response.data;
+    return data;
   }
 
   ///上传文件
