@@ -132,8 +132,6 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     );
 
     print("完整的接口：${this.location + this.path}");
-    print("post请求到的数据：${response.data}");
-    print((response.data.runtimeType).toString());
 
     Map data;
     if ((response.data.runtimeType).toString() == 'String') {
