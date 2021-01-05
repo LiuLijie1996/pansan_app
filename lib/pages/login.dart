@@ -336,7 +336,9 @@ class _LoginState extends State<Login> with MyScreenUtil {
       myShowToast(msg: '登录成功');
 
       // 跳转到首页
-      Navigator.pushNamed(context, "/home");
+      // Navigator.pushNamed(context, "/home");
+
+      Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
     } catch (e) {
       ErrorInfo(
         msg: "登录失败",
