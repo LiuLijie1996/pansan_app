@@ -1,20 +1,101 @@
-{
-    "id": 200123,
-    "course_id": 158,
-    "chapter_id": 181,
-    "article_id": 461,
-    "user_id": 2714,
-    "department_id": 44,
-    "duration": 1,
-    "status": 1,
-    "addtime": 1607917034,
-    "type": 4,
-    "finish_time": 1607917034,
-    "update_time": 0,
-    "user": {
-        "id": 2714,
-        "name": "陈亚群",
-        "department": 44
+[{
+        "result": {
+            "l": true,
+            "i": "4bta0oh96odxsikr28",
+            "n": 0,
+            "s": 0,
+            "c": 0,
+            "t": false,
+            "j": 1609921441533,
+            "p": 0,
+            "e": "测试推送1",
+            "k": true,
+            "d": "测试推送1",
+            "m": false,
+            "r": "373680500",
+            "h": {
+                "id": "4bta0oh96odxsikr28",
+                "channel": "mobpush",
+                "pushData": {
+                    "id": "2402"
+                }
+            }
+        },
+        "action": 1
     },
-    "studyStatus": 1
-}
+    {
+        "result": {
+            "l": true,
+            "i": "4bqnbcd8n4wgz3dn28",
+            "n": 0,
+            "s": 0,
+            "c": 0,
+            "t": false,
+            "j": 1609922107586,
+            "p": 0,
+            "e": "测试推送1",
+            "k": true,
+            "d": "测试推送1",
+            "m": false,
+            "r": "13878123",
+            "h": {
+                "id": "4bqnbcd8n4wgz3dn28",
+                "channel": "mobpush",
+                "pushData": {
+                    "id": "2402"
+                }
+            }
+        },
+        "action": 1
+    },
+    {
+        "result": {
+            "l": true,
+            "i": "4bqnbcd8n4wgz3dn28",
+            "n": 0,
+            "s": 0,
+            "c": 0,
+            "t": false,
+            "j": 1609922107586,
+            "p": 0,
+            "e": "测试推送1",
+            "k": true,
+            "d": "测试推送1",
+            "m": false,
+            "r": "13878123",
+            "h": {
+                "channel": "mobpush",
+                "id": "4bqnbcd8n4wgz3dn28",
+                "pushData": {
+                    "id": "2402"
+                }
+            }
+        },
+        "action": 2
+    },
+    {
+        "result": {
+            "l": true,
+            "i": "4br904665lm10f2txc",
+            "n": 0,
+            "s": 0,
+            "c": 0,
+            "t": false,
+            "j": 1609922788721,
+            "p": 0,
+            "e": "测试推送1",
+            "k": true,
+            "d": "测试推送1",
+            "m": false,
+            "r": "345298397",
+            "h": {
+                "id": "4br904665lm10f2txc",
+                "channel": "mobpush",
+                "pushData": {
+                    "id": "2402"
+                }
+            }
+        },
+        "action": 1
+    }
+]

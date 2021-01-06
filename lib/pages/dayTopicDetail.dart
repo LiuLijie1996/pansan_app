@@ -10,6 +10,7 @@ import '../models/DayTopicDetailDataType.dart';
 import '../models/DayTopicDataType.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
+import '../components/MyIcon.dart';
 
 class DayTopicDetail extends StatefulWidget {
   final TimeChildren arguments;
@@ -20,6 +21,8 @@ class DayTopicDetail extends StatefulWidget {
 }
 
 class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   DayTopicDetailDataType dayTopicDetail;
   int fontSize = 120;
   List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
@@ -45,6 +48,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
   // 获取一日一题详情
   getDetail() async {
     try {
+      print("获取一日一题详情: ${widget.arguments.id}");
       var result = await myRequest(
         path: MyApi.getOneTodayStudy,
         data: {
@@ -112,8 +116,21 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
     print(fontSize);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("一日一题详情"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState.openEndDrawer();
+            },
+            icon: Icon(
+              aliIconfont.wenzi,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       endDrawer: Container(
         width: MediaQuery.of(context).size.width / 2,

@@ -166,6 +166,7 @@ class _ExamRankingState extends State<ExamRanking>
     return Scaffold(
       appBar: AppBar(
         title: Text("考试排行"),
+        elevation: 0,
         actions: [
           FlatButton(
             onPressed: () async {
