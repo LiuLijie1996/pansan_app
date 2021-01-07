@@ -28,21 +28,44 @@ class CourseDetail extends StatefulWidget {
 
 class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
   GlobalKey aspectRatioKey = GlobalKey();
-  GlobalKey<MyVideoPlayerState> videoKey = GlobalKey(); //视频key
-  GlobalKey<MyAudioplayersState> audioKey = GlobalKey(); //音频key
+
+  ///视频key
+  GlobalKey<MyVideoPlayerState> videoKey = GlobalKey();
+
+  ///音频key
+  GlobalKey<MyAudioplayersState> audioKey = GlobalKey();
   CourseDataType arguments;
-  List<CourseChapterDataType> chapterList = []; //章节
-  int chapterId; //被点击的子章节的父章节id
-  ChapterChildren chapterChildren; //被点击的章节下的子章节
-  int chapterTotal = 0; //章节数量
-  int articleListTotal = 0; //课时
-  int view_num = 0; //在学人数
-  int currentNavIndex = 1; //导航栏下标
-  MateriaDataType audioMateria; //音频资源
-  MateriaDataType videoMateria; //视频资源
+
+  ///章节
+  List<CourseChapterDataType> chapterList = [];
+
+  ///被点击的子章节的父章节id
+  int chapterId;
+
+  ///被点击的章节下的子章节
+  ChapterChildren chapterChildren;
+
+  ///章节数量
+  int chapterTotal = 0;
+
+  ///课时
+  int articleListTotal = 0;
+
+  ///在学人数
+  int view_num = 0;
+
+  ///导航栏下标
+  int currentNavIndex = 1;
+
+  ///音频资源
+  MateriaDataType audioMateria;
+
+  ///视频资源
+  MateriaDataType videoMateria;
   double paddingTop = 0.0;
 
-  Duration playPosition; //播放的进度
+  ///播放的进度
+  Duration playPosition;
 
   @override
   void initState() {
@@ -178,7 +201,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
         validTime = chapterChildren.stuVideo;
       }
 
-      // 上传数据前先更新之前后台给的音视频进度
+      // 上传数据前先更新后台给的音视频进度
       chapterChildren.materia.studyDuration = duration;
 
       try {
@@ -205,7 +228,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
   }
 
   // 获取播放进度
-  getPlayPosition(position) {
+  getPlayPosition(Duration position) {
     playPosition = position;
   }
 
