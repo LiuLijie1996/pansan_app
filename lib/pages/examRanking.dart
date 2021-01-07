@@ -317,77 +317,82 @@ class _ExamRankingState extends State<ExamRanking>
                 ? TabBarView(
                     controller: _tabController,
                     children: tabs.map((e) {
-                      return ListView.separated(
-                        itemCount: rankingList.length,
-                        separatorBuilder: (context, index) {
-                          return Divider();
-                        },
-                        itemBuilder: (context, index) {
-                          ExamRankingDataType item = rankingList[index];
+                      return Container(
+                        color: Colors.white,
+                        child: ListView.separated(
+                          itemCount: rankingList.length,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider();
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            ExamRankingDataType item = rankingList[index];
 
-                          String network = rankingList[index].user.headUrl;
-                          String asset = "assets/images/account.png";
-                          var image = network == ''
-                              ? AssetImage(asset)
-                              : NetworkImage(network);
+                            String network = rankingList[index].user.headUrl;
 
-                          String rankingInex =
-                              index + 1 < 10 ? "0${index + 1}" : index;
-                          return Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  child: Text("$rankingInex"),
-                                  alignment: Alignment.centerRight,
+                            String asset = "assets/images/account.png";
+                            var image = network == ''
+                                ? AssetImage(asset)
+                                : NetworkImage(network);
+
+                            String rankingInex = index + 1 < 10
+                                ? "0${index + 1}"
+                                : index.toString();
+
+                            return Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    child: Text("$rankingInex"),
+                                    alignment: Alignment.centerRight,
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 10,
-                                child: Container(
-                                  color: Colors.white,
-                                  child: ListTile(
-                                    leading: Container(
-                                      width: dp(100.0),
-                                      height: dp(100.0),
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: image,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                    ),
-                                    title: Text("${item.user.name}"),
-                                    subtitle:
-                                        Text("${item.user.department.name}"),
-                                    trailing: RichText(
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          color: Colors.yellow[700],
-                                          fontSize: dp(38.0),
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        text:
-                                            "${(item.fraction).toStringAsFixed(1)}",
-                                        children: [
-                                          TextSpan(
-                                            style: TextStyle(
-                                              color: Colors.yellow[700],
-                                              fontSize: dp(26.0),
-                                            ),
-                                            text: "分",
+                                Expanded(
+                                  flex: 10,
+                                  child: Container(
+                                    child: ListTile(
+                                      leading: Container(
+                                        width: dp(100.0),
+                                        height: dp(100.0),
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: image,
+                                            fit: BoxFit.fitHeight,
                                           ),
-                                        ],
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                      title: Text("${item.user.name}"),
+                                      subtitle:
+                                          Text("${item.user.department.name}"),
+                                      trailing: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(
+                                            color: Colors.yellow[700],
+                                            fontSize: dp(38.0),
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          text:
+                                              "${(item.fraction).toStringAsFixed(1)}",
+                                          children: [
+                                            TextSpan(
+                                              style: TextStyle(
+                                                color: Colors.yellow[700],
+                                                fontSize: dp(26.0),
+                                              ),
+                                              text: "分",
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
+                              ],
+                            );
+                          },
+                        ),
                       );
                     }).toList(),
                   )

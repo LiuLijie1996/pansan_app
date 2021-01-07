@@ -72,11 +72,13 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
         centerTitle: true,
       ),
       body: Container(
+        width: double.infinity,
         child: ListView.builder(
           itemCount: coursePlanList.length,
           itemBuilder: (context, index) {
             CoursePlanDataType item = coursePlanList[index];
             return Container(
+              width: double.infinity,
               padding: EdgeInsets.all(dp(30.0)),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -90,47 +92,59 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(item.name),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: dp(60.0),
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            // 文件预览
-                            FilePreview(
-                              context: context,
-                              link: item.link,
-                              title: "课程计划预览",
-                            );
-                          },
-                          child: Text(
-                            "查看",
-                            style: TextStyle(color: Colors.white),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "${item.name}谁发水电费水电费高法国的法国",
+                      maxLines: 2,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: dp(130.0),
+                          height: dp(60.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              // 文件预览
+                              FilePreview(
+                                context: context,
+                                link: item.link,
+                                title: "课程计划预览",
+                              );
+                            },
+                            child: Text(
+                              "查看",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: dp(20.0)),
-                      SizedBox(
-                        height: dp(60.0),
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            // 下载文件
-                            myRequest(
-                              context: context,
-                              method: "download",
-                              filePath: item.link,
-                            );
-                          },
-                          child: Text(
-                            "下载",
-                            style: TextStyle(color: Colors.white),
+                        SizedBox(width: dp(20.0)),
+                        SizedBox(
+                          width: dp(130.0),
+                          height: dp(60.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              // 下载文件
+                              myRequest(
+                                context: context,
+                                method: "download",
+                                filePath: item.link,
+                              );
+                            },
+                            child: Text(
+                              "下载",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

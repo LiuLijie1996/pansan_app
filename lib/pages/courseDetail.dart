@@ -534,11 +534,12 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                         ),
                                       ),
                                       trailing: Container(
-                                        width: 100.0,
+                                        width: dp(200.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
+                                            // 学习
                                             InkWell(
                                               onTap: () {
                                                 // 切换阅读时上传进度
@@ -661,6 +662,8 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                                 ),
                                               ),
                                             ),
+
+                                            // 下载
                                             InkWell(
                                               onTap: () {
                                                 var link = child.materia.link;
