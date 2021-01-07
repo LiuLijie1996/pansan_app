@@ -95,7 +95,7 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      "${item.name}谁发水电费水电费高法国的法国",
+                      "${item.name}",
                       maxLines: 2,
                     ),
                   ),

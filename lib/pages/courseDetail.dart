@@ -534,7 +534,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                         ),
                                       ),
                                       trailing: Container(
-                                        width: dp(200.0),
+                                        width: dp(210.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
