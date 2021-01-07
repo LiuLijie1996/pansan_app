@@ -40,7 +40,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   MyRequest({this.line = false}) {
     // 如果项目上线了，将后台地址改成线上的
     if (this.line) {
-      location = "http://192.168.0.8:88/index.php/v2";
+      location = "http://192.168.0.8:88/index.php/appApi";
     }
   }
 
