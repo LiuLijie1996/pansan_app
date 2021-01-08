@@ -336,7 +336,7 @@ class _ExamRankingState extends State<ExamRanking>
 
                             String rankingInex = index + 1 < 10
                                 ? "0${index + 1}"
-                                : index.toString();
+                                : (index + 1).toString();
 
                             return Row(
                               children: [
@@ -434,6 +434,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
   // 获取时间线上的数据
   getTimeLineData() async {
     try {
+      print("获取时间线上的数据");
       var result = await myRequest(
         path: MyApi.examTimeLine,
         data: {
@@ -443,6 +444,7 @@ class _SelectExamState extends State<SelectExam> with MyScreenUtil {
 
       List data = result['data'];
       examTimeLineDataList = data.map((e) {
+        print(e['child'].runtimeType);
         List children = e['child'];
         List newChildren = children.map((child) {
           return {

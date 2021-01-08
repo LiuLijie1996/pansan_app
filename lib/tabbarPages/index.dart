@@ -96,7 +96,7 @@ class Index extends StatelessWidget with MyScreenUtil {
 
       // 判断是否确定
       if (alertResult) {
-        String myApi;
+        Map myApi;
 
         // 判断签到还是加入班级
         if (result1['code'] == 101) {

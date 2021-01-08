@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../models/UserInfoDataType.dart';
 import '../models/AppInfoDataType.dart';
+import '../models/ApiDataType.dart';
 import '../mixins/mixins.dart';
 import '../components/LoadWidget.dart';
 
@@ -32,7 +33,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   bool line;
 
   ///接口
-  String path;
+  ApiDataType pathData;
 
   ///发给后台的数据
   Map<String, dynamic> query;
@@ -49,14 +50,11 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     ///上下文
     BuildContext context,
 
-    ///请求方式  post请求    get请求   upload上传文件  download下载文件
-    String method = "post",
-
     ///上传（下载）文件时，文件的地址  将method改成upload类型
     String filePath,
 
     ///请求地址
-    String path = "",
+    Map path,
 
     ///发送的数据
     Map<String, dynamic> data,
@@ -68,14 +66,14 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     this.appInfo = await this.getAppInfo();
 
     // 接口
-    this.path = path;
+    this.pathData = ApiDataType.fromJson(path);
 
     // 设置发给后台的数据
     this.setSendData(data);
 
     // 请求数据
     Map result;
-    switch (method) {
+    switch (pathData.method) {
       case 'post':
         result = await this.postData();
         break;
@@ -97,7 +95,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   /// get请求数据
   Future getData() async {
     Response response = await dio.get(
-      this.location + this.path, //拼接完整的接口
+      this.location + this.pathData.path, //拼接完整的接口
       queryParameters: this.query,
       options: Options(
         headers: {
@@ -121,7 +119,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   /// post请求数据
   Future postData() async {
     Response response = await dio.post(
-      this.location + this.path, //拼接完整的接口
+      this.location + this.pathData.path, //拼接完整的接口
       data: this.query,
       options: Options(
         headers: {
@@ -131,7 +129,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       ),
     );
 
-    print("完整的接口：${this.location + this.path}");
+    print("完整的接口：${this.location + this.pathData.path}");
 
     Map data;
     if ((response.data.runtimeType).toString() == 'String') {
@@ -157,12 +155,12 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       )
     });
 
-    print("接口：${this.location + this.path}");
+    print("接口：${this.location + this.pathData.path}");
 
     // Map<String, dynamic> map = {'fileType': "KTP_IMG"};
     //上传结果
     Response response = await dio.post(
-      this.location + this.path, //拼接完整的接口
+      this.location + this.pathData.path, //拼接完整的接口
       data: formdata,
       options: Options(
         headers: {
@@ -329,4 +327,4 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   }
 }
 
-var myRequest = MyRequest().request;
+var myRequest = MyRequest(line: true).request;

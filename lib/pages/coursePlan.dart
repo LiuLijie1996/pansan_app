@@ -133,7 +133,7 @@ class _CoursePlanState extends State<CoursePlan> with MyScreenUtil {
                               // 下载文件
                               myRequest(
                                 context: context,
-                                method: "download",
+                                path: MyApi.downloadFile,
                                 filePath: item.link,
                               );
                             },

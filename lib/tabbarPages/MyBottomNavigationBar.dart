@@ -154,12 +154,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
     // 监听推送
     MobpushPlugin.addPushReceiver(
       (Object event) async {
-        print("监听的推送：$event");
-        await myRequest(
-          path: "/api/index",
-          data: {"key": "监听的推送：${json.encode(event)}"},
-        );
-
         Map<String, dynamic> eventMap = json.decode(event);
         Map<String, dynamic> result = eventMap['result'];
 
@@ -216,10 +210,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
         }
       },
       (Object event) async {
-        await myRequest(
-          path: "/api/index",
-          data: {"key": "监听的推送报错了：${json.encode(event)}"},
-        );
         print("监听的推送报错了：$event");
       },
     );

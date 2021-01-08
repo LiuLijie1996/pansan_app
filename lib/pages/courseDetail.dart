@@ -671,7 +671,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                                   // 下载文件
                                                   myRequest(
                                                     context: context,
-                                                    method: "download",
+                                                    path: MyApi.downloadFile,
                                                     filePath:
                                                         child.materia.link,
                                                   );

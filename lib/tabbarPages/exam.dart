@@ -99,7 +99,7 @@ class _ExamPageState extends State<ExamPage> with MyScreenUtil {
       ErrorInfo(
         errInfo: e,
         msg: "获取分类失败",
-        path: MyApi.getTestItemList + "或者" + MyApi.getPracticeItemList,
+        path: "${MyApi.getTestItemList} 或者 ${MyApi.getPracticeItemList}",
       );
     }
   }

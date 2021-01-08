@@ -48,7 +48,6 @@ class _MyInformationState extends State<MyInformation>
 
       // 上传头像
       var result = await myRequest(
-        method: "upload",
         path: MyApi.upload,
         filePath: image.path,
       );
@@ -67,7 +66,6 @@ class _MyInformationState extends State<MyInformation>
 
       // 得到返回的头像地址，上传给后台
       var reault = await myRequest(
-        method: "post",
         path: MyApi.editUser,
         data: {
           "user_id": true,
