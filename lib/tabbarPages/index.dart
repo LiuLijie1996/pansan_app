@@ -23,6 +23,7 @@ import '../models/ExamListDataType.dart';
 import '../models/NewsDataType.dart';
 import '../models/CourseDataType.dart';
 import '../models/SearchCourseDataType.dart';
+import '../models/NavDataType.dart';
 
 // 首页页面
 class Index extends StatelessWidget with MyScreenUtil {
@@ -704,6 +705,7 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
         autoplay: true,
         onTap: (int index) async {
           BannerDataType item = dataList[index];
+          print("${item.toJson()}");
 
           switch (item.typeLink) {
             // 0不跳转
@@ -712,7 +714,16 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
 
             // 1考试分类
             case 1:
-              Navigator.pushNamed(context, "/examSelect");
+              Navigator.pushNamed(
+                context,
+                "/examSelect",
+                arguments: NavDataType.fromJson(
+                  {
+                    "id": item.link,
+                    "name": "${item.name}",
+                  },
+                ),
+              );
               break;
 
             // 2课程列表
@@ -721,7 +732,7 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
                 context,
                 "/searchCourseList",
                 arguments: SearchCourseDataType(
-                  pid: int.parse("${item.link}"),
+                  pid: item.link,
                 ),
               );
               break;
@@ -741,8 +752,6 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
               this.pushNewsDetail(item, context);
               break;
           }
-
-          print("${item.toJson()}");
         },
       ),
     );

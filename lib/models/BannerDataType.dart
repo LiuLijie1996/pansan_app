@@ -11,7 +11,7 @@ class BannerDataType {
   int typeLink;
 
   ///分类id 或 列表id
-  String link;
+  int link;
 
   ///封面图
   String thumbUrl;

@@ -232,7 +232,7 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
                               context,
                               "/courseList",
                               arguments: SearchCourseDataType(
-                                searchValue: searchValue ?? '',
+                                searchValue: value,
                                 isTags: true,
                               ),
                             );

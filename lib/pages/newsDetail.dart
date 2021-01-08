@@ -150,6 +150,25 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
     }
   }
 
+  // 阅读完成
+  readAccomplish() async {
+    try {
+      await myRequest(
+        path: MyApi.newsUserScore,
+        data: {
+          "id": arguments.id,
+          "user_id": 1,
+        },
+      );
+    } catch (e) {
+      ErrorInfo(
+        errInfo: e,
+        msg: "上传进度失败",
+        path: MyApi.newsUserScore,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!isInitialize) {
@@ -395,27 +414,27 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         ),
         body: Stack(
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(dp(10.0)),
-                decoration: BoxDecoration(
-                  color: Colors.yellow,
-                ),
-                child: Text(
-                  validTime == 0
-                      ? '阅读完成'
-                      : "有效阅读时间：${validTime != null ? validTime < 10 ? '0' + validTime.toString() : validTime : ''} 秒",
-                  style: TextStyle(fontSize: dp(30.0)),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 0,
+            //   left: 0,
+            //   right: 0,
+            //   child: Container(
+            //     padding: EdgeInsets.all(dp(10.0)),
+            //     decoration: BoxDecoration(
+            //       color: Colors.yellow,
+            //     ),
+            //     child: Text(
+            //       validTime == 0
+            //           ? '阅读完成'
+            //           : "有效阅读时间：${validTime != null ? validTime < 10 ? '0' + validTime.toString() : validTime : ''} 秒",
+            //       style: TextStyle(fontSize: dp(30.0)),
+            //     ),
+            //   ),
+            // ),
 
             // 文章内容
             Container(
-              padding: EdgeInsets.only(top: dp(60.0)),
+              // padding: EdgeInsets.only(top: dp(60.0)),
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
                 child: Column(
@@ -551,25 +570,6 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
             ),
           ],
         ),
-      );
-    }
-  }
-
-  // 阅读完成
-  readAccomplish() async {
-    try {
-      await myRequest(
-        path: MyApi.newsUserScore,
-        data: {
-          "id": arguments.id,
-          "user_id": 1,
-        },
-      );
-    } catch (e) {
-      ErrorInfo(
-        errInfo: e,
-        msg: "上传进度失败",
-        path: MyApi.newsUserScore,
       );
     }
   }
