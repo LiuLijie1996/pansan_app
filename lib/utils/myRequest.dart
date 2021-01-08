@@ -38,7 +38,8 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   ///发给后台的数据
   Map<String, dynamic> query;
 
-  MyRequest({this.line = false}) {
+  MyRequest({line = false}) {
+    this.line = line;
     // 如果项目上线了，将后台地址改成线上的
     if (this.line) {
       location = "http://192.168.0.8:88/index.php/appApi";
@@ -94,8 +95,9 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
 
   /// get请求数据
   Future getData() async {
+    String path = this.line ? this.pathData.normal : this.pathData.test;
     Response response = await dio.get(
-      this.location + this.pathData.path, //拼接完整的接口
+      this.location + path, //拼接完整的接口
       queryParameters: this.query,
       options: Options(
         headers: {
@@ -118,8 +120,9 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
 
   /// post请求数据
   Future postData() async {
+    String path = this.line ? this.pathData.normal : this.pathData.test;
     Response response = await dio.post(
-      this.location + this.pathData.path, //拼接完整的接口
+      this.location + path, //拼接完整的接口
       data: this.query,
       options: Options(
         headers: {
@@ -129,7 +132,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       ),
     );
 
-    print("完整的接口：${this.location + this.pathData.path}");
+    print("完整的接口：${this.location + path}");
 
     Map data;
     if ((response.data.runtimeType).toString() == 'String') {
@@ -155,12 +158,12 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       )
     });
 
-    print("接口：${this.location + this.pathData.path}");
+    String path = this.line ? this.pathData.normal : this.pathData.test;
 
     // Map<String, dynamic> map = {'fileType': "KTP_IMG"};
     //上传结果
     Response response = await dio.post(
-      this.location + this.pathData.path, //拼接完整的接口
+      this.location + path, //拼接完整的接口
       data: formdata,
       options: Options(
         headers: {

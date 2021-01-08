@@ -1,404 +1,471 @@
 /// 接口
 class MyApi {
-  /// 最新课程、联想词；测试接口：/api/course/courseList
+  /// 最新课程、联想词；测试接口：
   static const courseList = {
-    "path": "/course/courseList",
     "method": "post",
+    "normal": "/course/courseList",
+    "test": "/api/course/courseList",
   };
 
-  /// 课程分类导航；测试接口：/api/course/getCourseItemList
+  /// 课程分类导航；测试接口：
   static const getCourseItemList = {
-    "path": "/course/getCourseItemList",
     "method": "get",
+    "normal": "/course/getCourseItemList",
+    "test": "/api/course/getCourseItemList",
   };
 
-  /// 课程详情；测试接口：/api/course/courseDetail
+  /// 课程详情；测试接口：
   static const courseDetail = {
-    "path": "/course/courseDetail",
     "method": "post",
+    "normal": "/course/courseDetail",
+    "test": "/api/course/courseDetail",
   };
 
-  /// 发送课程阅读进度给后端；测试接口：/api/course/courseProgress
+  /// 发送课程阅读进度给后端；测试接口：
   static const courseProgress = {
-    "path": "/course/courseProgress",
     "method": "post",
+    "normal": "/course/courseProgress",
+    "test": "/api/course/courseProgress",
   };
 
-  /// 最新考试；测试接口：/api/exam/newKaoshi
+  /// 最新考试；测试接口：
   static const newKaoshi = {
-    "path": "/test/newKaoshi",
     "method": "post",
+    "normal": "/test/newKaoshi",
+    "test": "/api/exam/newKaoshi",
   };
 
-  /// 我要考试分类；测试接口：/api/exam/getTestItemList
+  /// 我要考试分类；测试接口：
   static const getTestItemList = {
-    "path": "/test/getTestItemList",
     "method": "get",
+    "normal": "/test/getTestItemList",
+    "test": "/api/exam/getTestItemList",
   };
 
-  /// 我要练习分类；测试接口：/api/exam/getPracticeItemList
+  /// 我要练习分类；测试接口：
   static const getPracticeItemList = {
-    "path": "/Practice/getPracticeItemList",
     "method": "get",
+    "normal": "/Practice/getPracticeItemList",
+    "test": "/api/exam/getPracticeItemList",
   };
 
-  /// 考试考题；测试接口：/api/exam/kaoTi
+  /// 考试考题；测试接口：
   static const kaoTi = {
-    "path": "/appApi/test/kaoTi",
     "method": "post",
+    "normal": "/appApi/test/kaoTi",
+    "test": "/api/exam/kaoTi",
   };
 
-  /// 考试列表；测试接口：/api/exam/getTestList
+  /// 考试列表；测试接口：
   static const getTestList = {
-    "path": "/test/getTestList",
     "method": "post",
+    "normal": "/test/getTestList",
+    "test": "/api/exam/getTestList",
   };
 
-  /// 获取考试时间线；测试接口：/api/user/getTestList
+  /// 获取考试时间线；测试接口：
   static const examTimeLine = {
-    "path": "/user/getTestList",
     "method": "post",
+    "normal": "/user/getTestList",
+    "test": "/api/user/getTestList",
   };
 
-  /// 考试结束提交试卷；测试接口：/api/exam/saveUserTest
+  /// 考试结束提交试卷；测试接口：
   static const saveUserTest = {
-    "path": "/test/saveUserTest",
     "method": "post",
+    "normal": "/test/saveUserTest",
+    "test": "/api/exam/saveUserTest",
   };
 
-  /// 获取专项练习列表；测试接口：/api/exam/exerciseSpecialtySelect
+  /// 获取专项练习列表；测试接口：
   static const getAllQuestionItemList = {
-    "path": "/Practice/getAllQuestionItemList",
-    "method": "post"
+    "method": "post",
+    "normal": "/Practice/getAllQuestionItemList",
+    "test": "/api/exam/exerciseSpecialtySelect",
   };
 
-  /// 获取专项练习列表中的题目；测试接口：/api/exam/getQuestionList
+  /// 获取专项练习列表中的题目；测试接口：
   static const getQuestionList = {
-    "path": "/Practice/getQuestionList",
-    "method": "post"
+    "method": "post",
+    "normal": "/Practice/getQuestionList",
+    "test": "/api/exam/getQuestionList",
   };
 
-  /// 练习列表；测试接口：/api/exercise/getPracticeList
+  /// 练习列表；测试接口：
   static const getPracticeList = {
-    "path": "/Practice/getPracticeList",
-    "method": "post"
+    "method": "post",
+    "normal": "/Practice/getPracticeList",
+    "test": "/api/exercise/getPracticeList",
   };
 
-  /// 练习详情；测试接口：/api/exercise/getOnePractice
+  /// 练习详情；测试接口：
   static const getOnePractice = {
-    "path": "/Practice/getOnePractice",
-    "method": "post"
+    "method": "post",
+    "normal": "/Practice/getOnePractice",
+    "test": "/api/exercise/getOnePractice",
   };
 
-  /// 普通练习提交数据；测试接口：/api/exercise/saveUserPractice
+  /// 普通练习提交数据；测试接口：
   static const saveUserPractice = {
-    "path": "/Practice/saveUserPractice",
     "method": "post",
+    "normal": "/Practice/saveUserPractice",
+    "test": "/api/exercise/saveUserPractice",
   };
 
-  /// 轮播图；测试接口：/api/index/banner
+  /// 轮播图；测试接口：
   static const indexBanner = {
-    "path": "/index/indexBanner",
     "method": "post",
+    "normal": "/index/indexBanner",
+    "test": "/api/index/banner",
   };
 
-  /// 推荐新闻；测试接口：/api/news/getIndexNewsList
+  /// 推荐新闻；测试接口：
   static const getIndexNewsList = {
-    "path": "/news/getIndexNewsList",
     "method": "post",
+    "normal": "/news/getIndexNewsList",
+    "test": "/api/news/getIndexNewsList",
   };
 
-  /// 新闻导航；测试接口：/api/news/getNewsItemList
+  /// 新闻导航；测试接口：
   static const getNewsItemList = {
-    "path": "/news/getNewsItemList",
     "method": "get",
+    "normal": "/news/getNewsItemList",
+    "test": "/api/news/getNewsItemList",
   };
 
-  /// 通过导航获取新闻；测试接口：/api/news/newsList
+  /// 通过导航获取新闻；测试接口：
   static const newsList = {
-    "path": "/news/newsList",
     "method": "post",
+    "normal": "/news/newsList",
+    "test": "/api/news/newsList",
   };
 
-  /// 新闻详情；测试接口：/api/news/getNewsOne
+  /// 新闻详情；测试接口：
   static const getNewsOne = {
-    "path": "/news/getNewsOne",
     "method": "post",
+    "normal": "/news/getNewsOne",
+    "test": "/api/news/getNewsOne",
   };
 
-  /// 新闻阅读完成；测试接口：/api/news/newsUserScore
+  /// 新闻阅读完成；测试接口：
   static const newsUserScore = {
-    "path": "/news/newsUserScore",
     "method": "post",
+    "normal": "/news/newsUserScore",
+    "test": "/api/news/newsUserScore",
   };
 
-  /// 新闻点赞；测试接口：/api/news/saveUserUpvote
+  /// 新闻点赞；测试接口：
   static const saveUserUpvote = {
-    "path": "/news/saveUserUpvote",
     "method": "post",
+    "normal": "/news/saveUserUpvote",
+    "test": "/api/news/saveUserUpvote",
   };
 
-  /// 积分明细；测试接口：/api/score/getUserScoreList
+  /// 积分明细；测试接口：
   static const getUserScoreList = {
-    "path": "/user/getUserScoreList",
     "method": "post",
+    "normal": "/user/getUserScoreList",
+    "test": "/api/score/getUserScoreList",
   };
 
-  /// 积分规则；测试接口：/api/score/getScoreRule
+  /// 积分规则；测试接口：
   static const getScoreRule = {
-    "path": "/score/getScoreRule",
     "method": "post",
+    "normal": "/score/getScoreRule",
+    "test": "/api/score/getScoreRule",
   };
 
-  /// 积分商品；测试接口：/api/score/goodsList
+  /// 积分商品；测试接口：
   static const goodsList = {
-    "path": "/score/goodsList",
     "method": "post",
+    "normal": "/score/goodsList",
+    "test": "/api/score/goodsList",
   };
 
-  /// 兑换记录；测试接口：/api/score/getUserScoreExchange
+  /// 兑换记录；测试接口：
   static const getUserScoreExchange = {
-    "path": "/user/getUserScoreExchange",
     "method": "post",
+    "normal": "/user/getUserScoreExchange",
+    "test": "/api/score/getUserScoreExchange",
   };
 
-  /// 兑换商品；测试接口：/api/score/userExchangeScore
+  /// 兑换商品；测试接口：
   static const userExchangeScore = {
-    "path": "/score/userExchangeScore",
     "method": "post",
+    "normal": "/score/userExchangeScore",
+    "test": "/api/score/userExchangeScore",
   };
 
-  /// 关键词；测试接口：/api/search/antistop
+  /// 关键词；测试接口：
   static const getCourseTags = {
-    "path": "/course/getCourseTags",
     "method": "get",
+    "normal": "/course/getCourseTags",
+    "test": "/api/search/antistop",
   };
 
-  /// 用户一日一题列表；测试接口：/api/user/getTodayUserStudy
+  /// 用户一日一题列表；测试接口：
   static const getTodayUserStudy = {
-    "path": "/user/getTodayUserStudy",
     "method": "post",
+    "normal": "/user/getTodayUserStudy",
+    "test": "/api/user/getTodayUserStudy",
   };
 
-  /// 职工服务；测试接口：/api/user/getUserServiceList
+  /// 职工服务；测试接口：
   static const getUserServiceList = {
-    "path": "/user/getUserServiceList",
     "method": "post",
+    "normal": "/user/getUserServiceList",
+    "test": "/api/user/getUserServiceList",
   };
 
-  /// 添加咨询；测试接口：/api/user/addUserService
+  /// 添加咨询；测试接口：
   static const addUserService = {
-    "path": "/user/addUserService",
     "method": "post",
+    "normal": "/user/addUserService",
+    "test": "/api/user/addUserService",
   };
 
-  /// 获取咨询详情；测试接口：/api/user/getUserServiceReply
+  /// 获取咨询详情；测试接口：
   static const getUserServiceReply = {
-    "path": "/user/getUserServiceReply",
     "method": "post",
+    "normal": "/user/getUserServiceReply",
+    "test": "/api/user/getUserServiceReply",
   };
 
-  /// 获取我的班级；测试接口：/api/user/getUserClass
+  /// 获取我的班级；测试接口：
   static const getUserClass = {
-    "path": "/user/getUserClass",
     "method": "post",
+    "normal": "/user/getUserClass",
+    "test": "/api/user/getUserClass",
   };
 
-  /// 获取考勤记录；测试接口：/api/user/getAttendDetail
+  /// 获取考勤记录；测试接口：
   static const getAttendDetail = {
-    "path": "/user/getAttendDetail",
     "method": "post",
+    "normal": "/user/getAttendDetail",
+    "test": "/api/user/getAttendDetail",
   };
 
-  /// 获取课程计划；测试接口：/api/user/getTimeTableList
+  /// 获取课程计划；测试接口：
   static const getTimeTableList = {
-    "path": "/user/getTimeTableList",
     "method": "post",
+    "normal": "/user/getTimeTableList",
+    "test": "/api/user/getTimeTableList",
   };
 
-  /// 获取考试排行；测试接口：/api/user/testRankList
+  /// 获取考试排行；测试接口：
   static const testRankList = {
-    "path": "/user/testRankList",
     "method": "post",
+    "normal": "/user/testRankList",
+    "test": "/api/user/testRankList",
   };
 
-  /// 通知公告；测试接口：/api/user/getUserMessage
+  /// 通知公告；测试接口：
   static const getUserMessage = {
-    "path": "/user/getUserMessage",
     "method": "post",
+    "normal": "/user/getUserMessage",
+    "test": "/api/user/getUserMessage",
   };
 
-  /// 登录；测试接口：/api/login/login
+  /// 登录；测试接口：
   static const login = {
-    "path": "/login/login",
     "method": "post",
+    "normal": "/login/login",
+    "test": "/api/login/login",
   };
 
-  /// 收藏的新闻；测试接口：/api/news/getNewsCollect
+  /// 收藏的新闻；测试接口：
   static const getNewsCollect = {
-    "path": "/news/getNewsCollect",
     "method": "post",
+    "normal": "/news/getNewsCollect",
+    "test": "/api/news/getNewsCollect",
   };
 
-  /// 我的课程；测试接口：/api/user/getUserCourseList
+  /// 我的课程；测试接口：
   static const getUserCourseList = {
-    "path": "/user/getUserCourseList",
     "method": "post",
+    "normal": "/user/getUserCourseList",
+    "test": "/api/user/getUserCourseList",
   };
 
   /// 上传图片
   static const upload = {
-    "path": "/upload/uploadImg",
     "method": "upload",
+    "normal": "/upload/uploadImg",
+    "test": "/upload/uploadImg",
   };
 
-  /// 我的错题；测试接口：/api/user/getUserErrQuestion
+  /// 我的错题；测试接口：
   static const getUserErrQuestion = {
-    "path": "/user/getUserErrQuestion",
     "method": "post",
+    "normal": "/user/getUserErrQuestion",
+    "test": "/api/user/getUserErrQuestion",
   };
 
-  /// 获取收藏的试题；测试接口：/api/user/getQuestionCollect
+  /// 获取收藏的试题；测试接口：
   static const getQuestionCollect = {
-    "path": "/user/getQuestionCollect",
     "method": "post",
+    "normal": "/user/getQuestionCollect",
+    "test": "/api/user/getQuestionCollect",
   };
 
-  /// 考试记录；测试接口：/api/user/getUserTestRecordList
+  /// 考试记录；测试接口：
   static const getUserTestRecordList = {
-    "path": "/user/getUserTestRecordList",
     "method": "post",
+    "normal": "/user/getUserTestRecordList",
+    "test": "/api/user/getUserTestRecordList",
   };
 
-  /// 考试记录对应的考题；测试接口：/api/user/getUserTestAnswerList
+  /// 考试记录对应的考题；测试接口：
   static const getUserTestAnswerList = {
-    "path": "/user/getUserTestAnswerList",
     "method": "post",
+    "normal": "/user/getUserTestAnswerList",
+    "test": "/api/user/getUserTestAnswerList",
   };
 
-  /// 一日一题详情；测试接口：/api/user/getOneTodayStudy
+  /// 一日一题详情；测试接口：
   static const getOneTodayStudy = {
-    "path": "/user/getOneTodayStudy",
     "method": "post",
+    "normal": "/user/getOneTodayStudy",
+    "test": "/api/user/getOneTodayStudy",
   };
 
-  /// 一日一题阅读完成；测试接口：/api/user/saveTodayStudy
+  /// 一日一题阅读完成；测试接口：
   static const saveTodayStudy = {
-    "path": "/user/saveTodayStudy",
     "method": "post",
+    "normal": "/user/saveTodayStudy",
+    "test": "/api/user/saveTodayStudy",
   };
 
-  /// 获取证书详情；测试接口：/api/user/getUserCert
+  /// 获取证书详情；测试接口：
   static const getUserCert = {
-    "path": "/user/getUserCert",
     "method": "post",
+    "normal": "/user/getUserCert",
+    "test": "/api/user/getUserCert",
   };
 
-  /// 发送已读通知公告；测试接口：/api/user/saveUserMessage
+  /// 发送已读通知公告；测试接口：
   static const saveUserMessage = {
-    "path": "/user/saveUserMessage",
     "method": "post",
+    "normal": "/user/saveUserMessage",
+    "test": "/api/user/saveUserMessage",
   };
 
-  /// 公告详情；测试接口：/api/user/getOneMessage
+  /// 公告详情；测试接口：
   static const getOneMessage = {
-    "path": "/user/getOneMessage",
     "method": "post",
+    "normal": "/user/getOneMessage",
+    "test": "/api/user/getOneMessage",
   };
 
-  /// 应用报错时发送数据给后台；测试接口：/api/error
+  /// 应用报错时发送数据给后台；测试接口：
   static const error = {
-    "path": "/base/saveErrorLog",
     "method": "post",
+    "normal": "/base/saveErrorLog",
+    "test": "/api/error",
   };
 
   /// 修改用户信息
   static const editUser = {
-    "path": "/user/editUser",
     "method": "post",
+    "normal": "/user/editUser",
+    "test": "/user/editUser",
   };
 
-  /// 修改用户信息；测试接口：/api/exam/saveeErrorCorrection
+  /// 修改用户信息；测试接口：
   static const saveeErrorCorrection = {
-    "path": "/user/saveeErrorCorrection",
     "method": "post",
+    "normal": "/user/saveeErrorCorrection",
+    "test": "/api/exam/saveeErrorCorrection",
   };
 
-  /// 完成情况；测试接口：/api/course/courseSituation
+  /// 完成情况；测试接口：
   static const courseSituation = {
-    "path": "/course/courseSituation",
     "method": "post",
+    "normal": "/course/courseSituation",
+    "test": "/api/course/courseSituation",
   };
 
-  /// 收藏题目；测试接口：/api/exam/addQuestionCollect
+  /// 收藏题目；测试接口：
   static const addQuestionCollect = {
-    "path": "/user/addQuestionCollect",
     "method": "post",
+    "normal": "/user/addQuestionCollect",
+    "test": "/api/exam/addQuestionCollect",
   };
 
-  /// 收藏新闻；测试接口：/api/news/addNewsCollect
+  /// 收藏新闻；测试接口：
   static const addNewsCollect = {
-    "path": "/news/addNewsCollect",
     "method": "post",
+    "normal": "/news/addNewsCollect",
+    "test": "/api/news/addNewsCollect",
   };
 
-  /// 扫码加入班级；测试接口：/api/user/userAddClass
+  /// 扫码加入班级；测试接口：
   static const userAddClass = {
-    "path": "/user/userAddClass",
     "method": "post",
+    "normal": "/user/userAddClass",
+    "test": "/api/user/userAddClass",
   };
 
-  /// 真正的加入班级请求；测试接口：/api/user/addClass
+  /// 真正的加入班级请求；测试接口：
   static const addClass = {
-    "path": "/user/userAddClass",
     "method": "post",
+    "normal": "/user/userAddClass",
+    "test": "/api/user/addClass",
   };
 
-  /// 签到；测试接口：/api/user/signClass
+  /// 签到；测试接口：
   static const signClass = {
-    "path": "/user/signClass",
     "method": "post",
+    "normal": "/user/signClass",
+    "test": "/api/user/signClass",
   };
 
-  /// 获取用户总积分；测试接口：/api/user/getuserScoreTotal
+  /// 获取用户总积分；测试接口：
   static const getuserScoreTotal = {
-    "path": "/user/getuserScoreTotal",
     "method": "post",
+    "normal": "/user/getuserScoreTotal",
+    "test": "/api/user/getuserScoreTotal",
   };
 
-  /// 修改密码；测试接口：/api/user/editPassWord
+  /// 修改密码；测试接口：
   static const editPassWord = {
-    "path": "/user/editPassWord",
     "method": "post",
+    "normal": "/user/editPassWord",
+    "test": "/api/user/editPassWord",
   };
 
-  /// 检查更新；测试接口：/api/index/version
+  /// 检查更新；测试接口：
   static const version = {
-    "path": "/login/version",
     "method": "post",
+    "normal": "/login/version",
+    "test": "/api/index/version",
   };
 
   /// 获取验证码
   static const loginCode = {
-    "path": "/login/code",
     "method": "post",
+    "normal": "/login/code",
+    "test": "/login/code",
   };
 
   /// 注册
   static const register = {
-    "path": "/login/register",
     "method": "post",
+    "normal": "/login/register",
+    "test": "/login/register",
   };
 
   /// 忘记密码
   static const resetPassWord = {
-    "path": "/login/resetPassWord",
     "method": "post",
+    "normal": "/login/resetPassWord",
+    "test": "/login/resetPassWord",
   };
 
   /// 下载文件
   static const downloadFile = {
-    "path": null,
     "method": "download",
+    "normal": null,
+    "test": null,
   };
 }

@@ -286,7 +286,7 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                         is_play: true,
                         // 刷新页面的回调
                         setStateCallball: () {
-                          Future.delayed(Duration(milliseconds: 500))
+                          Future.delayed(Duration(milliseconds: 1000))
                               .then((value) {
                             // 刷新页面
                             setState(() {});
@@ -534,10 +534,10 @@ class _CourseDetailState extends State<CourseDetail> with MyScreenUtil {
                                         ),
                                       ),
                                       trailing: Container(
-                                        width: dp(210.0),
+                                        width: dp(220.0),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             // 学习
                                             InkWell(
