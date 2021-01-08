@@ -22,6 +22,7 @@ import '../models/BannerDataType.dart';
 import '../models/ExamListDataType.dart';
 import '../models/NewsDataType.dart';
 import '../models/CourseDataType.dart';
+import '../models/SearchCourseDataType.dart';
 
 // 首页页面
 class Index extends StatelessWidget with MyScreenUtil {
@@ -442,7 +443,19 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
       List data = result['data'];
 
       bannerList = data.map((e) {
-        return BannerDataType.fromJson(e);
+        return BannerDataType.fromJson({
+          "id": e['id'],
+          "name": e['name'],
+          "position": e['position'],
+          "type_link": e['type_link'],
+          "link": e['link'],
+          "thumb_url": e['thumb_url'],
+          "addtime": e['addtime'],
+          "status": e['status'],
+          "sorts": e['sorts'],
+          "link_name": e['link_name'],
+          "news_type": e['news_type'],
+        });
       }).toList();
 
       if (this.mounted) {
@@ -652,7 +665,7 @@ class _IndexPageState extends State<IndexPage> with MyScreenUtil {
   }
 }
 
-// 轮播图
+/// 轮播图
 class MyBanner extends StatelessWidget with MyScreenUtil {
   final List<BannerDataType> dataList;
   const MyBanner({Key key, @required this.dataList}) : super(key: key);
@@ -689,15 +702,97 @@ class MyBanner extends StatelessWidget with MyScreenUtil {
         // control: new SwiperControl(),
         scrollDirection: Axis.horizontal,
         autoplay: true,
-        onTap: (int index) {
-          print("$index");
+        onTap: (int index) async {
+          BannerDataType item = dataList[index];
+
+          switch (item.typeLink) {
+            // 0不跳转
+            case 0:
+              break;
+
+            // 1考试分类
+            case 1:
+              Navigator.pushNamed(context, "/examSelect");
+              break;
+
+            // 2课程列表
+            case 2:
+              Navigator.pushNamed(
+                context,
+                "/searchCourseList",
+                arguments: SearchCourseDataType(
+                  pid: int.parse("${item.link}"),
+                ),
+              );
+              break;
+
+            // 3练习分类
+            case 3:
+              Navigator.pushNamed(context, "/exerciseSelect");
+              break;
+
+            // 4考试列表
+            case 4:
+              Navigator.pushNamed(context, "/examSelect");
+              break;
+
+            // 5跳转到新闻详情
+            case 5:
+              this.pushNewsDetail(item, context);
+              break;
+          }
+
+          print("${item.toJson()}");
         },
       ),
     );
   }
+
+  // 跳转到新闻详情
+  pushNewsDetail(BannerDataType item, BuildContext context) async {
+    try {
+      var result = await myRequest(
+        path: MyApi.getNewsOne,
+        data: {
+          "id": item.link,
+        },
+      );
+      var data = result['data'];
+
+      Navigator.pushNamed(
+        context,
+        "/newsDetail",
+        arguments: NewsDataType.fromJson({
+          "id": data['id'],
+          "pid": data['pid'],
+          "title": data['title'],
+          "desc": data['desc'],
+          "thumb_url": data['thumb_url'],
+          "type": data['type'],
+          "materia_id": data['materia_id'],
+          "content": data['content'],
+          "tuij": data['tuij'],
+          "addtime": data['addtime'],
+          "view_num": data['view_num'],
+          "upvote": data['upvote'],
+          "materia": data['materia'],
+          "newsImgText": data['newsImgText'],
+          "newsVideo": data['newsVideo'],
+          "collect": data['collect'],
+          "news_content": data['news_content'],
+        }),
+      );
+    } catch (e) {
+      ErrorInfo(
+        msg: "获取新闻详情失败",
+        errInfo: "$e",
+        path: MyApi.getNewsOne,
+      );
+    }
+  }
 }
 
-// 快捷导航
+/// 快捷导航
 class FastNavList extends StatelessWidget with MyScreenUtil {
   ///未读的通知公告数量
   final int unreadNum;
@@ -820,7 +915,7 @@ class FastNavList extends StatelessWidget with MyScreenUtil {
   }
 }
 
-// 最新考试
+/// 最新考试
 class NewsExam extends StatelessWidget with MyScreenUtil {
   final List<ExamListDataType> dataList;
   const NewsExam({Key key, @required this.dataList}) : super(key: key);

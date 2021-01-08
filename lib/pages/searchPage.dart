@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
+import '../models/SearchCourseDataType.dart';
 import '../utils/ErrorInfo.dart';
 
 class SearchPage extends StatefulWidget {
@@ -66,6 +67,14 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
   // 获取联想词
   getAssociate() async {
     try {
+      if (searchValue == '') {
+        if (this.mounted) {
+          setState(() {
+            associateList = [];
+          });
+        }
+        return;
+      }
       var result = await myRequest(
         path: MyApi.courseList,
         data: {
@@ -114,9 +123,13 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
   // 搜索课程
   searchCourse() {
     // 搜索课程
-    Navigator.pushNamed(context, "/courseList", arguments: {
-      "searchValue": searchValue ?? '',
-    });
+    Navigator.pushNamed(
+      context,
+      "/courseList",
+      arguments: SearchCourseDataType(
+        searchValue: searchValue ?? '',
+      ),
+    );
   }
 
   @override
@@ -166,7 +179,9 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
               Navigator.pushNamed(
                 context,
                 "/courseList",
-                arguments: {"searchValue": searchValue},
+                arguments: SearchCourseDataType(
+                  searchValue: searchValue ?? '',
+                ),
               );
 
               _inputController.text = ''; //清空输入框内容
@@ -216,7 +231,10 @@ class _SearchPageState extends State<SearchPage> with MyScreenUtil {
                             Navigator.pushNamed(
                               context,
                               "/courseList",
-                              arguments: {"searchValue": value, "isTags": true},
+                              arguments: SearchCourseDataType(
+                                searchValue: searchValue ?? '',
+                                isTags: true,
+                              ),
                             );
                           },
                         ),

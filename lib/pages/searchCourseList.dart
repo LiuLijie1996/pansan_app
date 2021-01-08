@@ -11,9 +11,10 @@ import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../models/CourseDataType.dart';
 import '../utils/ErrorInfo.dart';
+import '../models/SearchCourseDataType.dart';
 
 class SearchCourseList extends StatefulWidget {
-  final arguments;
+  final SearchCourseDataType arguments;
   SearchCourseList({Key key, this.arguments}) : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
   int _currentMyWidget = 0;
   List myWidget = [MyProgress(), EmptyBox()];
 
-  Map arguments;
+  SearchCourseDataType arguments;
   Map courseListData = {
     "page": 1,
     "psize": 20,
@@ -66,8 +67,9 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
       var result = await myRequest(
         path: MyApi.courseList,
         data: {
-          "searchValue": arguments['searchValue'],
-          "isTags": arguments['isTags'],
+          "searchValue": arguments.searchValue,
+          "isTags": arguments.isTags,
+          "pid": arguments.pid,
           "page": page,
           "psize": 20,
           "user_id": true,
@@ -134,6 +136,7 @@ class _SearchCourseListState extends State<SearchCourseList> with MyScreenUtil {
     return Scaffold(
       appBar: AppBar(
         title: Text("课程列表"),
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: () {
