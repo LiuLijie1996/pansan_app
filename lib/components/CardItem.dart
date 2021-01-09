@@ -35,7 +35,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
 
     if (item.imgList != null && item.imgList.length > 1) {
       ///图片列表
-      List imgList;
+      List imgList = [];
 
       for (var i = 0; i < item.imgList.length; i++) {
         if (i < 3) {
