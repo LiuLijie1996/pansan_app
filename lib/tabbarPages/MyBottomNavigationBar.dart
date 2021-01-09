@@ -272,7 +272,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>
           _preTime = DateTime.now();
 
           Fluttertoast.showToast(
-            msg: "你今天真好看",
+            msg: "再按一次退出应用",
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,

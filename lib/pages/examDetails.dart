@@ -126,7 +126,8 @@ class _ExamDetailsState extends State<ExamDetails>
       //震动
       vibrate(count: 2);
 
-      _showLeaveNumAlert("你的切屏次数还剩：${examSiteInfo.cutScreenNum - _appCount} 次");
+      int count = examSiteInfo.cutScreenNum - _appCount - 1;
+      _showLeaveNumAlert("你的切屏次数还剩：$count 次");
 
       if (_appTime >= examSiteInfo.cutScreenTime) {
         // 弹出提示
