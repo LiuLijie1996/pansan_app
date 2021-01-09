@@ -172,7 +172,6 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
     return GestureDetector(
       onTap: () {
         // onClick();
-
         Navigator.pushNamed(context, "/newsDetail", arguments: item);
       },
       child: AspectRatio(
