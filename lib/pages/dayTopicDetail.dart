@@ -87,6 +87,7 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
         data: {
           "user_id": true,
           "id": widget.arguments.id,
+          "study_time": widget.arguments.studyTime,
         },
       );
     } catch (e) {
@@ -112,8 +113,6 @@ class _DayTopicDetailState extends State<DayTopicDetail> with MyScreenUtil {
       studyTime,
       [yyyy, '年', mm, '月', dd, "日"],
     );
-
-    print(fontSize);
 
     return Scaffold(
       key: _scaffoldKey,

@@ -54,6 +54,7 @@ class _MyInformationState extends State<MyInformation>
 
       // 获取后台返回的图片地址
       var photo = result['data']['link'];
+      print("获取后台返回的图片地址：$photo");
 
       // 修改本地数据库的用户信息
       user.headUrl = photo;

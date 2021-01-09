@@ -260,11 +260,19 @@ class _ExerciseDetailsState extends State<ExerciseDetails> with MyScreenUtil {
                     ],
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     bool userFavor = dataList[_currentIndex].userFavor;
                     dataList[_currentIndex].userFavor = !userFavor;
                   });
+                  // 发送收藏请求
+                  await myRequest(
+                    path: MyApi.addQuestionCollect,
+                    data: {
+                      "id": dataList[_currentIndex].id,
+                      "user_id": true,
+                    },
+                  );
                 },
               ),
               // 交卷按钮

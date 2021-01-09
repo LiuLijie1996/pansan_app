@@ -42,7 +42,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     this.line = line;
     // 如果项目上线了，将后台地址改成线上的
     if (this.line) {
-      location = "http://pansan.fangda.net.cn/index.php/appApi";
+      location = "http://pansan_api.fangda.net.cn/index.php/appapi";
     }
   }
 
@@ -121,6 +121,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   /// post请求数据
   Future postData() async {
     String path = this.line ? this.pathData.normal : this.pathData.test;
+    print("post请求数据: ${this.location + path}");
     Response response = await dio.post(
       this.location + path, //拼接完整的接口
       data: this.query,
