@@ -4,8 +4,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:vibrate/vibrate.dart';
+
 import '../utils/ErrorInfo.dart';
 import '../components/MyIcon.dart';
 import '../components/MyProgress.dart';
@@ -50,6 +53,9 @@ class _ExamDetailsState extends State<ExamDetails>
   ///最小考试时间
   int minDuration;
 
+  ///初始化是否完成
+  bool isInitialize = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,15 +74,18 @@ class _ExamDetailsState extends State<ExamDetails>
 
     // 考试计时
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      expend_time++;
-      minDuration--;
+      // 判断初始化是否完成
+      if (isInitialize) {
+        expend_time++;
+        minDuration--;
 
-      // 判断考试是否结束了
-      if (expend_time >= examSiteInfo.duration) {
-        // 考试结束 跳转到考试结束页面
-        toExamOverPage();
-      } else {
-        setState(() {});
+        // 判断考试是否结束了
+        if (expend_time >= examSiteInfo.duration) {
+          // 考试结束 跳转到考试结束页面
+          toExamOverPage();
+        } else {
+          setState(() {});
+        }
       }
     });
   }
@@ -86,7 +95,7 @@ class _ExamDetailsState extends State<ExamDetails>
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.paused) {
-      // APP进入后台，
+      // APP进入后台
 
       // 判断切屏次数
       _appCount++;
@@ -113,6 +122,12 @@ class _ExamDetailsState extends State<ExamDetails>
     } else if (state == AppLifecycleState.resumed) {
       // APP进入前台
       print('APP进入前台 ${examSiteInfo.cutScreenTime}');
+
+      //震动
+      vibrate(count: 2);
+
+      _showLeaveNumAlert("你的切屏次数还剩：${examSiteInfo.cutScreenNum - _appCount} 次");
+
       if (_appTime >= examSiteInfo.cutScreenTime) {
         // 弹出提示
         fn() async {
@@ -192,6 +207,7 @@ class _ExamDetailsState extends State<ExamDetails>
       }).toList();
 
       if (this.mounted) {
+        isInitialize = true;
         setState(() {});
       }
     } catch (e) {
@@ -203,9 +219,30 @@ class _ExamDetailsState extends State<ExamDetails>
     }
   }
 
+  ///震动
+  vibrate({
+    ///震动几次，最少1次
+    int count,
+
+    ///间隔时间（毫秒）
+    time = 200,
+  }) {
+    // 震动
+    HapticFeedback.vibrate();
+
+    if (count > 1) {
+      for (var i = 0; i < count - 1; i++) {
+        Future.delayed(Duration(milliseconds: time)).then((value) {
+          // 震动
+          HapticFeedback.vibrate();
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (dataList.length == 0) {
+    if (!isInitialize) {
       return Scaffold(
         body: MyProgress(),
       );

@@ -34,6 +34,15 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
     );
 
     if (item.imgList != null && item.imgList.length > 1) {
+      ///图片列表
+      List imgList;
+
+      for (var i = 0; i < item.imgList.length; i++) {
+        if (i < 3) {
+          imgList.add(item.imgList[i]);
+        }
+      }
+
       // 多图新闻
       return GestureDetector(
         onTap: () {
@@ -82,8 +91,8 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                 padding: EdgeInsets.only(
                     left: dp(20.0), right: dp(20.0), top: dp(20.0)),
                 child: Row(
-                  children: item.imgList.map((e) {
-                    int index = item.imgList.indexOf(e);
+                  children: imgList.map((e) {
+                    int index = imgList.indexOf(e);
                     double left = index != 0 ? dp(2.0) : 0.0;
                     return Expanded(
                       flex: 1,

@@ -52,7 +52,7 @@ class MyApi {
   /// 考试考题；测试接口：
   static const kaoTi = {
     "method": "post",
-    "normal": "/appApi/test/kaoTi",
+    "normal": "/test/kaoTi",
     "test": "/api/exam/kaoTi",
   };
 
