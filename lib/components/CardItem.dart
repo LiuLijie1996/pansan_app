@@ -79,31 +79,31 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
               Container(
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: dp(20.0)),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: item.imgList.map((e) {
-                      int index = item.imgList.indexOf(e);
-                      double right =
-                          item.imgList.length - 1 == index ? dp(20.0) : 0.0;
-                      return Container(
-                        width: dp(250.0),
-                        height: dp(150.0),
-                        margin: EdgeInsets.only(
-                          left: dp(20.0),
-                          right: right,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(dp(10.0)),
-                          child: Image.network(
-                            e,
-                            fit: BoxFit.cover,
+                padding: EdgeInsets.only(
+                    left: dp(20.0), right: dp(20.0), top: dp(20.0)),
+                child: Row(
+                  children: item.imgList.map((e) {
+                    int index = item.imgList.indexOf(e);
+                    double left = index != 0 ? dp(2.0) : 0.0;
+                    return Expanded(
+                      flex: 1,
+                      child: AspectRatio(
+                        aspectRatio: 16 / 10,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            left: left,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(dp(10.0)),
+                            child: Image.network(
+                              e,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
 
@@ -137,7 +137,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                     Row(
                       children: [
                         Icon(
-                          Icons.favorite_outline,
+                          aliIconfont.zan,
                           size: dp(36.0),
                           color: Colors.grey,
                         ),
@@ -160,8 +160,6 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
     }
 
     // 单图新闻
-
-    // GestureDetector
     return GestureDetector(
       onTap: () {
         // onClick();
@@ -187,7 +185,7 @@ class NewsCardItem extends StatelessWidget with MyScreenUtil {
                 item.thumbUrl != ''
                     ? Container(
                         child: AspectRatio(
-                          aspectRatio: 16 / 9.5,
+                          aspectRatio: 16 / 10,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(dp(10.0)),
                             child: Image.network(
@@ -342,7 +340,7 @@ class CourseCardItem extends StatelessWidget with MyScreenUtil {
                 item.thumbUrl != ''
                     ? Container(
                         child: AspectRatio(
-                          aspectRatio: 16 / 9.5,
+                          aspectRatio: 16 / 10,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(dp(10.0)),
                             child: Image.network(

@@ -32,6 +32,9 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   ///是否上线
   bool line;
 
+  ///请求头
+  Map<String, dynamic> headers;
+
   ///接口
   ApiDataType pathData;
 
@@ -63,14 +66,25 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     // 获取用户信息
     this.user = await this.userInfo();
 
-    // 应用信息
+    // 获取应用信息
     this.appInfo = await this.getAppInfo();
 
-    // 接口
+    // 设置接口数据类型
     this.pathData = ApiDataType.fromJson(path);
+
+    // 设置请求头
+    this.headers = {
+      "token": this.user != null ? this.user.token : null,
+      "versionCode": this.appInfo.buildNumber,
+    };
 
     // 设置发给后台的数据
     this.setSendData(data);
+
+    print("1、请求头：${this.headers}");
+    print("2、设置传给后台的数据：${this.query}");
+    String url = this.line ? this.pathData.normal : this.pathData.test;
+    print("3、完整的接口：${this.location + url}");
 
     // 请求数据
     Map result;
@@ -100,10 +114,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       this.location + path, //拼接完整的接口
       queryParameters: this.query,
       options: Options(
-        headers: {
-          "token": this.user != null ? this.user.token : null,
-          "versionCode": this.appInfo.buildNumber,
-        },
+        headers: this.headers,
       ),
     );
 
@@ -121,19 +132,13 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
   /// post请求数据
   Future postData() async {
     String path = this.line ? this.pathData.normal : this.pathData.test;
-    print("post请求数据: ${this.location + path}");
     Response response = await dio.post(
       this.location + path, //拼接完整的接口
       data: this.query,
       options: Options(
-        headers: {
-          "token": this.user != null ? this.user.token : null,
-          "versionCode": this.appInfo.buildNumber,
-        },
+        headers: this.headers,
       ),
     );
-
-    print("完整的接口：${this.location + path}");
 
     Map data;
     if ((response.data.runtimeType).toString() == 'String') {
@@ -167,9 +172,7 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       this.location + path, //拼接完整的接口
       data: formdata,
       options: Options(
-        headers: {
-          "token": this.user != null ? this.user.token : null,
-        },
+        headers: this.headers,
       ),
       // queryParameters: map,
       onSendProgress: (int count, int total) {
@@ -193,9 +196,6 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
       // 获取权限
       await isGrantedFn();
 
-      // //获取文档地址
-      // String dir = (await getApplicationDocumentsDirectory()).path;
-
       String dir;
       if (Theme.of(context).platform == TargetPlatform.android) {
         //获取android文档地址
@@ -205,14 +205,12 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
         dir = (await getApplicationDocumentsDirectory()).path;
       }
 
-      print("获取文档地址  $dir");
-      print("文件Url  $fileUrl");
-
       List fileSplit = fileUrl.split("/");
       // 获取文件名称
       String fileName = fileSplit[fileSplit.length - 1];
       //拼接保存路径
       File file = File("$dir/$fileName");
+      print("文件Url  $fileUrl");
       print("保存路径：${file.path}");
 
       // 保存路径
@@ -250,7 +248,6 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
             }
           },
         );
-        print("下载完成状态码：${response.statusCode}");
       } catch (e) {
         Fluttertoast.showToast(
           msg: "文件权限过高,下载失败",
@@ -277,13 +274,12 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
     }
   }
 
-  // 设置传给后台的数据
+  /// 设置传给后台的数据
+  /// token：pansan
+  /// t：时间戳
+  /// nonce（随机6位字符串）：ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678
+  /// sign（大写md5）： t + nonce + token
   Map<String, dynamic> setSendData(Map<String, dynamic> value) {
-    // token：pansan
-    // t：时间戳
-    // nonce（随机6位字符串）：ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678
-    // sign（大写md5）： t + nonce + token
-
     var str = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
     var maxLen = str.length;
 
@@ -324,8 +320,6 @@ class MyRequest extends UserInfoMixin with LoadWidget, AppInfoMixin {
         "sign": sign,
       };
     }
-
-    print("设置传给后台的数据：${this.query}");
 
     return this.query;
   }

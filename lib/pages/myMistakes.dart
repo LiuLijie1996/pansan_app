@@ -201,11 +201,19 @@ class _MyMistakesState extends State<MyMistakes> with MyScreenUtil {
                   ],
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   bool userFavor = myMistakesList[_currentIndex].userFavor;
                   myMistakesList[_currentIndex].userFavor = !userFavor;
                 });
+                // 发送收藏请求
+                await myRequest(
+                  path: MyApi.addQuestionCollect,
+                  data: {
+                    "id": myMistakesList[_currentIndex].id,
+                    "user_id": true,
+                  },
+                );
               },
             ),
             // 答题卡

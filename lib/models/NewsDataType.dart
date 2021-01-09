@@ -42,6 +42,9 @@ class NewsDataType {
   ///点赞个数
   int upvote;
 
+  ///是否点赞
+  bool upvoteFlag;
+
   ///视频链接
   Object materia;
 
@@ -68,6 +71,7 @@ class NewsDataType {
       this.addtime,
       this.viewNum,
       this.upvote,
+      this.upvoteFlag,
       this.materia,
       this.newsImgText,
       this.newsVideo,
@@ -89,6 +93,7 @@ class NewsDataType {
       addtime = json['addtime'];
       viewNum = json['view_num'];
       upvote = json['upvote'];
+      upvoteFlag = json['upvoteFlag'];
       materia = json['materia'];
       newsImgText = json['newsImgText'];
       newsVideo = json['newsVideo'];
@@ -114,6 +119,7 @@ class NewsDataType {
     data['addtime'] = this.addtime;
     data['view_num'] = this.viewNum;
     data['upvote'] = this.upvote;
+    data['upvoteFlag'] = this.upvoteFlag;
     data['materia'] = this.materia;
     data['newsImgText'] = this.newsImgText;
     data['newsVideo'] = this.newsVideo;

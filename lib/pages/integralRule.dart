@@ -1,10 +1,15 @@
 // 积分规则
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+
 import '../utils/myRequest.dart';
 import '../models/IntegralRuleDataType.dart';
 import '../mixins/mixins.dart';
 import '../utils/ErrorInfo.dart';
+import "../components/MyIcon.dart";
+import '../components/MyProgress.dart';
 
 class IntegralRule extends StatefulWidget {
   IntegralRule({Key key}) : super(key: key);
@@ -14,7 +19,15 @@ class IntegralRule extends StatefulWidget {
 }
 
 class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
-  List<IntegralRuleDataType> integralRuleDataList = [];
+  IntegralRuleDataType integralRuleDataList;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  int fontSize = 120;
+  List fontSizeList = [120, 80, 100, 140, 160, 180, 200];
+  List titleList = ["默认字体", '超小字体', '小字体', '中等字体', '大字体', '大号字体', "超大号字体"];
+
+  ///初始化是否完成
+  bool isInitialize = false;
 
   @override
   void initState() {
@@ -28,40 +41,15 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
   getIntegralRuleData() async {
     try {
       var result = await myRequest(path: MyApi.getScoreRule);
-      List data = result['data'];
-      integralRuleDataList = data.map((e) {
-        var child = e['child'].map((item) {
-          return {
-            'id': item['id'],
-            'pid': item['pid'],
-            'name': item['name'],
-            'num': item['num'],
-            'score': item['score'],
-            'frequency': item['frequency'],
-            'mark1': item['mark1'],
-            'mark2': item['mark2'],
-            'addtime': item['addtime'],
-            'type': item['type'],
-            'status': item['status'],
-            'sorts': item['sorts'],
-            'upper_limit': item['upper_limit']
-          };
-        }).toList();
-        return IntegralRuleDataType.fromJson({
-          'id': e['id'],
-          'name': e['name'],
-          'type': e['type'],
-          'upper_limit': e['upper_limit'],
-          'addtime': e['addtime'],
-          'update_time': e['update_time'],
-          'status': e['status'],
-          'sorts': e['sorts'],
-          "child": child,
-        });
-      }).toList();
+      Map data = result['data'];
+      integralRuleDataList = IntegralRuleDataType.fromJson({
+        "id": data['id'],
+        "content": data['content'],
+      });
 
       // 刷新页面
       if (this.mounted) {
+        isInitialize = true;
         setState(() {});
       }
     } catch (e) {
@@ -75,110 +63,174 @@ class _IntegralRuleState extends State<IntegralRule> with MyScreenUtil {
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialize) {
+      return Scaffold(
+        body: MyProgress(),
+      );
+    }
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("积分规则"),
         centerTitle: true,
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.all(dp(20.0)),
-              child: Text("潘三矿职工素质提升平台积分规则如下："),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                IntegralRuleDataType item = integralRuleDataList[index];
-                List<IntegralRuleChild> children = item.child;
-                int upperLimit = item.upperLimit;
-                String limitStr = '每日上限$upperLimit分';
-
-                if (item.type == 2) {
-                  limitStr = '每场上限$upperLimit分';
-                }
-
-                return Container(
-                  padding: EdgeInsets.all(dp(20.0)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                            fontSize: dp(32.0),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "${item.name} ",
-                              children: [
-                                TextSpan(
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: dp(30.0),
-                                    color: Colors.red,
-                                  ),
-                                  text: "( $limitStr )",
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: dp(30.0),
-                            color: Colors.black,
-                          ),
-                          children: <InlineSpan>[
-                            ...children.map((child) {
-                              String content = '';
-
-                              int childIndex = children.indexOf(child);
-                              String n =
-                                  childIndex == children.length - 1 ? '' : "\n";
-
-                              if (item.type == 1) {
-                                content += "每日首次登录获取${child.score}分。";
-                              } else if (item.type == 2) {
-                                content +=
-                                    "考试分数在${child.mark1}-${child.mark2}分之间获取${child.score}分；$n";
-                              } else if (item.type == 3) {
-                                content += "每有效阅读一篇获取${child.score}分；";
-                              } else if (item.type == 5) {
-                                String name = '';
-                                if (child.name == '视频') {
-                                  name = '观看';
-                                } else if (child.name == '音频') {
-                                  name = '收听';
-                                } else if (child.name == '图文') {
-                                  name = '阅读';
-                                }
-                                content +=
-                                    "${child.name}：每有效$name一篇获取${child.score}分；$n";
-                              } else if (item.type == 6) {
-                                content += "每有效阅读一题获取${child.score}分；";
-                              }
-
-                              return TextSpan(text: '$content');
-                            }).toList(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              childCount: integralRuleDataList.length,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState.openEndDrawer();
+            },
+            icon: Icon(
+              aliIconfont.wenzi,
+              color: Colors.white,
             ),
           ),
         ],
       ),
+      endDrawer: Container(
+        width: MediaQuery.of(context).size.width / 2,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.all(0.0),
+            children: [
+              SizedBox(height: dp(50.0)),
+              ...fontSizeList.map((item) {
+                int index = fontSizeList.indexOf(item);
+                String title = titleList[index];
+
+                return ListTile(
+                  leading: Radio(
+                    value: item,
+                    groupValue: fontSize,
+                    onChanged: (value) {
+                      setState(() {
+                        fontSize = item;
+                      });
+                    },
+                  ),
+                  title: Text(
+                    "$title",
+                    style: TextStyle(
+                      fontSize: dp(32.0),
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      fontSize = item;
+                    });
+                  },
+                );
+              }).toList(),
+            ],
+          ),
+        ),
+      ),
+      body: Html(
+        data: "<div>${integralRuleDataList.content}</div>",
+        style: {
+          "div": Style(
+            fontSize: FontSize.percent(fontSize),
+            lineHeight: dp(3.0),
+          ),
+        },
+      ),
+      // body: CustomScrollView(
+      //   slivers: [
+      //     SliverToBoxAdapter(
+      //       child: Container(
+      //         padding: EdgeInsets.all(dp(20.0)),
+      //         child: Text("潘三矿职工素质提升平台积分规则如下："),
+      //       ),
+      //     ),
+      //     SliverList(
+      //       delegate: SliverChildBuilderDelegate(
+      //         (context, index) {
+      //           IntegralRuleDataType item = integralRuleDataList[index];
+      //           List<IntegralRuleChild> children = item.child;
+      //           int upperLimit = item.upperLimit;
+      //           String limitStr = '每日上限$upperLimit分';
+
+      //           if (item.type == 2) {
+      //             limitStr = '每场上限$upperLimit分';
+      //           }
+
+      //           return Container(
+      //             padding: EdgeInsets.all(dp(20.0)),
+      //             child: Column(
+      //               crossAxisAlignment: CrossAxisAlignment.start,
+      //               children: [
+      //                 RichText(
+      //                   text: TextSpan(
+      //                     style: TextStyle(
+      //                       fontWeight: FontWeight.w700,
+      //                       color: Colors.black,
+      //                       fontSize: dp(32.0),
+      //                     ),
+      //                     children: [
+      //                       TextSpan(
+      //                         text: "${item.name} ",
+      //                         children: [
+      //                           TextSpan(
+      //                             style: TextStyle(
+      //                               fontWeight: FontWeight.w700,
+      //                               fontSize: dp(30.0),
+      //                               color: Colors.red,
+      //                             ),
+      //                             text: "( $limitStr )",
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 RichText(
+      //                   text: TextSpan(
+      //                     style: TextStyle(
+      //                       fontSize: dp(30.0),
+      //                       color: Colors.black,
+      //                     ),
+      //                     children: <InlineSpan>[
+      //                       ...children.map((child) {
+      //                         String content = '';
+
+      //                         int childIndex = children.indexOf(child);
+      //                         String n =
+      //                             childIndex == children.length - 1 ? '' : "\n";
+
+      //                         if (item.type == 1) {
+      //                           content += "每日首次登录获取${child.score}分。";
+      //                         } else if (item.type == 2) {
+      //                           content +=
+      //                               "考试分数在${child.mark1}-${child.mark2}分之间获取${child.score}分；$n";
+      //                         } else if (item.type == 3) {
+      //                           content += "每有效阅读一篇获取${child.score}分；";
+      //                         } else if (item.type == 5) {
+      //                           String name = '';
+      //                           if (child.name == '视频') {
+      //                             name = '观看';
+      //                           } else if (child.name == '音频') {
+      //                             name = '收听';
+      //                           } else if (child.name == '图文') {
+      //                             name = '阅读';
+      //                           }
+      //                           content +=
+      //                               "${child.name}：每有效$name一篇获取${child.score}分；$n";
+      //                         } else if (item.type == 6) {
+      //                           content += "每有效阅读一题获取${child.score}分；";
+      //                         }
+
+      //                         return TextSpan(text: '$content');
+      //                       }).toList(),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           );
+      //         },
+      //         childCount: integralRuleDataList.length,
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

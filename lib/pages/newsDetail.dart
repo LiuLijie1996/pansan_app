@@ -14,8 +14,7 @@ import '../mixins/mixins.dart';
 import '../utils/myRequest.dart';
 import '../utils/ErrorInfo.dart';
 
-// 新闻详情页
-
+/// 新闻详情页
 class NewsDetail extends StatefulWidget {
   final NewsDataType arguments;
   NewsDetail({Key key, @required this.arguments}) : super(key: key);
@@ -106,6 +105,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         "newsVideo": data['newsVideo'],
         "collect": data['collect'],
         "news_content": data['news_content'],
+        "upvoteFlag": data['upvoteFlag'],
       };
 
       if (this.mounted) {
@@ -142,6 +142,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         });
       }
     } catch (e) {
+      print("报错了：$e");
       ErrorInfo(
         errInfo: e,
         msg: "获取新闻详情失败",
@@ -353,6 +354,9 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                                       Icon(
                                         aliIconfont.zan,
                                         size: dp(32.0),
+                                        color: arguments.upvoteFlag
+                                            ? Colors.red
+                                            : null,
                                       ),
                                       SizedBox(width: dp(10.0)),
                                       Text("点赞"),
@@ -519,6 +523,9 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
                                       Icon(
                                         aliIconfont.zan,
                                         size: dp(32.0),
+                                        color: arguments.upvoteFlag
+                                            ? Colors.red
+                                            : null,
                                       ),
                                       SizedBox(width: dp(10.0)),
                                       Text("点赞"),
@@ -581,6 +588,7 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         path: MyApi.saveUserUpvote,
         data: {
           "id": arguments.id,
+          "user_id": true,
         },
       );
 
@@ -593,6 +601,12 @@ class _NewsDetailState extends State<NewsDetail> with MyScreenUtil {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+
+      if (this.mounted) {
+        setState(() {
+          arguments.upvoteFlag = !arguments.upvoteFlag;
+        });
+      }
     } catch (e) {
       ErrorInfo(
         errInfo: e,

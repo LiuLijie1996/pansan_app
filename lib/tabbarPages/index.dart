@@ -34,7 +34,7 @@ class Index extends StatelessWidget with MyScreenUtil {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text("职工学习平台"),
+        title: Text("职工素质提升平台"),
         actions: [
           UnconstrainedBox(
             child: Container(

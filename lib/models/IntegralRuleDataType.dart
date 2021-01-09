@@ -1,59 +1,66 @@
 ///积分规则数据类型
 class IntegralRuleDataType {
-  int id;
-  String name;
+  // String name;
+  // /// 1登录  2考试  3看新闻  5课程  6一日一题
+  // int type;
+  // int upperLimit;
+  // int addtime;
+  // int updateTime;
+  // int status;
+  // int sorts;
+  // List<IntegralRuleChild> child;
 
-  /// 1登录  2考试  3看新闻  5课程  6一日一题
-  int type;
-  int upperLimit;
-  int addtime;
-  int updateTime;
-  int status;
-  int sorts;
-  List<IntegralRuleChild> child;
+  ///id
+  int id;
+
+  ///积分规则
+  String content;
 
   IntegralRuleDataType({
     this.id,
-    this.name,
-    this.type,
-    this.upperLimit,
-    this.addtime,
-    this.updateTime,
-    this.status,
-    this.sorts,
-    this.child,
+    this.content,
+    // this.name,
+    // this.type,
+    // this.upperLimit,
+    // this.addtime,
+    // this.updateTime,
+    // this.status,
+    // this.sorts,
+    // this.child,
   });
 
   IntegralRuleDataType.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    type = json['type'];
-    upperLimit = json['upper_limit'];
-    addtime = json['addtime'];
-    updateTime = json['update_time'];
-    status = json['status'];
-    sorts = json['sorts'];
-    if (json['child'] != null) {
-      child = new List<IntegralRuleChild>();
-      json['child'].forEach((v) {
-        child.add(new IntegralRuleChild.fromJson(v));
-      });
-    }
+    content = json['content'];
+    // name = json['name'];
+    // type = json['type'];
+    // upperLimit = json['upper_limit'];
+    // addtime = json['addtime'];
+    // updateTime = json['update_time'];
+    // status = json['status'];
+    // sorts = json['sorts'];
+    // if (json['child'] != null) {
+    //   child = new List<IntegralRuleChild>();
+    //   json['child'].forEach((v) {
+    //     child.add(new IntegralRuleChild.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
-    data['type'] = this.type;
-    data['upper_limit'] = this.upperLimit;
-    data['addtime'] = this.addtime;
-    data['update_time'] = this.updateTime;
-    data['status'] = this.status;
-    data['sorts'] = this.sorts;
-    if (this.child != null) {
-      data['child'] = this.child.map((v) => v.toJson()).toList();
-    }
+    data['content'] = this.content;
+    // data['name'] = this.name;
+    // data['type'] = this.type;
+    // data['upper_limit'] = this.upperLimit;
+    // data['addtime'] = this.addtime;
+    // data['update_time'] = this.updateTime;
+    // data['status'] = this.status;
+    // data['sorts'] = this.sorts;
+    // if (this.child != null) {
+    //   data['child'] = this.child.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }
