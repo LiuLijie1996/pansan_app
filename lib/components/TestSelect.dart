@@ -56,6 +56,7 @@ class MultipleChoice extends StatelessWidget with MyScreenUtil {
                 // 判断是否需要错误提示
                 if (reminder) {
                   for (var i = 0; i < user_answer.length; i++) {
+                    // 当前选项和用户选项匹配时再判断用户选择的答案对还是错
                     if (e.label == user_answer[i]) {
                       // 判断用户的选项是否包含在标准答案中
                       status = data.answer.contains(user_answer[i]);
