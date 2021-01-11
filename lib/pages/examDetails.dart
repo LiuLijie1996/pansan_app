@@ -56,6 +56,9 @@ class _ExamDetailsState extends State<ExamDetails>
   ///初始化是否完成
   bool isInitialize = false;
 
+  ///每次弹窗提示用户切屏次数，就在数组中塞一个路由出栈的方法
+  List isNavigatorPop = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -96,6 +99,14 @@ class _ExamDetailsState extends State<ExamDetails>
 
     if (state == AppLifecycleState.paused) {
       // APP进入后台
+      for (var i = 0; i < isNavigatorPop.length; i++) {
+        var alterPop = isNavigatorPop[i];
+
+        // 退出弹窗
+        alterPop();
+      }
+      // 清空路由出栈的数组
+      isNavigatorPop = [];
 
       // 判断切屏次数
       _appCount++;
@@ -121,14 +132,23 @@ class _ExamDetailsState extends State<ExamDetails>
       }
     } else if (state == AppLifecycleState.resumed) {
       // APP进入前台
-      print('APP进入前台 ${examSiteInfo.cutScreenTime}');
 
       //震动
       vibrate(count: 2);
 
       int count = examSiteInfo.cutScreenNum - _appCount - 1;
       if (count >= 0) {
-        _showLeaveNumAlert("你的切屏次数还剩：$count 次");
+        // 弹窗提示用户切屏次数还剩几次
+        _showLeaveNumAlert("你的切屏次数还剩：$count 次").then((value) {
+          // 删除一个路由出栈
+          int index = isNavigatorPop.length - 1;
+          if (isNavigatorPop.length != 0) {
+            isNavigatorPop.remove(isNavigatorPop[index]);
+          }
+        });
+
+        // 记录本次弹窗
+        isNavigatorPop.add(Navigator.of(context).pop);
       }
 
       if (_appTime >= examSiteInfo.cutScreenTime) {
