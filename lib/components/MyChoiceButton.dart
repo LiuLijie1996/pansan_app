@@ -4,10 +4,18 @@ import '../models/IssueDataType.dart';
 
 //考试选项的按钮
 class MyChoiceButton extends StatelessWidget with MyScreenUtil {
-  final bool status; //状态  null未选择  true选择正确  false选择错误
-  final Option option; //选项
-  final bool disabled; //是否禁止点击
-  final Function onClick; //点击的回调
+  ///状态  null未选择  true选择正确  false选择错误
+  final bool status;
+
+  ///选项
+  final Option option;
+
+  ///是否禁止点击
+  final bool disabled;
+
+  ///点击的回调
+  final Function onClick;
+
   MyChoiceButton({
     Key key,
     @required this.status,
