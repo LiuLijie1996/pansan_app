@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:package_info/package_info.dart';
@@ -43,6 +43,9 @@ class _UpdateAppState extends State<UpdateApp> with UpdateAlter, AppInfoMixin {
 
   // 检查更新APP
   examineUpdateApp() async {
+    // 判断是不是ios
+    if (Platform.isIOS) return;
+
     // 当前时间
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     // 判断是否需要提醒更新应用
