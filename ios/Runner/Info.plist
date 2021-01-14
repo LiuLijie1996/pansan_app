@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>学习平台</string>
+	<string>职工学习平台</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,11 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -31,30 +33,22 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>App需要您的同意,才能访问媒体资料库</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>App需要您的同意,才能访问蓝牙</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>App需要您的同意,才能访问日历</string>
+	<string>是否允许App访问您的日历</string>
 	<key>NSCameraUsageDescription</key>
-	<string>App需要您的同意,才能访问相机</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>App需要您的同意,才能访问健康分享</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>App需要您的同意,才能访问健康更新 </string>
+	<string>用于用户扫码加入班级</string>
+	<key>NSContactsUsageDescription</key>
+	<string>是否允许App访问您联系人</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>App需要您的同意,才能始终访问位置</string>
-	<key>NSLocationUsageDescription</key>
-	<string>App需要您的同意,才能访问位置</string>
+	<string>是否允许App持续获取地理位置</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App需要您的同意,才能在使用期间访问位置</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App需要您的同意,才能访问麦克风</string>
+	<string>是否允许App使用时获获取地理位置</string>
 	<key>NSMotionUsageDescription</key>
-	<string>App需要您的同意,才能访问运动与健身</string>
+	<string>是否允许App访问您的运动与健康</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App需要您的同意,才能访问相册</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>App需要您的同意,才能访问提醒事项</string>
+	<string>是否允许App访问您的相册</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>允许app进行语音转文字</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
