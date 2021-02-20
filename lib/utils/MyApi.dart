@@ -409,7 +409,7 @@ class MyApi {
   /// 真正的加入班级请求；测试接口：
   static const addClass = {
     "method": "post",
-    "normal": "/user/userAddClass",
+    "normal": "/user/addClass",
     "test": "/api/user/addClass",
   };
 
