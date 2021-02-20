@@ -757,12 +757,16 @@ class _CourseTextDetailState extends State<CourseTextDetail> with MyScreenUtil {
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (validTime != null) {
+        print(validTime);
         if (this.mounted) {
           setState(() {
             --validTime;
           });
 
-          if (validTime == 0) {
+          if (validTime <= 0) {
+            setState(() {
+              validTime = 0;
+            });
             _timer.cancel(); //清除定时器
 
             // 通知后台阅读完成
