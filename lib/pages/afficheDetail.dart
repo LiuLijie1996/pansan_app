@@ -146,7 +146,7 @@ class _AfficheDetailState extends State<AfficheDetail> with MyScreenUtil {
                       // 打开文件
                       FilePreview(
                         context: context,
-                        link: widget.arguments.link,
+                        link: widget.arguments.annex,
                         title: widget.arguments.name,
                       );
                     },
