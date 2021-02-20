@@ -360,7 +360,7 @@ class IllegalManageWidget extends StatelessWidget with MyScreenUtil {
 }
 
 // 咨询组件
-class AdvisoryWidget extends StatelessWidget {
+class AdvisoryWidget extends StatelessWidget with MyScreenUtil {
   AdvisoryDataType item;
   AdvisoryWidget({Key key, @required this.item}) : super(key: key);
 
@@ -385,7 +385,13 @@ class AdvisoryWidget extends StatelessWidget {
           arguments: item.toJson(),
         );
       },
-      leading: Text("${item.title}"),
+      leading: Container(
+        width: dp(350),
+        child: Text(
+          "${item.title}",
+          maxLines: 2,
+        ),
+      ),
       trailing: Text("$_addtime"),
     );
   }
